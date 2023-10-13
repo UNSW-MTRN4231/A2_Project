@@ -1,0 +1,16 @@
+package.xml
+setup.cfg
+setup.py
+../build/image_warper/image_warper.egg-info/PKG-INFO
+../build/image_warper/image_warper.egg-info/SOURCES.txt
+../build/image_warper/image_warper.egg-info/dependency_links.txt
+../build/image_warper/image_warper.egg-info/entry_points.txt
+../build/image_warper/image_warper.egg-info/requires.txt
+../build/image_warper/image_warper.egg-info/top_level.txt
+../build/image_warper/image_warper.egg-info/zip-safe
+image_warper/__init__.py
+image_warper/image_warper.py
+resource/image_warper
+test/test_copyright.py
+test/test_flake8.py
+test/test_pep257.py

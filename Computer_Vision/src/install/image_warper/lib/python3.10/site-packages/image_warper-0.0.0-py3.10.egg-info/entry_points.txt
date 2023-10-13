@@ -1,0 +1,3 @@
+[console_scripts]
+image_warper = image_warper.image_warper:main
+
