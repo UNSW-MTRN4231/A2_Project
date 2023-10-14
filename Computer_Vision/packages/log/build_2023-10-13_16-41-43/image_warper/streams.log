@@ -1,0 +1,27 @@
+[1.507s] Invoking command in '/home/mtrn/4231/A2_Project/Computer_Vision/src/image_warper': PYTHONPATH=/home/mtrn/4231/A2_Project/Computer_Vision/src/build/image_warper/prefix_override:/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../build/image_warper build --build-base /home/mtrn/4231/A2_Project/Computer_Vision/src/build/image_warper/build install --record /home/mtrn/4231/A2_Project/Computer_Vision/src/build/image_warper/install.log --single-version-externally-managed
+[2.063s] running egg_info
+[2.063s] writing ../build/image_warper/image_warper.egg-info/PKG-INFO
+[2.064s] writing dependency_links to ../build/image_warper/image_warper.egg-info/dependency_links.txt
+[2.064s] writing entry points to ../build/image_warper/image_warper.egg-info/entry_points.txt
+[2.065s] writing requirements to ../build/image_warper/image_warper.egg-info/requires.txt
+[2.065s] writing top-level names to ../build/image_warper/image_warper.egg-info/top_level.txt
+[2.067s] reading manifest file '../build/image_warper/image_warper.egg-info/SOURCES.txt'
+[2.068s] writing manifest file '../build/image_warper/image_warper.egg-info/SOURCES.txt'
+[2.068s] running build
+[2.069s] running build_py
+[2.069s] copying image_warper/image_warper.py -> /home/mtrn/4231/A2_Project/Computer_Vision/src/build/image_warper/build/lib/image_warper
+[2.069s] running install
+[2.070s] /usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
+[2.070s]   warnings.warn(
+[2.070s] running install_lib
+[2.072s] copying /home/mtrn/4231/A2_Project/Computer_Vision/src/build/image_warper/build/lib/image_warper/image_warper.py -> /home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/lib/python3.10/site-packages/image_warper
+[2.073s] byte-compiling /home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/lib/python3.10/site-packages/image_warper/image_warper.py to image_warper.cpython-310.pyc
+[2.074s] running install_data
+[2.075s] running install_egg_info
+[2.078s] removing '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/lib/python3.10/site-packages/image_warper-0.0.0-py3.10.egg-info' (and everything under it)
+[2.087s] Copying ../build/image_warper/image_warper.egg-info to /home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/lib/python3.10/site-packages/image_warper-0.0.0-py3.10.egg-info
+[2.087s] running install_scripts
+[2.117s] Installing ImagePublisher script to /home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/lib/image_warper
+[2.119s] Installing image_warper script to /home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/lib/image_warper
+[2.119s] writing list of installed files to '/home/mtrn/4231/A2_Project/Computer_Vision/src/build/image_warper/install.log'
+[2.167s] Invoked command in '/home/mtrn/4231/A2_Project/Computer_Vision/src/image_warper' returned '0': PYTHONPATH=/home/mtrn/4231/A2_Project/Computer_Vision/src/build/image_warper/prefix_override:/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../build/image_warper build --build-base /home/mtrn/4231/A2_Project/Computer_Vision/src/build/image_warper/build install --record /home/mtrn/4231/A2_Project/Computer_Vision/src/build/image_warper/install.log --single-version-externally-managed

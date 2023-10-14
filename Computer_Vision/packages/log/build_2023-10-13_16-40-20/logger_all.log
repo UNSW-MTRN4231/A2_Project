@@ -1,0 +1,115 @@
+[0.780s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[0.781s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=4, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, mixin_files=None, mixin=None, verb_parser=<colcon_mixin.mixin.mixin_argument.MixinArgumentDecorator object at 0x7f56a3928940>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7f56a3a51b40>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7f56a3a51b40>>, mixin_verb=('build',))
+[0.831s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.831s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.831s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.831s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.831s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.832s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.832s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/mtrn/4231/A2_Project/Computer_Vision/src'
+[0.832s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.832s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.832s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.832s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.833s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.833s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.833s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.833s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.833s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.852s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.852s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.852s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.853s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.853s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.853s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.854s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.854s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.854s] Level 1:colcon.colcon_core.package_identification:_identify(image_warper) by extensions ['ignore', 'ignore_ament_install']
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(image_warper) by extension 'ignore'
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(image_warper) by extension 'ignore_ament_install'
+[0.856s] Level 1:colcon.colcon_core.package_identification:_identify(image_warper) by extensions ['colcon_pkg']
+[0.856s] Level 1:colcon.colcon_core.package_identification:_identify(image_warper) by extension 'colcon_pkg'
+[0.856s] Level 1:colcon.colcon_core.package_identification:_identify(image_warper) by extensions ['colcon_meta']
+[0.856s] Level 1:colcon.colcon_core.package_identification:_identify(image_warper) by extension 'colcon_meta'
+[0.857s] Level 1:colcon.colcon_core.package_identification:_identify(image_warper) by extensions ['ros']
+[0.857s] Level 1:colcon.colcon_core.package_identification:_identify(image_warper) by extension 'ros'
+[0.862s] DEBUG:colcon.colcon_core.package_identification:Package 'image_warper' with type 'ros.ament_python' and name 'image_warper'
+[0.862s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.863s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.863s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.863s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.864s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.864s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.864s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.865s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.865s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.865s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.866s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.912s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.912s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.921s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 1 installed packages in /home/mtrn/4231/A2_Project/Computer_Vision/src/install
+[0.924s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 7 installed packages in /home/mtrn/4231/ros_ur_driver/install
+[0.929s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 55 installed packages in /home/mtrn/4231/ws_moveit2/install
+[0.934s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 341 installed packages in /opt/ros/humble
+[0.938s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[1.046s] Level 5:colcon.colcon_core.verb:set package 'image_warper' build argument 'cmake_args' from command line to 'None'
+[1.046s] Level 5:colcon.colcon_core.verb:set package 'image_warper' build argument 'cmake_target' from command line to 'None'
+[1.047s] Level 5:colcon.colcon_core.verb:set package 'image_warper' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[1.047s] Level 5:colcon.colcon_core.verb:set package 'image_warper' build argument 'cmake_clean_cache' from command line to 'False'
+[1.047s] Level 5:colcon.colcon_core.verb:set package 'image_warper' build argument 'cmake_clean_first' from command line to 'False'
+[1.047s] Level 5:colcon.colcon_core.verb:set package 'image_warper' build argument 'cmake_force_configure' from command line to 'False'
+[1.047s] Level 5:colcon.colcon_core.verb:set package 'image_warper' build argument 'ament_cmake_args' from command line to 'None'
+[1.048s] Level 5:colcon.colcon_core.verb:set package 'image_warper' build argument 'catkin_cmake_args' from command line to 'None'
+[1.048s] Level 5:colcon.colcon_core.verb:set package 'image_warper' build argument 'catkin_skip_building_tests' from command line to 'False'
+[1.048s] DEBUG:colcon.colcon_core.verb:Building package 'image_warper' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/mtrn/4231/A2_Project/Computer_Vision/src/build/image_warper', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper', 'merge_install': False, 'path': '/home/mtrn/4231/A2_Project/Computer_Vision/src/image_warper', 'symlink_install': False, 'test_result_base': None}
+[1.050s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[1.059s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[1.060s] INFO:colcon.colcon_ros.task.ament_python.build:Building ROS package in '/home/mtrn/4231/A2_Project/Computer_Vision/src/image_warper' with build type 'ament_python'
+[1.060s] Level 1:colcon.colcon_core.shell:create_environment_hook('image_warper', 'ament_prefix_path')
+[1.069s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[1.071s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/share/image_warper/hook/ament_prefix_path.ps1'
+[1.072s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/share/image_warper/hook/ament_prefix_path.dsv'
+[1.074s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/share/image_warper/hook/ament_prefix_path.sh'
+[1.080s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.080s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.805s] INFO:colcon.colcon_core.task.python.build:Building Python package in '/home/mtrn/4231/A2_Project/Computer_Vision/src/image_warper'
+[1.812s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.812s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[2.522s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/mtrn/4231/A2_Project/Computer_Vision/src/image_warper': PYTHONPATH=/home/mtrn/4231/A2_Project/Computer_Vision/src/build/image_warper/prefix_override:/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../build/image_warper build --build-base /home/mtrn/4231/A2_Project/Computer_Vision/src/build/image_warper/build install --record /home/mtrn/4231/A2_Project/Computer_Vision/src/build/image_warper/install.log --single-version-externally-managed
+[3.180s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/mtrn/4231/A2_Project/Computer_Vision/src/image_warper' returned '0': PYTHONPATH=/home/mtrn/4231/A2_Project/Computer_Vision/src/build/image_warper/prefix_override:/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../build/image_warper build --build-base /home/mtrn/4231/A2_Project/Computer_Vision/src/build/image_warper/build install --record /home/mtrn/4231/A2_Project/Computer_Vision/src/build/image_warper/install.log --single-version-externally-managed
+[3.194s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper' for CMake module files
+[3.196s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper' for CMake config files
+[3.197s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/lib'
+[3.198s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/bin'
+[3.199s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/lib/pkgconfig/image_warper.pc'
+[3.200s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/lib/python3.10/site-packages'
+[3.200s] Level 1:colcon.colcon_core.shell:create_environment_hook('image_warper', 'pythonpath')
+[3.205s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/share/image_warper/hook/pythonpath.ps1'
+[3.208s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/share/image_warper/hook/pythonpath.dsv'
+[3.210s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/share/image_warper/hook/pythonpath.sh'
+[3.212s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/bin'
+[3.213s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(image_warper)
+[3.218s] INFO:colcon.colcon_core.shell:Creating package script '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/share/image_warper/package.ps1'
+[3.220s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/share/image_warper/package.dsv'
+[3.224s] INFO:colcon.colcon_core.shell:Creating package script '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/share/image_warper/package.sh'
+[3.227s] INFO:colcon.colcon_core.shell:Creating package script '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/share/image_warper/package.bash'
+[3.243s] INFO:colcon.colcon_core.shell:Creating package script '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/share/image_warper/package.zsh'
+[3.246s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/mtrn/4231/A2_Project/Computer_Vision/src/install/image_warper/share/colcon-core/packages/image_warper)
+[3.251s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[3.251s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[3.252s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[3.252s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[3.265s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[3.265s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[3.266s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[3.295s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[3.299s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/local_setup.ps1'
+[3.312s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/_local_setup_util_ps1.py'
+[3.316s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/setup.ps1'
+[3.324s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/local_setup.sh'
+[3.326s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/_local_setup_util_sh.py'
+[3.327s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/setup.sh'
+[3.335s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/local_setup.bash'
+[3.337s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/setup.bash'
+[3.344s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/local_setup.zsh'
+[3.346s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/mtrn/4231/A2_Project/Computer_Vision/src/install/setup.zsh'
