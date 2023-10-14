@@ -1,6 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
+from std_msgs.msg import Float64MultiArray
 import cv2
 import numpy as np
 from cv_bridge import CvBridge
@@ -11,6 +12,7 @@ class ImageWarper(Node):
         super().__init__('image_warper')
         self.subscription = self.create_subscription(Image, 'image_raw', self.listener_callback, 10)
         self.publisher_ = self.create_publisher(Image, 'image_warped', 10)
+        self.pov_publisher_ = self.create_publisher(Float64MultiArray, 'warp_pov_tf', 10)
         self.bridge = CvBridge()
 
     def listener_callback(self, msg):
@@ -30,6 +32,11 @@ class ImageWarper(Node):
         src = np.array(purple_dots, dtype=np.float32)
         dst = np.array([[0, 0], [1000, 0], [0, 1000], [1000, 1000]], dtype=np.float32)
         M = cv2.getPerspectiveTransform(src, dst)
+
+        # Publish the transformation matrix
+        matrix_msg = Float64MultiArray()
+        matrix_msg.data = [float(value) for value in M.ravel()]
+        self.pov_publisher_.publish(matrix_msg)
         return cv2.warpPerspective(img, M, (1000, 1000))
 
 
