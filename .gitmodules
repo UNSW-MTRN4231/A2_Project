@@ -1,0 +1,3 @@
+[submodule "Computer_Vision/Computer_Vision/yolov8_ros1"]
+	path = Computer_Vision/Computer_Vision/yolov8_ros1
+	url = https://github.com/mgonzs13/yolov8_ros.git
