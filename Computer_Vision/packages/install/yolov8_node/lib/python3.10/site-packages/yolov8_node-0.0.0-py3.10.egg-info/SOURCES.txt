@@ -13,3 +13,4 @@ test/test_copyright.py
 test/test_flake8.py
 test/test_pep257.py
 yolov8_node/__init__.py
+yolov8_node/yolov8_object_detection.py
