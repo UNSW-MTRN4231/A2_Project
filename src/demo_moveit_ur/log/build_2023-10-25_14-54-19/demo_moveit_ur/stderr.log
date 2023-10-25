@@ -1,0 +1,90 @@
+[01m[K/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/src/moveit_trajectory.cpp:[m[K In member function ‘[01m[Kvoid moveit_trajectory::move_to_pose(geometry_msgs::msg::Pose)[m[K’:
+[01m[K/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/src/moveit_trajectory.cpp:110:31:[m[K [01;31m[Kerror: [m[Kno matching function for call to ‘[01m[Kmoveit_visual_tools::MoveItVisualTools::publishSphere(geometry_msgs::msg::PoseStamped_<std::allocator<void> >&, rviz_visual_tools::Colors, double)[m[K’
+  110 |   [01;31m[Kvisual_tools_->publishSphere(current_pose, rviz_visual_tools::BLUE, 0.05)[m[K;
+      |   [01;31m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[K
+In file included from [01m[K/home/mtrn/4231/ws_moveit2/install/moveit_visual_tools/include/moveit_visual_tools/moveit_visual_tools.h:38[m[K,
+                 from [01m[K/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/include/moveit_trajectory.hpp:10[m[K,
+                 from [01m[K/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/src/moveit_trajectory.cpp:6[m[K:
+[01m[K/opt/ros/humble/include/rviz_visual_tools/rviz_visual_tools.hpp:580:8:[m[K [01;36m[Knote: [m[Kcandidate: ‘[01m[Kbool rviz_visual_tools::RvizVisualTools::publishSphere(const Isometry3d&, rviz_visual_tools::Colors, rviz_visual_tools::Scales, const string&, std::size_t)[m[K’
+  580 |   bool [01;36m[KpublishSphere[m[K(const Eigen::Isometry3d& pose, Colors color = BLUE, Scales scale = MEDIUM,
+      |        [01;36m[K^~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/humble/include/rviz_visual_tools/rviz_visual_tools.hpp:580:47:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from ‘[01m[Kgeometry_msgs::msg::PoseStamped_<std::allocator<void> >[m[K’ to ‘[01m[Kconst Isometry3d&[m[K’ {aka ‘[01m[Kconst Eigen::Transform<double, 3, 1>&[m[K’}
+  580 |   bool publishSphere([01;36m[Kconst Eigen::Isometry3d& pose[m[K, Colors color = BLUE, Scales scale = MEDIUM,
+      |                      [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~^~~~[m[K
+[01m[K/opt/ros/humble/include/rviz_visual_tools/rviz_visual_tools.hpp:582:8:[m[K [01;36m[Knote: [m[Kcandidate: ‘[01m[Kbool rviz_visual_tools::RvizVisualTools::publishSphere(const Vector3d&, rviz_visual_tools::Colors, rviz_visual_tools::Scales, const string&, std::size_t)[m[K’
+  582 |   bool [01;36m[KpublishSphere[m[K(const Eigen::Vector3d& point, Colors color = BLUE, Scales scale = MEDIUM,
+      |        [01;36m[K^~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/humble/include/rviz_visual_tools/rviz_visual_tools.hpp:582:45:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from ‘[01m[Kgeometry_msgs::msg::PoseStamped_<std::allocator<void> >[m[K’ to ‘[01m[Kconst Vector3d&[m[K’ {aka ‘[01m[Kconst Eigen::Matrix<double, 3, 1>&[m[K’}
+  582 |   bool publishSphere([01;36m[Kconst Eigen::Vector3d& point[m[K, Colors color = BLUE, Scales scale = MEDIUM,
+      |                      [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~^~~~~[m[K
+[01m[K/opt/ros/humble/include/rviz_visual_tools/rviz_visual_tools.hpp:584:8:[m[K [01;36m[Knote: [m[Kcandidate: ‘[01m[Kbool rviz_visual_tools::RvizVisualTools::publishSphere(const Vector3d&, rviz_visual_tools::Colors, double, const string&, std::size_t)[m[K’
+  584 |   bool [01;36m[KpublishSphere[m[K(const Eigen::Vector3d& point, Colors color, double scale,
+      |        [01;36m[K^~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/humble/include/rviz_visual_tools/rviz_visual_tools.hpp:584:45:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from ‘[01m[Kgeometry_msgs::msg::PoseStamped_<std::allocator<void> >[m[K’ to ‘[01m[Kconst Vector3d&[m[K’ {aka ‘[01m[Kconst Eigen::Matrix<double, 3, 1>&[m[K’}
+  584 |   bool publishSphere([01;36m[Kconst Eigen::Vector3d& point[m[K, Colors color, double scale,
+      |                      [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~^~~~~[m[K
+[01m[K/opt/ros/humble/include/rviz_visual_tools/rviz_visual_tools.hpp:586:8:[m[K [01;36m[Knote: [m[Kcandidate: ‘[01m[Kbool rviz_visual_tools::RvizVisualTools::publishSphere(const Point&, rviz_visual_tools::Colors, rviz_visual_tools::Scales, const string&, std::size_t)[m[K’
+  586 |   bool [01;36m[KpublishSphere[m[K(const geometry_msgs::msg::Point& point, Colors color = BLUE,
+      |        [01;36m[K^~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/humble/include/rviz_visual_tools/rviz_visual_tools.hpp:586:55:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from ‘[01m[Kgeometry_msgs::msg::PoseStamped_<std::allocator<void> >[m[K’ to ‘[01m[Kconst Point&[m[K’ {aka ‘[01m[Kconst geometry_msgs::msg::Point_<std::allocator<void> >&[m[K’}
+  586 |   bool publishSphere([01;36m[Kconst geometry_msgs::msg::Point& point[m[K, Colors color = BLUE,
+      |                      [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~[m[K
+[01m[K/opt/ros/humble/include/rviz_visual_tools/rviz_visual_tools.hpp:588:8:[m[K [01;36m[Knote: [m[Kcandidate: ‘[01m[Kbool rviz_visual_tools::RvizVisualTools::publishSphere(const Pose&, rviz_visual_tools::Colors, rviz_visual_tools::Scales, const string&, std::size_t)[m[K’
+  588 |   bool [01;36m[KpublishSphere[m[K(const geometry_msgs::msg::Pose& pose, Colors color = BLUE,
+      |        [01;36m[K^~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/humble/include/rviz_visual_tools/rviz_visual_tools.hpp:588:54:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from ‘[01m[Kgeometry_msgs::msg::PoseStamped_<std::allocator<void> >[m[K’ to ‘[01m[Kconst Pose&[m[K’ {aka ‘[01m[Kconst geometry_msgs::msg::Pose_<std::allocator<void> >&[m[K’}
+  588 |   bool publishSphere([01;36m[Kconst geometry_msgs::msg::Pose& pose[m[K, Colors color = BLUE,
+      |                      [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~[m[K
+[01m[K/opt/ros/humble/include/rviz_visual_tools/rviz_visual_tools.hpp:590:8:[m[K [01;36m[Knote: [m[Kcandidate: ‘[01m[Kbool rviz_visual_tools::RvizVisualTools::publishSphere(const Pose&, rviz_visual_tools::Colors, double, const string&, std::size_t)[m[K’
+  590 |   bool [01;36m[KpublishSphere[m[K(const geometry_msgs::msg::Pose& pose, Colors color, double scale,
+      |        [01;36m[K^~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/humble/include/rviz_visual_tools/rviz_visual_tools.hpp:590:54:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from ‘[01m[Kgeometry_msgs::msg::PoseStamped_<std::allocator<void> >[m[K’ to ‘[01m[Kconst Pose&[m[K’ {aka ‘[01m[Kconst geometry_msgs::msg::Pose_<std::allocator<void> >&[m[K’}
+  590 |   bool publishSphere([01;36m[Kconst geometry_msgs::msg::Pose& pose[m[K, Colors color, double scale,
+      |                      [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~[m[K
+[01m[K/opt/ros/humble/include/rviz_visual_tools/rviz_visual_tools.hpp:592:8:[m[K [01;36m[Knote: [m[Kcandidate: ‘[01m[Kbool rviz_visual_tools::RvizVisualTools::publishSphere(const Pose&, rviz_visual_tools::Colors, geometry_msgs::msg::Vector3, const string&, std::size_t)[m[K’
+  592 |   bool [01;36m[KpublishSphere[m[K(const geometry_msgs::msg::Pose& pose, Colors color,
+      |        [01;36m[K^~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/humble/include/rviz_visual_tools/rviz_visual_tools.hpp:592:54:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from ‘[01m[Kgeometry_msgs::msg::PoseStamped_<std::allocator<void> >[m[K’ to ‘[01m[Kconst Pose&[m[K’ {aka ‘[01m[Kconst geometry_msgs::msg::Pose_<std::allocator<void> >&[m[K’}
+  592 |   bool publishSphere([01;36m[Kconst geometry_msgs::msg::Pose& pose[m[K, Colors color,
+      |                      [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~[m[K
+[01m[K/opt/ros/humble/include/rviz_visual_tools/rviz_visual_tools.hpp:595:8:[m[K [01;36m[Knote: [m[Kcandidate: ‘[01m[Kbool rviz_visual_tools::RvizVisualTools::publishSphere(const Pose&, const ColorRGBA&, geometry_msgs::msg::Vector3, const string&, std::size_t)[m[K’
+  595 |   bool [01;36m[KpublishSphere[m[K(const geometry_msgs::msg::Pose& pose, const std_msgs::msg::ColorRGBA& color,
+      |        [01;36m[K^~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/humble/include/rviz_visual_tools/rviz_visual_tools.hpp:595:54:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from ‘[01m[Kgeometry_msgs::msg::PoseStamped_<std::allocator<void> >[m[K’ to ‘[01m[Kconst Pose&[m[K’ {aka ‘[01m[Kconst geometry_msgs::msg::Pose_<std::allocator<void> >&[m[K’}
+  595 |   bool publishSphere([01;36m[Kconst geometry_msgs::msg::Pose& pose[m[K, const std_msgs::msg::ColorRGBA& color,
+      |                      [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~[m[K
+[01m[K/opt/ros/humble/include/rviz_visual_tools/rviz_visual_tools.hpp:598:8:[m[K [01;36m[Knote: [m[Kcandidate: ‘[01m[Kbool rviz_visual_tools::RvizVisualTools::publishSphere(const Isometry3d&, const ColorRGBA&, geometry_msgs::msg::Vector3, const string&, std::size_t)[m[K’
+  598 |   bool [01;36m[KpublishSphere[m[K(const Eigen::Isometry3d& pose, const std_msgs::msg::ColorRGBA& color,
+      |        [01;36m[K^~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/humble/include/rviz_visual_tools/rviz_visual_tools.hpp:598:47:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from ‘[01m[Kgeometry_msgs::msg::PoseStamped_<std::allocator<void> >[m[K’ to ‘[01m[Kconst Isometry3d&[m[K’ {aka ‘[01m[Kconst Eigen::Transform<double, 3, 1>&[m[K’}
+  598 |   bool publishSphere([01;36m[Kconst Eigen::Isometry3d& pose[m[K, const std_msgs::msg::ColorRGBA& color,
+      |                      [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~^~~~[m[K
+[01m[K/opt/ros/humble/include/rviz_visual_tools/rviz_visual_tools.hpp:601:8:[m[K [01;36m[Knote: [m[Kcandidate: ‘[01m[Kbool rviz_visual_tools::RvizVisualTools::publishSphere(const Vector3d&, const ColorRGBA&, geometry_msgs::msg::Vector3, const string&, std::size_t)[m[K’
+  601 |   bool [01;36m[KpublishSphere[m[K(const Eigen::Vector3d& point, const std_msgs::msg::ColorRGBA& color,
+      |        [01;36m[K^~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/humble/include/rviz_visual_tools/rviz_visual_tools.hpp:601:45:[m[K [01;36m[Knote: [m[K  no known conversion for argument 1 from ‘[01m[Kgeometry_msgs::msg::PoseStamped_<std::allocator<void> >[m[K’ to ‘[01m[Kconst Vector3d&[m[K’ {aka ‘[01m[Kconst Eigen::Matrix<double, 3, 1>&[m[K’}
+  601 |   bool publishSphere([01;36m[Kconst Eigen::Vector3d& point[m[K, const std_msgs::msg::ColorRGBA& color,
+      |                      [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~^~~~~[m[K
+[01m[K/opt/ros/humble/include/rviz_visual_tools/rviz_visual_tools.hpp:604:8:[m[K [01;36m[Knote: [m[Kcandidate: ‘[01m[Kbool rviz_visual_tools::RvizVisualTools::publishSphere(const PoseStamped&, rviz_visual_tools::Colors, geometry_msgs::msg::Vector3, const string&, std::size_t)[m[K’
+  604 |   bool [01;36m[KpublishSphere[m[K(const geometry_msgs::msg::PoseStamped& pose, Colors color,
+      |        [01;36m[K^~~~~~~~~~~~~[m[K
+[01m[K/opt/ros/humble/include/rviz_visual_tools/rviz_visual_tools.hpp:605:56:[m[K [01;36m[Knote: [m[K  no known conversion for argument 3 from ‘[01m[Kdouble[m[K’ to ‘[01m[Kgeometry_msgs::msg::Vector3[m[K’ {aka ‘[01m[Kgeometry_msgs::msg::Vector3_<std::allocator<void> >[m[K’}
+  605 |                      [01;36m[Kconst geometry_msgs::msg::Vector3 scale[m[K, const std::string& ns = "Sphere",
+      |                      [01;36m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~[m[K
+[01m[K/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/src/moveit_trajectory.cpp:[m[K In member function ‘[01m[Kvoid moveit_trajectory::set_orientation(geometry_msgs::msg::Quaternion)[m[K’:
+[01m[K/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/src/moveit_trajectory.cpp:213:37:[m[K [01;31m[Kerror: [m[K‘[01m[Kstruct geometry_msgs::msg::PoseStamped_<std::allocator<void> >[m[K’ has no member named ‘[01m[Kposition[m[K’
+  213 |   std::cout<<"Pose: "<<current_pose.[01;31m[Kposition[m[K.x<<'\t'<<current_pose.position.y<<'\t'<<current_pose.position.z<<'\t'<<std::endl;
+      |                                     [01;31m[K^~~~~~~~[m[K
+[01m[K/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/src/moveit_trajectory.cpp:213:68:[m[K [01;31m[Kerror: [m[K‘[01m[Kstruct geometry_msgs::msg::PoseStamped_<std::allocator<void> >[m[K’ has no member named ‘[01m[Kposition[m[K’
+  213 |   std::cout<<"Pose: "<<current_pose.position.x<<'\t'<<current_pose.[01;31m[Kposition[m[K.y<<'\t'<<current_pose.position.z<<'\t'<<std::endl;
+      |                                                                    [01;31m[K^~~~~~~~[m[K
+[01m[K/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/src/moveit_trajectory.cpp:213:99:[m[K [01;31m[Kerror: [m[K‘[01m[Kstruct geometry_msgs::msg::PoseStamped_<std::allocator<void> >[m[K’ has no member named ‘[01m[Kposition[m[K’
+  213 |   std::cout<<"Pose: "<<current_pose.position.x<<'\t'<<current_pose.position.y<<'\t'<<current_pose.[01;31m[Kposition[m[K.z<<'\t'<<std::endl;
+      |                                                                                                   [01;31m[K^~~~~~~~[m[K
+[01m[K/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/src/moveit_trajectory.cpp:[m[K In member function ‘[01m[Kvoid moveit_trajectory::move_callback(geometry_msgs::msg::Pose_<std::allocator<void> >::SharedPtr)[m[K’:
+[01m[K/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/src/moveit_trajectory.cpp:271:81:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kpose[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+  271 | void moveit_trajectory::move_callback([01;35m[Kconst geometry_msgs::msg::Pose::SharedPtr pose[m[K)
+      |                                       [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~[m[K
+gmake[2]: *** [CMakeFiles/moveit_trajectory.dir/build.make:76: CMakeFiles/moveit_trajectory.dir/src/moveit_trajectory.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/moveit_trajectory.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

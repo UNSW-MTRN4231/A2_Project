@@ -104,10 +104,10 @@ void moveit_trajectory::move_to_pose(geometry_msgs::msg::Pose target_pose) {
   moveit::planning_interface::MoveGroupInterface::Plan planMessage;
 
   // Visualise current and target pose
-  // auto current_pose = move_group_interface->getCurrentPose();
-  geometry_msgs::msg::Pose current_pose = get_end_effector_pose();
-  std::cout<<"Pose: "<<current_pose.position.x<<'\t'<<current_pose.position.y<<'\t'<<current_pose.position.z<<'\t'<<std::endl;
-  visual_tools_->publishSphere(current_pose, rviz_visual_tools::BLUE, 0.05);
+  auto current_pose = move_group_interface->getCurrentPose();
+  //geometry_msgs::msg::Pose current_pose = get_end_effector_pose();
+  //std::cout<<"Pose: "<<current_pose.position.x<<'\t'<<current_pose.position.y<<'\t'<<current_pose.position.z<<'\t'<<std::endl;
+  visual_tools_->publishSphere(current_pose.pose, rviz_visual_tools::BLUE, 0.05);
   visual_tools_->publishSphere(target_pose, rviz_visual_tools::RED, 0.05);
   visual_tools_->trigger();
 
@@ -208,10 +208,12 @@ void moveit_trajectory::move_to_pose_cartesian(geometry_msgs::msg::Pose target_p
 }
 
 void moveit_trajectory::set_orientation(geometry_msgs::msg::Quaternion target_orientation) {
-  auto current_pose = get_end_effector_pose();
+  // auto current_pose = get_end_effector_pose();
+  auto current_pose = move_group_interface->getCurrentPose();
+  std::cout<<"Pose: "<<current_pose.pose.position.x<<'\t'<<current_pose.pose.position.y<<'\t'<<current_pose.pose.position.z<<'\t'<<std::endl;
 
   geometry_msgs::msg::Pose target_pose;
-  target_pose.position = current_pose.position;
+  target_pose.position = current_pose.pose.position;
   target_pose.orientation = target_orientation;
 
   move_to_pose_cartesian(target_pose);
@@ -274,13 +276,20 @@ void moveit_trajectory::move_callback(const geometry_msgs::msg::Pose::SharedPtr 
   target_orientation.z = 1;
   target_orientation.w = 0;
   set_orientation(target_orientation);
-  setOrientationConstraint("down");
-  pose->position.x -= 0.2;
-  move_to_pose_cartesian(*pose);
-  pose->position.y += 0.2;
-  move_to_pose_cartesian(*pose);
-  pose->position.z -= 0.2;
-  move_to_pose_cartesian(*pose);
+  target_orientation.x = 1;
+  target_orientation.y = 0;
+  target_orientation.z = 0;
+  target_orientation.w = 0;
+  set_orientation(target_orientation);
+  // setOrientationConstraint("down");
+  // pose->position.x -= 0.2;
+  // move_to_pose_cartesian(*pose);
+  // pose->position.y += 0.2;
+  // move_to_pose_cartesian(*pose);
+  // pose->position.x += 0.2;
+  // move_to_pose_cartesian(*pose);
+  // pose->position.y -= 0.2;
+  // move_to_pose_cartesian(*pose);
 }
 
 /////////////////////////////////////////////////////////////////////

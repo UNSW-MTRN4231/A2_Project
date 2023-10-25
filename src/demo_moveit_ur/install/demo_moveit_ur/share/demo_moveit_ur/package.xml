@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>demo_moveit_ur</name>
+  <version>0.0.0</version>
+  <description>Demonstation of basic moveit techniques</description>
+  <maintainer email="mitch.torok@gmail.com">Mitchell</maintainer>
+  <license>Apache license 2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>moveit_ros_planning_interface</depend>
+  <depend>rclcpp</depend>
+  <depend>ros_ur_driver</depend>
+  <depend>moveit_visual_tools</depend>
+  <depend>std_srvs</depend>
+  <depend>std_msgs</depend>
+  <depend>controller_manager_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>control_msgs</depend>
+  <depend>trajectory_msgs</depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+
+
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

@@ -1,0 +1,31 @@
+[0.048s] Invoking command in '/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/build/demo_moveit_ur': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/mtrn/4231/ws_moveit2/install/moveit_configs_utils:/home/mtrn/4231/ws_moveit2/install/launch_param_builder:/opt/ros/humble /home/mtrn/.local/bin/cmake --build /home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/build/demo_moveit_ur -- -j12 -l12
+[0.330s] [ 50%] [32mBuilding CXX object CMakeFiles/moveit_trajectory.dir/src/moveit_trajectory.cpp.o[0m
+[9.139s] [01m[K/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/src/moveit_trajectory.cpp:[m[K In member function ‘[01m[Kvoid moveit_trajectory::move_callback(geometry_msgs::msg::Pose_<std::allocator<void> >::SharedPtr)[m[K’:
+[9.139s] [01m[K/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/src/moveit_trajectory.cpp:269:81:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kpose[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[9.139s]   269 | void moveit_trajectory::move_callback([01;35m[Kconst geometry_msgs::msg::Pose::SharedPtr pose[m[K)
+[9.140s]       |                                       [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~[m[K
+[17.933s] [100%] [32m[1mLinking CXX executable moveit_trajectory[0m
+[19.117s] [100%] Built target moveit_trajectory
+[19.141s] Invoked command in '/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/build/demo_moveit_ur' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/mtrn/4231/ws_moveit2/install/moveit_configs_utils:/home/mtrn/4231/ws_moveit2/install/launch_param_builder:/opt/ros/humble /home/mtrn/.local/bin/cmake --build /home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/build/demo_moveit_ur -- -j12 -l12
+[19.366s] Invoking command in '/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/build/demo_moveit_ur': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/mtrn/4231/ws_moveit2/install/moveit_configs_utils:/home/mtrn/4231/ws_moveit2/install/launch_param_builder:/opt/ros/humble /home/mtrn/.local/bin/cmake --install /home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/build/demo_moveit_ur
+[19.415s] -- Install configuration: ""
+[19.415s] -- Installing: /home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/lib/demo_moveit_ur/moveit_trajectory
+[19.423s] -- Set runtime path of "/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/lib/demo_moveit_ur/moveit_trajectory" to ""
+[19.424s] -- Up-to-date: /home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur//launch
+[19.424s] -- Up-to-date: /home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur//launch/moveit_trajectory_launch.py
+[19.424s] -- Up-to-date: /home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/ament_index/resource_index/package_run_dependencies/demo_moveit_ur
+[19.424s] -- Up-to-date: /home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/ament_index/resource_index/parent_prefix_path/demo_moveit_ur
+[19.425s] -- Up-to-date: /home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/environment/ament_prefix_path.sh
+[19.425s] -- Up-to-date: /home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/environment/ament_prefix_path.dsv
+[19.425s] -- Up-to-date: /home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/environment/path.sh
+[19.425s] -- Up-to-date: /home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/environment/path.dsv
+[19.425s] -- Up-to-date: /home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/local_setup.bash
+[19.425s] -- Up-to-date: /home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/local_setup.sh
+[19.426s] -- Up-to-date: /home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/local_setup.zsh
+[19.426s] -- Up-to-date: /home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/local_setup.dsv
+[19.426s] -- Installing: /home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/package.dsv
+[19.426s] -- Up-to-date: /home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/ament_index/resource_index/packages/demo_moveit_ur
+[19.426s] -- Up-to-date: /home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/cmake/demo_moveit_urConfig.cmake
+[19.426s] -- Up-to-date: /home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/cmake/demo_moveit_urConfig-version.cmake
+[19.427s] -- Up-to-date: /home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/package.xml
+[19.442s] Invoked command in '/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/build/demo_moveit_ur' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/mtrn/4231/ws_moveit2/install/moveit_configs_utils:/home/mtrn/4231/ws_moveit2/install/launch_param_builder:/opt/ros/humble /home/mtrn/.local/bin/cmake --install /home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/build/demo_moveit_ur

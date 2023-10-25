@@ -1,0 +1,17 @@
+/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/lib/demo_moveit_ur/moveit_trajectory
+/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur//launch/moveit_trajectory_launch.py
+/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/ament_index/resource_index/package_run_dependencies/demo_moveit_ur
+/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/ament_index/resource_index/parent_prefix_path/demo_moveit_ur
+/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/environment/ament_prefix_path.sh
+/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/environment/ament_prefix_path.dsv
+/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/environment/path.sh
+/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/environment/path.dsv
+/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/local_setup.bash
+/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/local_setup.sh
+/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/local_setup.zsh
+/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/local_setup.dsv
+/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/package.dsv
+/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/ament_index/resource_index/packages/demo_moveit_ur
+/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/cmake/demo_moveit_urConfig.cmake
+/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/cmake/demo_moveit_urConfig-version.cmake
+/home/mtrn/A2_project/A2_Project/src/demo_moveit_ur/install/demo_moveit_ur/share/demo_moveit_ur/package.xml
