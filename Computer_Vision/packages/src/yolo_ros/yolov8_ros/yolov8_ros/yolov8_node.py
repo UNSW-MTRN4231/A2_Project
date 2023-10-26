@@ -66,11 +66,11 @@ class Yolov8Node(Node):
         self.yolo.fuse()
 
         # pubs
-        self._pub = self.create_publisher(Mask, "yolo_detections", 10)
-
+        self._pub = self.create_publisher(DetectionArray, "old_detections", 10)
+        self._pub_mask = self.create_publisher(Mask, "yolo_detections", 10)
         # subs
         self._sub = self.create_subscription(
-            Image, "image_warped", self.image_cb,
+            Image, "image_raw", self.image_cb,
             qos_profile_sensor_data
         )
 
@@ -173,7 +173,7 @@ class Yolov8Node(Node):
 
         return keypoints_list
 
-def image_cb(self, msg: Image) -> None:
+    def image_cb(self, msg: Image) -> None:
 
         if self.enable:
 
@@ -187,28 +187,46 @@ def image_cb(self, msg: Image) -> None:
                 device=self.device
             )
             results: Results = results[0].cpu()
-            hypothesis = self.parse_hypothesis(results)
-            
+
+            if results.boxes:
+                hypothesis = self.parse_hypothesis(results)
+                boxes = self.parse_boxes(results)
+
             if results.masks:
-# Filter masks to only include pizzas (class ID 53)
-                pizza_masks = [mask for mask, hyp in zip(masks, hypothesis) if hyp["class_id"] == 53]
-                
-                # Placeholder logic for plates (assuming class ID for plates is ??)
-                # plate_masks = [mask for mask, hyp in zip(masks, hypothesis) if hyp["class_id"] == ??]
-
-                # Create and publish Mask messages for pizzas
-                for pizza_mask_msg in pizza_masks:
-                    self._pub.publish(pizza_mask_msg)
-
-                # Placeholder for publishing Mask messages for plates
-                # for plate_mask_msg in plate_masks:
-                #     self._pub.publish(plate_mask_msg)
                 masks = self.parse_masks(results)
-
-                # create mask msgs
                 for mask_msg in masks:
-                    # publish each mask
-                    self._pub.publish(mask_msg)
+                    mask_msg.header = msg.header  # Add header if needed
+                    self._pub_mask.publish(mask_msg)
+
+            if results.keypoints:
+                keypoints = self.parse_keypoints(results)
+
+            # create detection msgs
+            detections_msg = DetectionArray()
+
+            for i in range(len(results)):
+
+                aux_msg = Detection()
+
+                if results.boxes:
+                    aux_msg.class_id = hypothesis[i]["class_id"]
+                    aux_msg.class_name = hypothesis[i]["class_name"]
+                    aux_msg.score = hypothesis[i]["score"]
+
+                    aux_msg.bbox = boxes[i]
+
+                if results.masks:
+                    aux_msg.mask = masks[i]
+
+                if results.keypoints:
+                    aux_msg.keypoints = keypoints[i]
+
+                detections_msg.detections.append(aux_msg)
+
+            # publish detections
+            detections_msg.header = msg.header
+            self._pub.publish(detections_msg)
+
 def main():
     rclpy.init()
     node = Yolov8Node()
