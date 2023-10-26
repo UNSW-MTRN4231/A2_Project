@@ -51,7 +51,7 @@ def get_purple_dots_coordinates(image):
     
     coordinates = []
     for contour in contours:
-        if 100 < cv2.contourArea(contour) < 10000:
+        if 15 < cv2.contourArea(contour) < 10000:
             M = cv2.moments(contour)
             if M["m00"]:
                 cX = int(M["m10"] / M["m00"])
