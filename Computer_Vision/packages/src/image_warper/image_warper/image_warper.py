@@ -1,3 +1,4 @@
+
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
@@ -14,31 +15,40 @@ class ImageWarper(Node):
         self.publisher_ = self.create_publisher(Image, 'image_warped', 10)
         self.pov_publisher_ = self.create_publisher(Float64MultiArray, 'warp_pov_tf', 10)
         self.bridge = CvBridge()
+        self.prev_M = None  # Added: A variable to store the previous valid transformation matrix
 
     def listener_callback(self, msg):
         cv_image = self.bridge.imgmsg_to_cv2(msg, 'bgr8')
         purple_dots = get_purple_dots_coordinates(cv_image)
-        sorted_purple_dots = sort_coordinates(purple_dots)
 
-        if len(sorted_purple_dots) != 4:
+        # Use the previous valid transformation matrix if not exactly 4 dots are found
+        if len(purple_dots) != 4:
             self.get_logger().warn('Did not detect exactly four purple dots.')
-            return
+            if self.prev_M is not None:  # Check if a previous valid matrix exists
+                M = self.prev_M
+            else:
+                return  # If no previous valid matrix, return without doing anything
+        else:  # Update the transformation matrix if 4 dots are found
+            sorted_purple_dots = sort_coordinates(purple_dots)
+            M = self.get_perspective_transform(sorted_purple_dots)
+            self.prev_M = M  # Update the previous valid matrix
 
-        warped_image = self.warp_image(cv_image, sorted_purple_dots)
+        # Continue with the warp and publish
+        warped_image = self.warp_image(cv_image, M)
         img_msg = self.bridge.cv2_to_imgmsg(warped_image, 'bgr8')
         self.publisher_.publish(img_msg)
 
-    def warp_image(self, img, purple_dots):
+    def get_perspective_transform(self, purple_dots):
         src = np.array(purple_dots, dtype=np.float32)
         dst = np.array([[0, 0], [1000, 0], [0, 1000], [1000, 1000]], dtype=np.float32)
-        M = cv2.getPerspectiveTransform(src, dst)
+        return cv2.getPerspectiveTransform(src, dst)
 
+    def warp_image(self, img, M):
         # Publish the transformation matrix
         matrix_msg = Float64MultiArray()
         matrix_msg.data = [float(value) for value in M.ravel()]
         self.pov_publisher_.publish(matrix_msg)
         return cv2.warpPerspective(img, M, (1000, 1000))
-
 
 def get_purple_dots_coordinates(image):
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
@@ -78,3 +88,5 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+
+
