@@ -1,4 +1,3 @@
-
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
@@ -14,26 +13,31 @@ class ImageWarper(Node):
         self.subscription = self.create_subscription(Image, 'image_raw', self.listener_callback, 10)
         self.publisher_ = self.create_publisher(Image, 'image_warped', 10)
         self.pov_publisher_ = self.create_publisher(Float64MultiArray, 'warp_pov_tf', 10)
+        self.homography_publisher_ = self.create_publisher(Float64MultiArray, 'homography_matrix', 10)  # New publisher
         self.bridge = CvBridge()
-        self.prev_M = None  # Added: A variable to store the previous valid transformation matrix
+        self.prev_M = None
 
     def listener_callback(self, msg):
         cv_image = self.bridge.imgmsg_to_cv2(msg, 'bgr8')
         purple_dots = get_purple_dots_coordinates(cv_image)
 
-        # Use the previous valid transformation matrix if not exactly 4 dots are found
         if len(purple_dots) != 4:
             self.get_logger().warn('Did not detect exactly four purple dots.')
-            if self.prev_M is not None:  # Check if a previous valid matrix exists
+            if self.prev_M is not None:
                 M = self.prev_M
             else:
-                return  # If no previous valid matrix, return without doing anything
-        else:  # Update the transformation matrix if 4 dots are found
+                return
+        else:
             sorted_purple_dots = sort_coordinates(purple_dots)
             M = self.get_perspective_transform(sorted_purple_dots)
-            self.prev_M = M  # Update the previous valid matrix
+            self.prev_M = M
 
-        # Continue with the warp and publish
+            # Compute homography to robot base and publish
+            H_robot = compute_homography_to_robot_base(sorted_purple_dots)
+            homography_msg = Float64MultiArray()
+            homography_msg.data = [float(value) for value in H_robot.ravel()]
+            self.homography_publisher_.publish(homography_msg)
+
         warped_image = self.warp_image(cv_image, M)
         img_msg = self.bridge.cv2_to_imgmsg(warped_image, 'bgr8')
         self.publisher_.publish(img_msg)
@@ -44,7 +48,6 @@ class ImageWarper(Node):
         return cv2.getPerspectiveTransform(src, dst)
 
     def warp_image(self, img, M):
-        # Publish the transformation matrix
         matrix_msg = Float64MultiArray()
         matrix_msg.data = [float(value) for value in M.ravel()]
         self.pov_publisher_.publish(matrix_msg)
@@ -69,7 +72,6 @@ def get_purple_dots_coordinates(image):
                 coordinates.append((cX, cY))
     return coordinates
 
-
 def sort_coordinates(coordinates):
     sorted_coordinates = sorted(coordinates, key=lambda coord: coord[0])
     left = sorted_coordinates[:2]
@@ -77,6 +79,15 @@ def sort_coordinates(coordinates):
     return [sorted(left, key=lambda coord: coord[1])[0], sorted(right, key=lambda coord: coord[1])[0],
             sorted(left, key=lambda coord: coord[1])[1], sorted(right, key=lambda coord: coord[1])[1]]
 
+def compute_homography_to_robot_base(src_points):
+    dst_robot = np.array([
+        [-250, 75],
+        [-250, -525],
+        [-900, 75],
+        [-900, -525]
+    ], dtype=np.float32)
+    H, _ = cv2.findHomography(src_points, dst_robot)
+    return H
 
 def main(args=None):
     rclpy.init(args=args)
@@ -85,8 +96,5 @@ def main(args=None):
     image_warper_node.destroy_node()
     rclpy.shutdown()
 
-
 if __name__ == '__main__':
     main()
-
-

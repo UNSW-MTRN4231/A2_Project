@@ -18,6 +18,7 @@ $ colcon build
 ```shell
 $ ros2 launch yolov8_bringup yolov8.launch.py
 ros2 launch yolov8_bringup yolov8.launch.py input_image_topic:='/image_warped' device:='cpu' model:=yolov8n-seg.pt
+ros2 launch yolov8_bringup yolov8.launch.py input_image_topic:='/image_raw' device:='cpu' model:=yolov8n-seg.pt
 ```
 
 ## Demos

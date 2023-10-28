@@ -1,0 +1,19 @@
+In file included from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/logging.hpp:24[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/client.hpp:40[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/callback_group.hpp:24[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/any_executable.hpp:20[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategy.hpp:25[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/memory_strategies.hpp:18[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor_options.hpp:20[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executor.hpp:37[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors/multi_threaded_executor.hpp:25[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/executors.hpp:21[m[K,
+                 from [01m[K/opt/ros/humble/include/rclcpp/rclcpp/rclcpp.hpp:155[m[K,
+                 from [01m[K/home/mtrn/4231/A2_Project/Computer_Vision/packages/src/pizza_pos/src/subscriber_node.cpp:1[m[K:
+[01m[K/home/mtrn/4231/A2_Project/Computer_Vision/packages/src/pizza_pos/src/subscriber_node.cpp:[m[K In member function ‘[01m[Kvoid DetectionSubscriber::callback(yolov8_msgs::msg::DetectionArray_<std::allocator<void> >::SharedPtr) const[m[K’:
+[01m[K/home/mtrn/4231/A2_Project/Computer_Vision/packages/src/pizza_pos/src/subscriber_node.cpp:17:63:[m[K [01;31m[Kerror: [m[K‘[01m[Kusing element_type = struct yolov8_msgs::msg::DetectionArray_<std::allocator<void> >[m[K’ {aka ‘[01m[Kstruct yolov8_msgs::msg::DetectionArray_<std::allocator<void> >[m[K’} has no member named ‘[01m[Kdata[m[K’
+   17 |         RCLCPP_INFO(this->get_logger(), "I heard: '%s'", msg->[01;31m[Kdata[m[K.c_str());
+      |                                                               [01;31m[K^~~~[m[K
+gmake[2]: *** [CMakeFiles/subscriber_node.dir/build.make:76: CMakeFiles/subscriber_node.dir/src/subscriber_node.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/subscriber_node.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2
