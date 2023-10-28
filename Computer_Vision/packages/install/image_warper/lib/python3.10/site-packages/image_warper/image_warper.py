@@ -80,6 +80,7 @@ def sort_coordinates(coordinates):
             sorted(left, key=lambda coord: coord[1])[1], sorted(right, key=lambda coord: coord[1])[1]]
 
 def compute_homography_to_robot_base(src_points):
+    src_points = np.array(src_points, dtype=np.float32)  # Ensure it's a numpy array
     dst_robot = np.array([
         [-250, 75],
         [-250, -525],
