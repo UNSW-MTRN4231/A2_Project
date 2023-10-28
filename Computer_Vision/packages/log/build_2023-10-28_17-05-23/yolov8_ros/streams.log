@@ -1,0 +1,27 @@
+[1.566s] Invoking command in '/home/mtrn/4231/A2_Project/Computer_Vision/packages/src/yolo_ros/yolov8_ros': PYTHONPATH=/home/mtrn/4231/A2_Project/Computer_Vision/packages/build/yolov8_ros/prefix_override:/home/mtrn/4231/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../../build/yolov8_ros build --build-base /home/mtrn/4231/A2_Project/Computer_Vision/packages/build/yolov8_ros/build install --record /home/mtrn/4231/A2_Project/Computer_Vision/packages/build/yolov8_ros/install.log --single-version-externally-managed
+[1.914s] running egg_info
+[1.917s] writing ../../../build/yolov8_ros/yolov8_ros.egg-info/PKG-INFO
+[1.917s] writing dependency_links to ../../../build/yolov8_ros/yolov8_ros.egg-info/dependency_links.txt
+[1.917s] writing entry points to ../../../build/yolov8_ros/yolov8_ros.egg-info/entry_points.txt
+[1.917s] writing requirements to ../../../build/yolov8_ros/yolov8_ros.egg-info/requires.txt
+[1.917s] writing top-level names to ../../../build/yolov8_ros/yolov8_ros.egg-info/top_level.txt
+[1.919s] reading manifest file '../../../build/yolov8_ros/yolov8_ros.egg-info/SOURCES.txt'
+[1.921s] writing manifest file '../../../build/yolov8_ros/yolov8_ros.egg-info/SOURCES.txt'
+[1.921s] running build
+[1.922s] running build_py
+[1.922s] copying yolov8_ros/yolov8_node.py -> /home/mtrn/4231/A2_Project/Computer_Vision/packages/build/yolov8_ros/build/lib/yolov8_ros
+[1.922s] running install
+[1.922s] running install_lib
+[1.923s] copying /home/mtrn/4231/A2_Project/Computer_Vision/packages/build/yolov8_ros/build/lib/yolov8_ros/yolov8_node.py -> /home/mtrn/4231/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/python3.10/site-packages/yolov8_ros
+[1.924s] byte-compiling /home/mtrn/4231/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/python3.10/site-packages/yolov8_ros/yolov8_node.py to yolov8_node.cpython-310.pyc
+[1.926s] running install_data
+[1.927s] running install_egg_info
+[1.930s] removing '/home/mtrn/4231/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/python3.10/site-packages/yolov8_ros-0.0.0-py3.10.egg-info' (and everything under it)
+[1.931s] Copying ../../../build/yolov8_ros/yolov8_ros.egg-info to /home/mtrn/4231/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/python3.10/site-packages/yolov8_ros-0.0.0-py3.10.egg-info
+[1.932s] running install_scripts
+[1.965s] Installing debug_node script to /home/mtrn/4231/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/yolov8_ros
+[1.965s] Installing detect_3d_node script to /home/mtrn/4231/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/yolov8_ros
+[1.966s] Installing tracking_node script to /home/mtrn/4231/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/yolov8_ros
+[1.966s] Installing yolov8_node script to /home/mtrn/4231/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/yolov8_ros
+[1.966s] writing list of installed files to '/home/mtrn/4231/A2_Project/Computer_Vision/packages/build/yolov8_ros/install.log'
+[2.009s] Invoked command in '/home/mtrn/4231/A2_Project/Computer_Vision/packages/src/yolo_ros/yolov8_ros' returned '0': PYTHONPATH=/home/mtrn/4231/A2_Project/Computer_Vision/packages/build/yolov8_ros/prefix_override:/home/mtrn/4231/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../../build/yolov8_ros build --build-base /home/mtrn/4231/A2_Project/Computer_Vision/packages/build/yolov8_ros/build install --record /home/mtrn/4231/A2_Project/Computer_Vision/packages/build/yolov8_ros/install.log --single-version-externally-managed

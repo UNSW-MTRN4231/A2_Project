@@ -1,0 +1,3 @@
+[0mCMake Error: The source directory "/home/mtrn/4231/A2_Project/Computer_Vision/packages/src/yolo_ros/yolov8_msgs" does not exist.
+Specify --help for usage, or press the help button on the CMake GUI.[0m
+gmake: *** [Makefile:3123: cmake_check_build_system] Error 1

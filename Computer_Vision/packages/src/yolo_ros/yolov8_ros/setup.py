@@ -1,4 +1,6 @@
 from setuptools import setup
+import warnings
+warnings.filterwarnings('ignore')
 
 package_name = 'yolov8_ros'
 
