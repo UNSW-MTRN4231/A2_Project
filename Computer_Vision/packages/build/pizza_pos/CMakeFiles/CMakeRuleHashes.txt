@@ -1,2 +1,0 @@
-# Hashes of file build rules.
-5334bd91f4d221516c1154d931062690 CMakeFiles/pizza_pos_uninstall
