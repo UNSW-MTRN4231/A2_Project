@@ -1,8 +1,8 @@
-# Install script for directory: /home/mtrn/4231/A2_Project/Computer_Vision/packages/build/yolov8_msgs/yolov8_msgs__py
+# Install script for directory: /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_msgs/yolov8_msgs__py
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/mtrn/4231/A2_Project/Computer_Vision/packages/install/yolov8_msgs")
+  set(CMAKE_INSTALL_PREFIX "/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 

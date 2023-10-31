@@ -1,0 +1,212 @@
+[0.741s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build', '--packages-select', 'yolov8_msgs']
+[0.742s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=12, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=['yolov8_msgs'], packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, mixin_files=None, mixin=None, verb_parser=<colcon_mixin.mixin.mixin_argument.MixinArgumentDecorator object at 0x7febd49296c0>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7febd5355420>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7febd5355420>>, mixin_verb=('build',))
+[0.791s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.792s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.792s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.792s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.792s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.793s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.793s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages'
+[0.793s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.793s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.793s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.793s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.793s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.793s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.793s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.794s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.794s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.828s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.829s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.829s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.829s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.829s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.829s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.830s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.831s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.832s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.832s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.833s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.833s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.833s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.834s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.834s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ignore', 'ignore_ament_install']
+[0.836s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore'
+[0.836s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore_ament_install'
+[0.836s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_pkg']
+[0.836s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_pkg'
+[0.836s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_meta']
+[0.836s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_meta'
+[0.836s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ros']
+[0.836s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ros'
+[0.836s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['cmake', 'python']
+[0.836s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'cmake'
+[0.836s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python'
+[0.836s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['python_setup_py']
+[0.836s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python_setup_py'
+[0.837s] Level 1:colcon.colcon_core.package_identification:_identify(src/image_warper) by extensions ['ignore', 'ignore_ament_install']
+[0.837s] Level 1:colcon.colcon_core.package_identification:_identify(src/image_warper) by extension 'ignore'
+[0.839s] Level 1:colcon.colcon_core.package_identification:_identify(src/image_warper) by extension 'ignore_ament_install'
+[0.839s] Level 1:colcon.colcon_core.package_identification:_identify(src/image_warper) by extensions ['colcon_pkg']
+[0.839s] Level 1:colcon.colcon_core.package_identification:_identify(src/image_warper) by extension 'colcon_pkg'
+[0.839s] Level 1:colcon.colcon_core.package_identification:_identify(src/image_warper) by extensions ['colcon_meta']
+[0.839s] Level 1:colcon.colcon_core.package_identification:_identify(src/image_warper) by extension 'colcon_meta'
+[0.839s] Level 1:colcon.colcon_core.package_identification:_identify(src/image_warper) by extensions ['ros']
+[0.840s] Level 1:colcon.colcon_core.package_identification:_identify(src/image_warper) by extension 'ros'
+[0.846s] DEBUG:colcon.colcon_core.package_identification:Package 'src/image_warper' with type 'ros.ament_python' and name 'image_warper'
+[0.847s] Level 1:colcon.colcon_core.package_identification:_identify(src/pizza_pos) by extensions ['ignore', 'ignore_ament_install']
+[0.847s] Level 1:colcon.colcon_core.package_identification:_identify(src/pizza_pos) by extension 'ignore'
+[0.847s] Level 1:colcon.colcon_core.package_identification:_identify(src/pizza_pos) by extension 'ignore_ament_install'
+[0.848s] Level 1:colcon.colcon_core.package_identification:_identify(src/pizza_pos) by extensions ['colcon_pkg']
+[0.848s] Level 1:colcon.colcon_core.package_identification:_identify(src/pizza_pos) by extension 'colcon_pkg'
+[0.848s] Level 1:colcon.colcon_core.package_identification:_identify(src/pizza_pos) by extensions ['colcon_meta']
+[0.848s] Level 1:colcon.colcon_core.package_identification:_identify(src/pizza_pos) by extension 'colcon_meta'
+[0.848s] Level 1:colcon.colcon_core.package_identification:_identify(src/pizza_pos) by extensions ['ros']
+[0.848s] Level 1:colcon.colcon_core.package_identification:_identify(src/pizza_pos) by extension 'ros'
+[0.850s] DEBUG:colcon.colcon_core.package_identification:Package 'src/pizza_pos' with type 'ros.ament_cmake' and name 'pizza_pos'
+[0.852s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros) by extensions ['ignore', 'ignore_ament_install']
+[0.852s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros) by extension 'ignore'
+[0.852s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros) by extension 'ignore_ament_install'
+[0.852s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros) by extensions ['colcon_pkg']
+[0.852s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros) by extension 'colcon_pkg'
+[0.852s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros) by extensions ['colcon_meta']
+[0.852s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros) by extension 'colcon_meta'
+[0.852s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros) by extensions ['ros']
+[0.853s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros) by extension 'ros'
+[0.853s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros) by extensions ['cmake', 'python']
+[0.853s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros) by extension 'cmake'
+[0.853s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros) by extension 'python'
+[0.853s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros) by extensions ['python_setup_py']
+[0.853s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros) by extension 'python_setup_py'
+[0.853s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_bringup) by extensions ['ignore', 'ignore_ament_install']
+[0.853s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_bringup) by extension 'ignore'
+[0.853s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_bringup) by extension 'ignore_ament_install'
+[0.853s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_bringup) by extensions ['colcon_pkg']
+[0.853s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_bringup) by extension 'colcon_pkg'
+[0.853s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_bringup) by extensions ['colcon_meta']
+[0.854s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_bringup) by extension 'colcon_meta'
+[0.854s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_bringup) by extensions ['ros']
+[0.854s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_bringup) by extension 'ros'
+[0.855s] DEBUG:colcon.colcon_core.package_identification:Package 'src/yolo_ros/yolov8_bringup' with type 'ros.ament_cmake' and name 'yolov8_bringup'
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_msgs) by extensions ['ignore', 'ignore_ament_install']
+[0.856s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_msgs) by extension 'ignore'
+[0.856s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_msgs) by extension 'ignore_ament_install'
+[0.856s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_msgs) by extensions ['colcon_pkg']
+[0.856s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_msgs) by extension 'colcon_pkg'
+[0.856s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_msgs) by extensions ['colcon_meta']
+[0.856s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_msgs) by extension 'colcon_meta'
+[0.856s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_msgs) by extensions ['ros']
+[0.856s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_msgs) by extension 'ros'
+[0.857s] DEBUG:colcon.colcon_core.package_identification:Package 'src/yolo_ros/yolov8_msgs' with type 'ros.ament_cmake' and name 'yolov8_msgs'
+[0.857s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_ros) by extensions ['ignore', 'ignore_ament_install']
+[0.858s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_ros) by extension 'ignore'
+[0.858s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_ros) by extension 'ignore_ament_install'
+[0.858s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_ros) by extensions ['colcon_pkg']
+[0.858s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_ros) by extension 'colcon_pkg'
+[0.858s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_ros) by extensions ['colcon_meta']
+[0.858s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_ros) by extension 'colcon_meta'
+[0.858s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_ros) by extensions ['ros']
+[0.858s] Level 1:colcon.colcon_core.package_identification:_identify(src/yolo_ros/yolov8_ros) by extension 'ros'
+[0.859s] DEBUG:colcon.colcon_core.package_identification:Package 'src/yolo_ros/yolov8_ros' with type 'ros.ament_python' and name 'yolov8_ros'
+[0.859s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.859s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.859s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.859s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.859s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.911s] INFO:colcon.colcon_core.package_selection:Skipping not selected package 'image_warper' in 'src/image_warper'
+[0.911s] INFO:colcon.colcon_core.package_selection:Skipping not selected package 'yolov8_ros' in 'src/yolo_ros/yolov8_ros'
+[0.911s] INFO:colcon.colcon_core.package_selection:Skipping not selected package 'pizza_pos' in 'src/pizza_pos'
+[0.911s] INFO:colcon.colcon_core.package_selection:Skipping not selected package 'yolov8_bringup' in 'src/yolo_ros/yolov8_bringup'
+[0.916s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.916s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.920s] WARNING:colcon.colcon_ros.prefix_path.ament:The path '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_node' in the environment variable AMENT_PREFIX_PATH doesn't exist
+[0.920s] WARNING:colcon.colcon_ros.prefix_path.ament:The path '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs' in the environment variable AMENT_PREFIX_PATH doesn't exist
+[0.924s] WARNING:colcon.colcon_ros.prefix_path.catkin:The path '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs' in the environment variable CMAKE_PREFIX_PATH doesn't exist
+[0.928s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 4 installed packages in /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install
+[0.935s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 55 installed packages in /home/mtrn/4231/ws_moveit2/install
+[0.938s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 7 installed packages in /home/mtrn/4231/ros_ur_driver/install
+[0.942s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 338 installed packages in /opt/ros/humble
+[0.948s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[1.136s] Level 5:colcon.colcon_core.verb:set package 'yolov8_msgs' build argument 'cmake_args' from command line to 'None'
+[1.136s] Level 5:colcon.colcon_core.verb:set package 'yolov8_msgs' build argument 'cmake_target' from command line to 'None'
+[1.137s] Level 5:colcon.colcon_core.verb:set package 'yolov8_msgs' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[1.137s] Level 5:colcon.colcon_core.verb:set package 'yolov8_msgs' build argument 'cmake_clean_cache' from command line to 'False'
+[1.137s] Level 5:colcon.colcon_core.verb:set package 'yolov8_msgs' build argument 'cmake_clean_first' from command line to 'False'
+[1.138s] Level 5:colcon.colcon_core.verb:set package 'yolov8_msgs' build argument 'cmake_force_configure' from command line to 'False'
+[1.138s] Level 5:colcon.colcon_core.verb:set package 'yolov8_msgs' build argument 'ament_cmake_args' from command line to 'None'
+[1.138s] Level 5:colcon.colcon_core.verb:set package 'yolov8_msgs' build argument 'catkin_cmake_args' from command line to 'None'
+[1.138s] Level 5:colcon.colcon_core.verb:set package 'yolov8_msgs' build argument 'catkin_skip_building_tests' from command line to 'False'
+[1.138s] DEBUG:colcon.colcon_core.verb:Building package 'yolov8_msgs' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_msgs', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs', 'merge_install': False, 'path': '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/src/yolo_ros/yolov8_msgs', 'symlink_install': False, 'test_result_base': None}
+[1.139s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[1.144s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[1.144s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/src/yolo_ros/yolov8_msgs' with build type 'ament_cmake'
+[1.144s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/src/yolo_ros/yolov8_msgs'
+[1.162s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[1.163s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.163s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.203s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_msgs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_node:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/image_warper:/home/mtrn/4231/ws_moveit2/install/moveit_configs_utils:/home/mtrn/4231/ws_moveit2/install/launch_param_builder:/opt/ros/humble /home/mtrn/.local/bin/cmake --build /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_msgs -- -j12 -l12
+[67.697s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_msgs' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_node:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/image_warper:/home/mtrn/4231/ws_moveit2/install/moveit_configs_utils:/home/mtrn/4231/ws_moveit2/install/launch_param_builder:/opt/ros/humble /home/mtrn/.local/bin/cmake --build /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_msgs -- -j12 -l12
+[71.000s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_msgs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_node:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/image_warper:/home/mtrn/4231/ws_moveit2/install/moveit_configs_utils:/home/mtrn/4231/ws_moveit2/install/launch_param_builder:/opt/ros/humble /home/mtrn/.local/bin/cmake --install /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_msgs
+[71.417s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(yolov8_msgs)
+[71.428s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_msgs' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_node:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/image_warper:/home/mtrn/4231/ws_moveit2/install/moveit_configs_utils:/home/mtrn/4231/ws_moveit2/install/launch_param_builder:/opt/ros/humble /home/mtrn/.local/bin/cmake --install /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_msgs
+[71.432s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs' for CMake module files
+[71.434s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs' for CMake config files
+[71.434s] Level 1:colcon.colcon_core.shell:create_environment_hook('yolov8_msgs', 'cmake_prefix_path')
+[71.437s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/yolov8_msgs/hook/cmake_prefix_path.ps1'
+[71.439s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/yolov8_msgs/hook/cmake_prefix_path.dsv'
+[71.440s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/yolov8_msgs/hook/cmake_prefix_path.sh'
+[71.444s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/lib'
+[71.445s] Level 1:colcon.colcon_core.shell:create_environment_hook('yolov8_msgs', 'ld_library_path_lib')
+[71.449s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/yolov8_msgs/hook/ld_library_path_lib.ps1'
+[71.450s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/yolov8_msgs/hook/ld_library_path_lib.dsv'
+[71.450s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/yolov8_msgs/hook/ld_library_path_lib.sh'
+[71.451s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/bin'
+[71.451s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/lib/pkgconfig/yolov8_msgs.pc'
+[71.451s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/lib/python3.10/site-packages'
+[71.451s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/bin'
+[71.464s] INFO:colcon.colcon_core.shell:Creating package script '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/yolov8_msgs/package.ps1'
+[71.474s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/yolov8_msgs/package.dsv'
+[71.476s] INFO:colcon.colcon_core.shell:Creating package script '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/yolov8_msgs/package.sh'
+[71.478s] INFO:colcon.colcon_core.shell:Creating package script '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/yolov8_msgs/package.bash'
+[71.481s] INFO:colcon.colcon_core.shell:Creating package script '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/yolov8_msgs/package.zsh'
+[71.485s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/colcon-core/packages/yolov8_msgs)
+[74.165s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(yolov8_msgs)
+[74.169s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs' for CMake module files
+[74.171s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs' for CMake config files
+[74.172s] Level 1:colcon.colcon_core.shell:create_environment_hook('yolov8_msgs', 'cmake_prefix_path')
+[74.176s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/yolov8_msgs/hook/cmake_prefix_path.ps1'
+[74.179s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/yolov8_msgs/hook/cmake_prefix_path.dsv'
+[74.180s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/yolov8_msgs/hook/cmake_prefix_path.sh'
+[74.181s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/lib'
+[74.181s] Level 1:colcon.colcon_core.shell:create_environment_hook('yolov8_msgs', 'ld_library_path_lib')
+[74.183s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/yolov8_msgs/hook/ld_library_path_lib.ps1'
+[74.184s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/yolov8_msgs/hook/ld_library_path_lib.dsv'
+[74.185s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/yolov8_msgs/hook/ld_library_path_lib.sh'
+[74.186s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/bin'
+[74.186s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/lib/pkgconfig/yolov8_msgs.pc'
+[74.186s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/lib/python3.10/site-packages'
+[74.187s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/bin'
+[74.189s] INFO:colcon.colcon_core.shell:Creating package script '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/yolov8_msgs/package.ps1'
+[74.190s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/yolov8_msgs/package.dsv'
+[74.192s] INFO:colcon.colcon_core.shell:Creating package script '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/yolov8_msgs/package.sh'
+[74.193s] INFO:colcon.colcon_core.shell:Creating package script '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/yolov8_msgs/package.bash'
+[74.194s] INFO:colcon.colcon_core.shell:Creating package script '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/yolov8_msgs/package.zsh'
+[74.195s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/share/colcon-core/packages/yolov8_msgs)
+[74.197s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[74.198s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[74.198s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[74.198s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[74.205s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[74.205s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[74.205s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[74.223s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[74.226s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/local_setup.ps1'
+[74.230s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/_local_setup_util_ps1.py'
+[74.242s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/setup.ps1'
+[74.247s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/local_setup.sh'
+[74.248s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/_local_setup_util_sh.py'
+[74.248s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/setup.sh'
+[74.255s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/local_setup.bash'
+[74.255s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/setup.bash'
+[74.267s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/local_setup.zsh'
+[74.271s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/setup.zsh'

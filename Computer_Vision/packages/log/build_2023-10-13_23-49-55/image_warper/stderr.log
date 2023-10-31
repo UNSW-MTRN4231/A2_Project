@@ -1,7 +1,0 @@
-/usr/lib/python3/dist-packages/setuptools/command/install.py:34: SetuptoolsDeprecationWarning: setup.py install is deprecated. Use build and pip and other standards-based tools.
-  warnings.warn(
-  File "/home/mtrn/4231/A2_Project/Computer_Vision/packages/install/image_warper/lib/python3.10/site-packages/image_warper/ImagePublisher.py", line 24
-    def main(args=None):/home/mtrn/4231/A2_Project/Computer_Vision/packages/src/image_warper/image_warper/1.png
-                                                                                                           ^
-SyntaxError: invalid decimal literal
-

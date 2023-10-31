@@ -1,5 +1,0 @@
-[0.814s] Invoking command in '/home/mtrn/4231/A2_Project/Computer_Vision/packages/build/yolov8_msgs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/mtrn/4231/ws_moveit2/install/moveit_configs_utils:/home/mtrn/4231/ws_moveit2/install/launch_param_builder:/opt/ros/humble /usr/bin/cmake --build /home/mtrn/4231/A2_Project/Computer_Vision/packages/build/yolov8_msgs -- -j6 -l6
-[0.859s] [0mCMake Error: The source directory "/home/mtrn/4231/A2_Project/Computer_Vision/packages/src/yolo_ros/yolov8_msgs" does not exist.
-[0.859s] Specify --help for usage, or press the help button on the CMake GUI.[0m
-[0.861s] gmake: *** [Makefile:3123: cmake_check_build_system] Error 1
-[0.864s] Invoked command in '/home/mtrn/4231/A2_Project/Computer_Vision/packages/build/yolov8_msgs' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/mtrn/4231/ws_moveit2/install/moveit_configs_utils:/home/mtrn/4231/ws_moveit2/install/launch_param_builder:/opt/ros/humble /usr/bin/cmake --build /home/mtrn/4231/A2_Project/Computer_Vision/packages/build/yolov8_msgs -- -j6 -l6

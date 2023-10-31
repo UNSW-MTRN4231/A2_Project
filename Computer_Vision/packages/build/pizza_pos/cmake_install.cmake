@@ -1,8 +1,8 @@
-# Install script for directory: /home/mtrn/4231/A2_Project/Computer_Vision/packages/src/pizza_pos
+# Install script for directory: /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/src/pizza_pos
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/mtrn/4231/A2_Project/Computer_Vision/packages/install/pizza_pos")
+  set(CMAKE_INSTALL_PREFIX "/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/pizza_pos")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -42,19 +42,19 @@ if(NOT DEFINED CMAKE_OBJDUMP)
   set(CMAKE_OBJDUMP "/usr/bin/objdump")
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/pizza_pos/subscriber_node" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/pizza_pos/subscriber_node")
     file(RPATH_CHECK
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/pizza_pos/subscriber_node"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pizza_pos" TYPE EXECUTABLE FILES "/home/mtrn/4231/A2_Project/Computer_Vision/packages/build/pizza_pos/subscriber_node")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pizza_pos" TYPE EXECUTABLE FILES "/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/pizza_pos/subscriber_node")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/pizza_pos/subscriber_node" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/pizza_pos/subscriber_node")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/pizza_pos/subscriber_node"
-         OLD_RPATH "/opt/ros/humble/lib:/home/mtrn/4231/A2_Project/Computer_Vision/packages/install/yolov8_msgs/lib:"
+         OLD_RPATH "/opt/ros/humble/lib:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/lib:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/pizza_pos/subscriber_node")
@@ -62,63 +62,63 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
   endif()
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ament_index/resource_index/package_run_dependencies" TYPE FILE FILES "/home/mtrn/4231/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_index/share/ament_index/resource_index/package_run_dependencies/pizza_pos")
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ament_index/resource_index/package_run_dependencies" TYPE FILE FILES "/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_index/share/ament_index/resource_index/package_run_dependencies/pizza_pos")
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ament_index/resource_index/parent_prefix_path" TYPE FILE FILES "/home/mtrn/4231/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_index/share/ament_index/resource_index/parent_prefix_path/pizza_pos")
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ament_index/resource_index/parent_prefix_path" TYPE FILE FILES "/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_index/share/ament_index/resource_index/parent_prefix_path/pizza_pos")
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pizza_pos/environment" TYPE FILE FILES "/opt/ros/humble/share/ament_cmake_core/cmake/environment_hooks/environment/ament_prefix_path.sh")
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pizza_pos/environment" TYPE FILE FILES "/home/mtrn/4231/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_environment_hooks/ament_prefix_path.dsv")
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pizza_pos/environment" TYPE FILE FILES "/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_environment_hooks/ament_prefix_path.dsv")
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pizza_pos/environment" TYPE FILE FILES "/opt/ros/humble/share/ament_cmake_core/cmake/environment_hooks/environment/path.sh")
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pizza_pos/environment" TYPE FILE FILES "/home/mtrn/4231/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_environment_hooks/path.dsv")
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pizza_pos/environment" TYPE FILE FILES "/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_environment_hooks/path.dsv")
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pizza_pos" TYPE FILE FILES "/home/mtrn/4231/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_environment_hooks/local_setup.bash")
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pizza_pos" TYPE FILE FILES "/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_environment_hooks/local_setup.bash")
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pizza_pos" TYPE FILE FILES "/home/mtrn/4231/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_environment_hooks/local_setup.sh")
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pizza_pos" TYPE FILE FILES "/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_environment_hooks/local_setup.sh")
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pizza_pos" TYPE FILE FILES "/home/mtrn/4231/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_environment_hooks/local_setup.zsh")
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pizza_pos" TYPE FILE FILES "/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_environment_hooks/local_setup.zsh")
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pizza_pos" TYPE FILE FILES "/home/mtrn/4231/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_environment_hooks/local_setup.dsv")
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pizza_pos" TYPE FILE FILES "/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_environment_hooks/local_setup.dsv")
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pizza_pos" TYPE FILE FILES "/home/mtrn/4231/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_environment_hooks/package.dsv")
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pizza_pos" TYPE FILE FILES "/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_environment_hooks/package.dsv")
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ament_index/resource_index/packages" TYPE FILE FILES "/home/mtrn/4231/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_index/share/ament_index/resource_index/packages/pizza_pos")
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/ament_index/resource_index/packages" TYPE FILE FILES "/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_index/share/ament_index/resource_index/packages/pizza_pos")
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pizza_pos/cmake" TYPE FILE FILES
-    "/home/mtrn/4231/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_core/pizza_posConfig.cmake"
-    "/home/mtrn/4231/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_core/pizza_posConfig-version.cmake"
+    "/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_core/pizza_posConfig.cmake"
+    "/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/pizza_pos/ament_cmake_core/pizza_posConfig-version.cmake"
     )
 endif()
 
-if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pizza_pos" TYPE FILE FILES "/home/mtrn/4231/A2_Project/Computer_Vision/packages/src/pizza_pos/package.xml")
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/pizza_pos" TYPE FILE FILES "/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/src/pizza_pos/package.xml")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -129,5 +129,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/mtrn/4231/A2_Project/Computer_Vision/packages/build/pizza_pos/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/pizza_pos/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -1,7 +1,0 @@
-[0.000000] (-) TimerEvent: {}
-[0.000437] (-) JobUnselected: {'identifier': 'image_warper'}
-[0.000559] (-) JobUnselected: {'identifier': 'pizza_pos'}
-[0.000601] (-) JobUnselected: {'identifier': 'yolov8_bringup'}
-[0.000632] (-) JobUnselected: {'identifier': 'yolov8_msgs'}
-[0.000661] (-) JobUnselected: {'identifier': 'yolov8_ros'}
-[0.001153] (-) EventReactorShutdown: {}

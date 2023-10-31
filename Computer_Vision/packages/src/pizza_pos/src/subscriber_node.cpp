@@ -50,6 +50,8 @@ private:
         cv::Mat image_with_circle = current_image_.clone();
         
         for (const auto& detection : msg->detections) {
+
+            std::cout << "Homography matrix: " << homography_matrix_ << std::endl;
             auto mask_centroid = computeCentroid(detection.mask);
             cv::Point center(mask_centroid.first, mask_centroid.second);
             cv::circle(image_with_circle, center, 5, cv::Scalar(255, 0, 0), -1);
@@ -59,7 +61,9 @@ private:
                 std::vector<cv::Point2f> original_points = {center};
                 std::vector<cv::Point2f> transformed_points;
                 cv::perspectiveTransform(original_points, transformed_points, homography_matrix_);
+                std::cout << "Original point: " << original_points[0] << std::endl;
 
+                std::cout << "Transformed point: " << transformed_points[0] << std::endl;
                 geometry_msgs::msg::Point transformed_centroid_msg;
                 transformed_centroid_msg.x = transformed_points[0].x;
                 transformed_centroid_msg.y = transformed_points[0].y;

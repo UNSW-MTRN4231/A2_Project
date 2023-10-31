@@ -14,6 +14,8 @@ class ImageWarper(Node):
         self.publisher_ = self.create_publisher(Image, 'image_warped', 10)
         self.pov_publisher_ = self.create_publisher(Float64MultiArray, 'warp_pov_tf', 10)
         self.homography_publisher_ = self.create_publisher(Float64MultiArray, 'homography_matrix', 10)  # New publisher
+        self.labelled_publisher_ = self.create_publisher(Image, 'image_labelled', 10)# New publisher
+
         self.bridge = CvBridge()
         self.prev_M = None
 
@@ -23,6 +25,8 @@ class ImageWarper(Node):
 
         if len(purple_dots) != 4:
             self.get_logger().warn('Did not detect exactly four purple dots.')
+           
+
             if self.prev_M is not None:
                 M = self.prev_M
             else:
@@ -37,6 +41,11 @@ class ImageWarper(Node):
             homography_msg = Float64MultiArray()
             homography_msg.data = [float(value) for value in H_robot.ravel()]
             self.homography_publisher_.publish(homography_msg)
+            labelled_image = cv_image.copy()
+            for index, (x, y) in enumerate(sorted_purple_dots):
+                cv2.putText(labelled_image, str(index), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+            labelled_img_msg = self.bridge.cv2_to_imgmsg(labelled_image, 'bgr8')
+            self.labelled_publisher_.publish(labelled_img_msg)
 
         warped_image = self.warp_image(cv_image, M)
         img_msg = self.bridge.cv2_to_imgmsg(warped_image, 'bgr8')
@@ -64,7 +73,7 @@ def get_purple_dots_coordinates(image):
     
     coordinates = []
     for contour in contours:
-        if 15 < cv2.contourArea(contour) < 10000:
+        if 10 < cv2.contourArea(contour) < 10000:
             M = cv2.moments(contour)
             if M["m00"]:
                 cX = int(M["m10"] / M["m00"])
@@ -82,10 +91,12 @@ def sort_coordinates(coordinates):
 def compute_homography_to_robot_base(src_points):
     src_points = np.array(src_points, dtype=np.float32)  # Ensure it's a numpy array
     dst_robot = np.array([
-        [-250, 75],
-        [-250, -525],
-        [-900, 75],
-        [-900, -525]
+        [-50, -235],
+        [525, -235],
+        [-50, -950],
+        [525, -950],
+
+
     ], dtype=np.float32)
     H, _ = cv2.findHomography(src_points, dst_robot)
     return H
