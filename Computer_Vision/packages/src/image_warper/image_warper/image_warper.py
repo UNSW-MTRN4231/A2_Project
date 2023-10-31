@@ -15,7 +15,7 @@ class ImageWarper(Node):
         self.pov_publisher_ = self.create_publisher(Float64MultiArray, 'warp_pov_tf', 10)
         self.homography_publisher_ = self.create_publisher(Float64MultiArray, 'homography_matrix', 10)  # New publisher
         self.labelled_publisher_ = self.create_publisher(Image, 'image_labelled', 10)# New publisher
-
+        self.pov_inv_publisher_ = self.create_publisher(Float64MultiArray, 'inv_warp_pov_tf', 10)
         self.bridge = CvBridge()
         self.prev_M = None
 
@@ -40,6 +40,14 @@ class ImageWarper(Node):
             H_robot = compute_homography_to_robot_base(sorted_purple_dots)
             homography_msg = Float64MultiArray()
             homography_msg.data = [float(value) for value in H_robot.ravel()]
+
+            # Publish M_inv 
+            M_inv = cv2.invert(M)[1]
+            self.prev_M_inv = M_inv
+            matrix_inv_msg = Float64MultiArray()
+            matrix_inv_msg.data = [float(value) for value in M_inv.ravel()]
+            # You'll need to create a publisher for this new message
+            self.pov_inv_publisher_.publish(matrix_inv_msg)
 
             self.homography_publisher_.publish(homography_msg)
 
