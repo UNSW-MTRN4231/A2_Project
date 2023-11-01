@@ -58,6 +58,12 @@ double radiansToDegrees(double radians) {
     return radians * 180.0 / M_PI_4;
 }
 
+// Input
+void wait_for_key_press() {
+  // std::cin.get();
+  return;
+}
+
 // Rotates a point theta (degrees) around a centre, in the XY plane
 geometry_msgs::msg::Point rotate_point(
   geometry_msgs::msg::Point point, geometry_msgs::msg::Point centre, float theta){
@@ -155,7 +161,8 @@ moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
   move_group_interface = std::make_unique<moveit::planning_interface::MoveGroupInterface>(std::unique_ptr<rclcpp::Node>(this), "ur_manipulator");
   move_group_interface->setPlannerId("RRTConnectkConfigDefault");
   move_group_interface->setPlanningTime(10.0);
-  move_group_interface->setNumPlanningAttempts(5);
+  move_group_interface->setNumPlanningAttempts(10);
+  move_group_interface->setMaxVelocityScalingFactor(0.1);
   std::string frame_id = move_group_interface->getPlanningFrame();
 
   // Define collision objects (size, pos, frame, id)
@@ -263,10 +270,10 @@ void moveit_trajectory::move_to_pose_cartesian(std::vector<geometry_msgs::msg::P
 
   // Visualize the plan in RViz
   // visual_tools_->deleteAllMarkers();
-  // visual_tools_->publishPath(waypoints, rviz_visual_tools::LIME_GREEN, rviz_visual_tools::SMALL);
-  // for (std::size_t i = 0; i < waypoints.size(); ++i)
-  //   visual_tools_->publishAxisLabeled(waypoints[i], "pt" + std::to_string(i), rviz_visual_tools::SMALL);
-  // visual_tools_->trigger();
+  visual_tools_->publishPath(waypoints, rviz_visual_tools::LIME_GREEN, rviz_visual_tools::SMALL);
+  for (std::size_t i = 0; i < waypoints.size(); ++i)
+    visual_tools_->publishAxisLabeled(waypoints[i], "pt" + std::to_string(i), rviz_visual_tools::SMALL);
+  visual_tools_->trigger();
 
   // Cartesian motions should often be slow, e.g. when approaching objects. The speed of Cartesian
   // plans cannot currently be set through the maxVelocityScalingFactor, but requires you to time
@@ -338,17 +345,17 @@ geometry_msgs::msg::Pose moveit_trajectory::get_end_effector_pose(){
 void moveit_trajectory::plan_slices() {
 
   int num_cuts = num_slices/2;
-
+  float cut_height = 0.1;
   // Define an initial, horizontal cut
   geometry_msgs::msg::Point start;
   start.x = pizza_pose.position.x - pizza_radius.data;
   start.y = pizza_pose.position.y;
-  start.z = 0;
+  start.z = cut_height;
 
   geometry_msgs::msg::Point end;
   end.x = pizza_pose.position.x + pizza_radius.data;
   end.y = pizza_pose.position.y;
-  end.z = 0;
+  end.z = cut_height;
 
   // Rotate the cut to find all cuts
   for (int i = 0; i<(num_cuts); i++){
@@ -368,8 +375,62 @@ void moveit_trajectory::plan_slices() {
     geometry_msgs::msg::Quaternion cut_orientation = get_cut_quaternion(cut_angle);
     cut_orientations.push_back(cut_orientation);
   }
+
+  cutting_is_planned = true;
 }
 
+/////////////////////////////////////////////////////////////////////
+//                       TRAJECTORY EXECUTION                      //
+/////////////////////////////////////////////////////////////////////
+
+void moveit_trajectory::cut_pizza() {
+  // Create 'down' orientation
+  geometry_msgs::msg::Quaternion down_orientation;
+  down_orientation.x = 0;
+  down_orientation.y = 1;
+  down_orientation.z = 0;
+  down_orientation.w = 0;
+
+  // Create centre pose (returned to between cuts)
+  geometry_msgs::msg::Pose centre_pose = pizza_pose;
+  centre_pose.position.z = 0.2;
+  centre_pose.orientation = down_orientation;
+
+  // Loop through cut points and execute
+  for (size_t i = 0; i<cut_points.size(); i++) {
+    std::cout<<"Press enter to execute next cut..."<< i << std::endl;
+    wait_for_key_press();
+    std::cout<<"Executing cut "<< i << std::endl;
+
+    geometry_msgs::msg::Pose above_cut_start;
+    above_cut_start.position = cut_points.at(i).at(0);
+    above_cut_start.position.z += 0.03;
+    above_cut_start.orientation = cut_orientations.at(i); // TODO orientation adjustment for tool use
+
+    geometry_msgs::msg::Pose cut_start;
+    cut_start.position = cut_points.at(i).at(0);
+    cut_start.orientation = cut_orientations.at(i); // TODO orientation adjustment for tool use
+
+    geometry_msgs::msg::Pose cut_end;
+    cut_end.position = cut_points.at(i).at(1);
+    cut_end.orientation = cut_orientations.at(i); // TODO orientation adjustment for tool use
+
+    geometry_msgs::msg::Pose above_cut_end;
+    above_cut_end.position = cut_points.at(i).at(1);
+    above_cut_end.position.z += 0.03;
+    above_cut_end.orientation = cut_orientations.at(i); // TODO orientation adjustment for tool use
+
+    std::vector<geometry_msgs::msg::Pose> waypoints;
+    waypoints.push_back(centre_pose);
+    waypoints.push_back(above_cut_start);
+    waypoints.push_back(cut_start);
+    waypoints.push_back(cut_end);
+    waypoints.push_back(above_cut_end);
+    move_to_pose_cartesian(waypoints);
+  }
+
+  return;
+}
 
 /////////////////////////////////////////////////////////////////////
 //                          VISUALIZATION                          //
@@ -428,49 +489,7 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
   if (operation_command.data == "Cut") {
     RCLCPP_INFO(this->get_logger(), "Executing Cuts");
 
-    // Create 'down' orientation
-    geometry_msgs::msg::Quaternion down_orientation;
-    down_orientation.x = 0;
-    down_orientation.y = 1;
-    down_orientation.z = 0;
-    down_orientation.w = 0;
-
-    // Create centre pose (returned to between cuts)
-    geometry_msgs::msg::Pose centre_pose = pizza_pose;
-    centre_pose.position.z = 0.2;
-    centre_pose.orientation = down_orientation;
-
-    // Loop through cut points and execute
-    for (size_t i = 0; i<cut_points.size(); i++) {
-
-      std::cout<<"Executing cut "<< i << std::endl;
-
-      geometry_msgs::msg::Pose above_cut_start;
-      above_cut_start.position = cut_points.at(i).at(0);
-      above_cut_start.position.z += 0.03;
-      above_cut_start.orientation = cut_orientations.at(i); // TODO orientation adjustment for tool use
-
-      geometry_msgs::msg::Pose cut_start;
-      cut_start.position = cut_points.at(i).at(0);
-      cut_start.orientation = cut_orientations.at(i); // TODO orientation adjustment for tool use
-
-      geometry_msgs::msg::Pose cut_end;
-      cut_end.position = cut_points.at(i).at(1);
-      cut_end.orientation = cut_orientations.at(i); // TODO orientation adjustment for tool use
-
-      geometry_msgs::msg::Pose above_cut_end;
-      above_cut_end.position = cut_points.at(i).at(1);
-      above_cut_end.position.z += 0.03;
-      above_cut_end.orientation = cut_orientations.at(i); // TODO orientation adjustment for tool use
-
-      std::vector<geometry_msgs::msg::Pose> waypoints;
-      waypoints.push_back(centre_pose);
-      waypoints.push_back(above_cut_start);
-      waypoints.push_back(cut_start);
-      waypoints.push_back(cut_end);
-      waypoints.push_back(above_cut_end);
-      move_to_pose_cartesian(waypoints);
-    }
+    cut_pizza();
   }
   return;
 }
@@ -483,7 +502,9 @@ void moveit_trajectory::operation_status_callback(std_msgs::msg::String operatio
     visualize_pizza();
 
     RCLCPP_INFO(this->get_logger(), "Planning Slicing");
-    plan_slices();
+    if (!cutting_is_planned){
+      plan_slices();
+    }
 
     RCLCPP_INFO(this->get_logger(), "Visualising Cuts");
     visualize_cut_points();

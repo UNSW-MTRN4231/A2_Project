@@ -39,6 +39,9 @@ class moveit_trajectory : public rclcpp::Node
     // Trajectory planning
     void plan_slices();
 
+    // Trajectory execution
+    void cut_pizza();
+
     // Visualization
     void visualize_pizza();
     void visualize_cut_points();
@@ -69,6 +72,9 @@ class moveit_trajectory : public rclcpp::Node
     // Stored variables from messages
     std_msgs::msg::Float32 pizza_radius;
     geometry_msgs::msg::Pose pizza_pose;
+
+    // State checking
+    bool cutting_is_planned = false;
 
     // Trajectory planning
     int num_slices = 8;
