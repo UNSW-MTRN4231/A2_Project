@@ -1,0 +1,49 @@
+[1.307s] Invoking command in '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/src/yolo_ros/yolov8_ros': PYTHONPATH=/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_ros/prefix_override:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../../build/yolov8_ros build --build-base /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_ros/build install --record /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_ros/install.log --single-version-externally-managed
+[1.628s] running egg_info
+[1.630s] creating ../../../build/yolov8_ros/yolov8_ros.egg-info
+[1.631s] writing ../../../build/yolov8_ros/yolov8_ros.egg-info/PKG-INFO
+[1.632s] writing dependency_links to ../../../build/yolov8_ros/yolov8_ros.egg-info/dependency_links.txt
+[1.633s] writing entry points to ../../../build/yolov8_ros/yolov8_ros.egg-info/entry_points.txt
+[1.633s] writing requirements to ../../../build/yolov8_ros/yolov8_ros.egg-info/requires.txt
+[1.633s] writing top-level names to ../../../build/yolov8_ros/yolov8_ros.egg-info/top_level.txt
+[1.635s] writing manifest file '../../../build/yolov8_ros/yolov8_ros.egg-info/SOURCES.txt'
+[1.638s] reading manifest file '../../../build/yolov8_ros/yolov8_ros.egg-info/SOURCES.txt'
+[1.640s] writing manifest file '../../../build/yolov8_ros/yolov8_ros.egg-info/SOURCES.txt'
+[1.640s] running build
+[1.640s] running build_py
+[1.640s] creating /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_ros/build
+[1.640s] creating /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_ros/build/lib
+[1.640s] creating /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_ros/build/lib/yolov8_ros
+[1.641s] copying yolov8_ros/__init__.py -> /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_ros/build/lib/yolov8_ros
+[1.641s] copying yolov8_ros/debug_node.py -> /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_ros/build/lib/yolov8_ros
+[1.641s] copying yolov8_ros/detect_3d_node.py -> /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_ros/build/lib/yolov8_ros
+[1.641s] copying yolov8_ros/tracking_node.py -> /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_ros/build/lib/yolov8_ros
+[1.641s] copying yolov8_ros/yolov8_node.py -> /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_ros/build/lib/yolov8_ros
+[1.642s] running install
+[1.642s] running install_lib
+[1.644s] creating /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/python3.10/site-packages/yolov8_ros
+[1.644s] copying /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_ros/build/lib/yolov8_ros/__init__.py -> /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/python3.10/site-packages/yolov8_ros
+[1.644s] copying /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_ros/build/lib/yolov8_ros/debug_node.py -> /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/python3.10/site-packages/yolov8_ros
+[1.644s] copying /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_ros/build/lib/yolov8_ros/detect_3d_node.py -> /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/python3.10/site-packages/yolov8_ros
+[1.644s] copying /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_ros/build/lib/yolov8_ros/tracking_node.py -> /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/python3.10/site-packages/yolov8_ros
+[1.644s] copying /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_ros/build/lib/yolov8_ros/yolov8_node.py -> /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/python3.10/site-packages/yolov8_ros
+[1.645s] byte-compiling /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/python3.10/site-packages/yolov8_ros/__init__.py to __init__.cpython-310.pyc
+[1.645s] byte-compiling /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/python3.10/site-packages/yolov8_ros/debug_node.py to debug_node.cpython-310.pyc
+[1.647s] byte-compiling /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/python3.10/site-packages/yolov8_ros/detect_3d_node.py to detect_3d_node.cpython-310.pyc
+[1.649s] byte-compiling /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/python3.10/site-packages/yolov8_ros/tracking_node.py to tracking_node.cpython-310.pyc
+[1.650s] byte-compiling /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/python3.10/site-packages/yolov8_ros/yolov8_node.py to yolov8_node.cpython-310.pyc
+[1.651s] running install_data
+[1.652s] creating /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/share/ament_index
+[1.652s] creating /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/share/ament_index/resource_index
+[1.652s] creating /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/share/ament_index/resource_index/packages
+[1.653s] copying resource/yolov8_ros -> /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/share/ament_index/resource_index/packages
+[1.653s] copying package.xml -> /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/share/yolov8_ros
+[1.653s] running install_egg_info
+[1.656s] Copying ../../../build/yolov8_ros/yolov8_ros.egg-info to /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/python3.10/site-packages/yolov8_ros-0.0.0-py3.10.egg-info
+[1.657s] running install_scripts
+[1.681s] Installing debug_node script to /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/yolov8_ros
+[1.681s] Installing detect_3d_node script to /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/yolov8_ros
+[1.681s] Installing tracking_node script to /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/yolov8_ros
+[1.681s] Installing yolov8_node script to /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/yolov8_ros
+[1.681s] writing list of installed files to '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_ros/install.log'
+[1.741s] Invoked command in '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/src/yolo_ros/yolov8_ros' returned '0': PYTHONPATH=/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_ros/prefix_override:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../../build/yolov8_ros build --build-base /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_ros/build install --record /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_ros/install.log --single-version-externally-managed

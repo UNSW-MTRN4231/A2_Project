@@ -1,0 +1,6 @@
+cv_bridge
+opencv-python
+rclpy
+sensor_msgs
+setuptools
+std_msgs

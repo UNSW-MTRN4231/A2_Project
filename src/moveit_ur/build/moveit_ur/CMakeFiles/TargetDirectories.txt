@@ -1,0 +1,10 @@
+/home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur/CMakeFiles/uninstall.dir
+/home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur/CMakeFiles/moveit_ur_uninstall.dir
+/home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur/CMakeFiles/moveit_trajectory.dir
+/home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur/CMakeFiles/test.dir
+/home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur/CMakeFiles/edit_cache.dir
+/home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur/CMakeFiles/rebuild_cache.dir
+/home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur/CMakeFiles/list_install_components.dir
+/home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur/CMakeFiles/install.dir
+/home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur/CMakeFiles/install/local.dir
+/home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur/CMakeFiles/install/strip.dir

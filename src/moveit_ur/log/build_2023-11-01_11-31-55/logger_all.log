@@ -1,0 +1,106 @@
+[0.376s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[0.376s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=12, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, mixin_files=None, mixin=None, verb_parser=<colcon_mixin.mixin.mixin_argument.MixinArgumentDecorator object at 0x7ff6dbb2cd30>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7ff6dc533f40>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7ff6dc533f40>>, mixin_verb=('build',))
+[0.400s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.401s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.401s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.401s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.401s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.401s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.401s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/mtrn/A2_project/A2_Project/src/moveit_ur'
+[0.401s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.401s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.401s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.401s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.401s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.401s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.401s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.401s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.401s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.417s] DEBUG:colcon.colcon_core.package_identification:Package '.' with type 'ros.ament_cmake' and name 'moveit_ur'
+[0.417s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.417s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.417s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.417s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.417s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.441s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.441s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.447s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 1 installed packages in /home/mtrn/A2_project/A2_Project/src/moveit_ur/install
+[0.449s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 55 installed packages in /home/mtrn/4231/ws_moveit2/install
+[0.450s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 7 installed packages in /home/mtrn/4231/ros_ur_driver/install
+[0.452s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 338 installed packages in /opt/ros/humble
+[0.455s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[0.538s] Level 5:colcon.colcon_core.verb:set package 'moveit_ur' build argument 'cmake_args' from command line to 'None'
+[0.538s] Level 5:colcon.colcon_core.verb:set package 'moveit_ur' build argument 'cmake_target' from command line to 'None'
+[0.538s] Level 5:colcon.colcon_core.verb:set package 'moveit_ur' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.538s] Level 5:colcon.colcon_core.verb:set package 'moveit_ur' build argument 'cmake_clean_cache' from command line to 'False'
+[0.538s] Level 5:colcon.colcon_core.verb:set package 'moveit_ur' build argument 'cmake_clean_first' from command line to 'False'
+[0.538s] Level 5:colcon.colcon_core.verb:set package 'moveit_ur' build argument 'cmake_force_configure' from command line to 'False'
+[0.538s] Level 5:colcon.colcon_core.verb:set package 'moveit_ur' build argument 'ament_cmake_args' from command line to 'None'
+[0.538s] Level 5:colcon.colcon_core.verb:set package 'moveit_ur' build argument 'catkin_cmake_args' from command line to 'None'
+[0.538s] Level 5:colcon.colcon_core.verb:set package 'moveit_ur' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.538s] DEBUG:colcon.colcon_core.verb:Building package 'moveit_ur' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur', 'merge_install': False, 'path': '/home/mtrn/A2_project/A2_Project/src/moveit_ur', 'symlink_install': False, 'test_result_base': None}
+[0.540s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.545s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.545s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/mtrn/A2_project/A2_Project/src/moveit_ur' with build type 'ament_cmake'
+[0.545s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/mtrn/A2_project/A2_Project/src/moveit_ur'
+[0.551s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.552s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.552s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.598s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/mtrn/4231/ws_moveit2/install/moveit_configs_utils:/home/mtrn/4231/ws_moveit2/install/launch_param_builder:/opt/ros/humble /home/mtrn/.local/bin/cmake --build /home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur -- -j12 -l12
+[26.132s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/mtrn/4231/ws_moveit2/install/moveit_configs_utils:/home/mtrn/4231/ws_moveit2/install/launch_param_builder:/opt/ros/humble /home/mtrn/.local/bin/cmake --build /home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur -- -j12 -l12
+[26.462s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/mtrn/4231/ws_moveit2/install/moveit_configs_utils:/home/mtrn/4231/ws_moveit2/install/launch_param_builder:/opt/ros/humble /home/mtrn/.local/bin/cmake --install /home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur
+[26.547s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(moveit_ur)
+[26.549s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/mtrn/4231/ws_moveit2/install/moveit_configs_utils:/home/mtrn/4231/ws_moveit2/install/launch_param_builder:/opt/ros/humble /home/mtrn/.local/bin/cmake --install /home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur
+[26.555s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur' for CMake module files
+[26.555s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur' for CMake config files
+[26.556s] Level 1:colcon.colcon_core.shell:create_environment_hook('moveit_ur', 'cmake_prefix_path')
+[26.557s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/share/moveit_ur/hook/cmake_prefix_path.ps1'
+[26.558s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/share/moveit_ur/hook/cmake_prefix_path.dsv'
+[26.559s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/share/moveit_ur/hook/cmake_prefix_path.sh'
+[26.560s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/lib'
+[26.560s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/bin'
+[26.560s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/lib/pkgconfig/moveit_ur.pc'
+[26.561s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/lib/python3.10/site-packages'
+[26.561s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/bin'
+[26.563s] INFO:colcon.colcon_core.shell:Creating package script '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/share/moveit_ur/package.ps1'
+[26.564s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/share/moveit_ur/package.dsv'
+[26.564s] INFO:colcon.colcon_core.shell:Creating package script '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/share/moveit_ur/package.sh'
+[26.565s] INFO:colcon.colcon_core.shell:Creating package script '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/share/moveit_ur/package.bash'
+[26.565s] INFO:colcon.colcon_core.shell:Creating package script '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/share/moveit_ur/package.zsh'
+[26.566s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/share/colcon-core/packages/moveit_ur)
+[26.834s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(moveit_ur)
+[26.839s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur' for CMake module files
+[26.841s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur' for CMake config files
+[26.841s] Level 1:colcon.colcon_core.shell:create_environment_hook('moveit_ur', 'cmake_prefix_path')
+[26.846s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/share/moveit_ur/hook/cmake_prefix_path.ps1'
+[26.846s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/share/moveit_ur/hook/cmake_prefix_path.dsv'
+[26.847s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/share/moveit_ur/hook/cmake_prefix_path.sh'
+[26.848s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/lib'
+[26.848s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/bin'
+[26.848s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/lib/pkgconfig/moveit_ur.pc'
+[26.848s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/lib/python3.10/site-packages'
+[26.849s] Level 1:colcon.colcon_core.environment:checking '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/bin'
+[26.852s] INFO:colcon.colcon_core.shell:Creating package script '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/share/moveit_ur/package.ps1'
+[26.852s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/share/moveit_ur/package.dsv'
+[26.853s] INFO:colcon.colcon_core.shell:Creating package script '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/share/moveit_ur/package.sh'
+[26.854s] INFO:colcon.colcon_core.shell:Creating package script '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/share/moveit_ur/package.bash'
+[26.854s] INFO:colcon.colcon_core.shell:Creating package script '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/share/moveit_ur/package.zsh'
+[26.855s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur/share/colcon-core/packages/moveit_ur)
+[26.855s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[26.856s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[26.856s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[26.856s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[26.866s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[26.867s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[26.867s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[26.890s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[26.895s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/local_setup.ps1'
+[26.899s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/_local_setup_util_ps1.py'
+[26.902s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/setup.ps1'
+[26.914s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/local_setup.sh'
+[26.916s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/_local_setup_util_sh.py'
+[26.917s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/setup.sh'
+[26.923s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/local_setup.bash'
+[26.924s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/setup.bash'
+[26.931s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/local_setup.zsh'
+[26.931s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/setup.zsh'

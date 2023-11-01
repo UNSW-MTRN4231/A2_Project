@@ -1,0 +1,24 @@
+[0.770s] Invoking command in '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_msgs': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/mtrn/4231/ws_moveit2/install/moveit_configs_utils:/home/mtrn/4231/ws_moveit2/install/launch_param_builder:/opt/ros/humble /home/mtrn/.local/bin/cmake --build /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_msgs -- -j12 -l12
+[0.942s] [ 12%] Built target yolov8_msgs__rosidl_generator_c
+[0.947s] [ 12%] Built target yolov8_msgs__cpp
+[0.948s] [ 12%] Built target ament_cmake_python_copy_yolov8_msgs
+[0.994s] [ 24%] Built target yolov8_msgs__rosidl_typesupport_c
+[1.012s] [ 36%] Built target yolov8_msgs__rosidl_typesupport_fastrtps_c
+[1.019s] [ 57%] Built target yolov8_msgs__rosidl_typesupport_cpp
+[1.019s] [ 60%] Built target yolov8_msgs__rosidl_typesupport_introspection_c
+[1.023s] [ 71%] Built target yolov8_msgs__rosidl_typesupport_fastrtps_cpp
+[1.025s] [ 83%] Built target yolov8_msgs__rosidl_typesupport_introspection_cpp
+[1.053s] [ 83%] Built target yolov8_msgs
+[1.080s] [ 84%] Built target yolov8_msgs__py
+[1.134s] [ 95%] Built target yolov8_msgs__rosidl_generator_py
+[1.175s] [ 97%] Built target yolov8_msgs__rosidl_typesupport_introspection_c__pyext
+[1.177s] [ 99%] Built target yolov8_msgs__rosidl_typesupport_fastrtps_c__pyext
+[1.184s] [100%] Built target yolov8_msgs__rosidl_typesupport_c__pyext
+[1.322s] running egg_info
+[1.324s] writing yolov8_msgs.egg-info/PKG-INFO
+[1.324s] writing dependency_links to yolov8_msgs.egg-info/dependency_links.txt
+[1.324s] writing top-level names to yolov8_msgs.egg-info/top_level.txt
+[1.328s] reading manifest file 'yolov8_msgs.egg-info/SOURCES.txt'
+[1.329s] writing manifest file 'yolov8_msgs.egg-info/SOURCES.txt'
+[1.371s] [100%] Built target ament_cmake_python_build_yolov8_msgs_egg
+[1.387s] Invoked command in '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_msgs' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/mtrn/4231/ws_moveit2/install/moveit_configs_utils:/home/mtrn/4231/ws_moveit2/install/launch_param_builder:/opt/ros/humble /home/mtrn/.local/bin/cmake --build /home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/yolov8_msgs -- -j12 -l12

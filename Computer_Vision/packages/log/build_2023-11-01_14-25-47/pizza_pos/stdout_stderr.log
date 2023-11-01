@@ -1,0 +1,13 @@
+[ 50%] [32mBuilding CXX object CMakeFiles/subscriber_node.dir/src/subscriber_node.cpp.o[0m
+[01m[K/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/src/pizza_pos/src/subscriber_node.cpp:86:2:[m[K [01;31m[Kerror: [m[Kexpected ‘[01m[K}[m[K’ at end of input
+   86 | }
+      |  [01;31m[K^[m[K
+[01m[K/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/src/pizza_pos/src/subscriber_node.cpp:12:1:[m[K [01;36m[Knote: [m[Kto match this ‘[01m[K{[m[K’
+   12 | [01;36m[K{[m[K
+      | [01;36m[K^[m[K
+[01m[K/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/src/pizza_pos/src/subscriber_node.cpp:86:2:[m[K [01;31m[Kerror: [m[Kexpected unqualified-id at end of input
+   86 | }
+      |  [01;31m[K^[m[K
+gmake[2]: *** [CMakeFiles/subscriber_node.dir/build.make:76: CMakeFiles/subscriber_node.dir/src/subscriber_node.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/subscriber_node.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2

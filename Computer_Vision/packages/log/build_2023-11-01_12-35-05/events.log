@@ -1,0 +1,297 @@
+[0.000000] (-) TimerEvent: {}
+[0.001986] (-) JobUnselected: {'identifier': 'image_warper'}
+[0.002580] (-) JobUnselected: {'identifier': 'yolov8_bringup'}
+[0.009316] (-) JobUnselected: {'identifier': 'yolov8_msgs'}
+[0.009514] (-) JobUnselected: {'identifier': 'yolov8_ros'}
+[0.009648] (pizza_pos) JobQueued: {'identifier': 'pizza_pos', 'dependencies': OrderedDict([('yolov8_ros', '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros')])}
+[0.009797] (pizza_pos) JobStarted: {'identifier': 'pizza_pos'}
+[0.077091] (pizza_pos) JobProgress: {'identifier': 'pizza_pos', 'progress': 'cmake'}
+[0.079193] (pizza_pos) JobProgress: {'identifier': 'pizza_pos', 'progress': 'build'}
+[0.080659] (pizza_pos) Command: {'cmd': ['/home/mtrn/.local/bin/cmake', '--build', '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/pizza_pos', '--', '-j12', '-l12'], 'cwd': '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/pizza_pos', 'env': OrderedDict([('LESSOPEN', '| /usr/bin/lesspipe %s'), ('LANGUAGE', 'en_AU:en'), ('USER', 'mtrn'), ('XDG_SESSION_TYPE', 'wayland'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/lib:/home/mtrn/4231/ws_moveit2/install/pilz_industrial_motion_planner_testutils/lib:/home/mtrn/4231/ws_moveit2/install/pilz_industrial_motion_planner/lib:/home/mtrn/4231/ws_moveit2/install/moveit_visual_tools/lib:/home/mtrn/4231/ws_moveit2/install/moveit_task_constructor_visualization/lib:/home/mtrn/4231/ws_moveit2/install/moveit_task_constructor_demo/lib:/home/mtrn/4231/ws_moveit2/install/moveit_task_constructor_capabilities/lib:/home/mtrn/4231/ws_moveit2/install/moveit_task_constructor_core/lib:/home/mtrn/4231/ws_moveit2/install/moveit_ros_control_interface/lib:/home/mtrn/4231/ws_moveit2/install/moveit_simple_controller_manager/lib:/home/mtrn/4231/ws_moveit2/install/moveit_setup_assistant/lib:/home/mtrn/4231/ws_moveit2/install/moveit_setup_srdf_plugins/lib:/home/mtrn/4231/ws_moveit2/install/moveit_setup_core_plugins/lib:/home/mtrn/4231/ws_moveit2/install/moveit_setup_controllers/lib:/home/mtrn/4231/ws_moveit2/install/moveit_setup_app_plugins/lib:/home/mtrn/4231/ws_moveit2/install/moveit_setup_framework/lib:/home/mtrn/4231/ws_moveit2/install/moveit_servo/lib:/home/mtrn/4231/ws_moveit2/install/moveit_ros_visualization/lib:/home/mtrn/4231/ws_moveit2/install/moveit_hybrid_planning/lib:/home/mtrn/4231/ws_moveit2/install/moveit_ros_planning_interface/lib:/home/mtrn/4231/ws_moveit2/install/moveit_ros_benchmarks/lib:/home/mtrn/4231/ws_moveit2/install/moveit_ros_warehouse/lib:/home/mtrn/4231/ws_moveit2/install/moveit_ros_robot_interaction/lib:/home/mtrn/4231/ws_moveit2/install/moveit_ros_perception/lib:/home/mtrn/4231/ws_moveit2/install/moveit_ros_move_group/lib:/home/mtrn/4231/ws_moveit2/install/moveit_planners_ompl/lib:/home/mtrn/4231/ws_moveit2/install/moveit_ros_planning/lib:/home/mtrn/4231/ws_moveit2/install/moveit_ros_occupancy_map_monitor/lib:/home/mtrn/4231/ws_moveit2/install/moveit_resources_prbt_ikfast_manipulator_plugin/lib:/home/mtrn/4231/ws_moveit2/install/moveit_planners_chomp/lib:/home/mtrn/4231/ws_moveit2/install/moveit_kinematics/lib:/home/mtrn/4231/ws_moveit2/install/moveit_chomp_optimizer_adapter/lib:/home/mtrn/4231/ws_moveit2/install/chomp_motion_planner/lib:/home/mtrn/4231/ws_moveit2/install/moveit_core/lib:/home/mtrn/4231/ws_moveit2/install/srdfdom/lib:/home/mtrn/4231/ws_moveit2/install/rviz_marker_tools/lib:/home/mtrn/4231/ws_moveit2/install/rosparam_shortcuts/lib:/home/mtrn/4231/ws_moveit2/install/moveit_task_constructor_msgs/lib:/home/mtrn/4231/ros_ur_driver/install/ur_robot_driver/lib:/home/mtrn/4231/ros_ur_driver/install/ur_controllers/lib:/home/mtrn/4231/ros_ur_driver/install/ur_dashboard_msgs/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib'), ('HOME', '/home/mtrn'), ('DESKTOP_SESSION', 'ubuntu'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('SYSTEMD_EXEC_PID', '2752'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('IM_CONFIG_PHASE', '1'), ('WAYLAND_DISPLAY', 'wayland-0'), ('COLCON_PREFIX_PATH', '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install:/home/mtrn/A2_project/A2_Project/src/moveit_ur/install:/home/mtrn/4231/ws_moveit2/install:/home/mtrn/4231/ros_ur_driver/install'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'mtrn'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('USERNAME', 'mtrn'), ('TERM', 'xterm-256color'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/home/mtrn/4231/ws_moveit2/install/moveit_core/bin:/home/mtrn/4231/ros_ur_driver/install/ur_robot_driver/bin:/opt/ros/humble/bin:/home/mtrn/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin'), ('SESSION_MANAGER', 'local/mtrn-HP-Z4-G4-Workstation:@/tmp/.ICE-unix/2147,unix/mtrn-HP-Z4-G4-Workstation:/tmp/.ICE-unix/2147'), ('XDG_MENU_PREFIX', 'gnome-'), ('GNOME_TERMINAL_SCREEN', '/org/gnome/Terminal/screen/83b10c01_098a_4d74_92e5_7e76d6b64864'), ('GNOME_SETUP_DISPLAY', ':1'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('DISPLAY', ':0'), ('LANG', 'en_US.UTF-8'), ('XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('XMODIFIERS', '@im=ibus'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/.mutter-Xwaylandauth.A7C1D2'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('GNOME_TERMINAL_SERVICE', ':1.99'), ('SSH_AGENT_LAUNCHER', 'gnome-keyring'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('AMENT_PREFIX_PATH', '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_bringup:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/pizza_pos:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/image_warper:/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur:/home/mtrn/4231/ws_moveit2/install/pilz_industrial_motion_planner_testutils:/home/mtrn/4231/ws_moveit2/install/moveit_runtime:/home/mtrn/4231/ws_moveit2/install/moveit2_tutorials:/home/mtrn/4231/ws_moveit2/install/moveit:/home/mtrn/4231/ws_moveit2/install/moveit_planners:/home/mtrn/4231/ws_moveit2/install/pilz_industrial_motion_planner:/home/mtrn/4231/ws_moveit2/install/moveit_visual_tools:/home/mtrn/4231/ws_moveit2/install/moveit_task_constructor_visualization:/home/mtrn/4231/ws_moveit2/install/moveit_task_constructor_demo:/home/mtrn/4231/ws_moveit2/install/moveit_task_constructor_capabilities:/home/mtrn/4231/ws_moveit2/install/moveit_task_constructor_core:/home/mtrn/4231/ws_moveit2/install/moveit_ros_control_interface:/home/mtrn/4231/ws_moveit2/install/moveit_plugins:/home/mtrn/4231/ws_moveit2/install/moveit_simple_controller_manager:/home/mtrn/4231/ws_moveit2/install/moveit_setup_assistant:/home/mtrn/4231/ws_moveit2/install/moveit_setup_srdf_plugins:/home/mtrn/4231/ws_moveit2/install/moveit_setup_core_plugins:/home/mtrn/4231/ws_moveit2/install/moveit_setup_controllers:/home/mtrn/4231/ws_moveit2/install/moveit_setup_app_plugins:/home/mtrn/4231/ws_moveit2/install/moveit_setup_framework:/home/mtrn/4231/ws_moveit2/install/moveit_servo:/home/mtrn/4231/ws_moveit2/install/moveit_ros:/home/mtrn/4231/ws_moveit2/install/moveit_ros_visualization:/home/mtrn/4231/ws_moveit2/install/moveit_hybrid_planning:/home/mtrn/4231/ws_moveit2/install/moveit_ros_planning_interface:/home/mtrn/4231/ws_moveit2/install/moveit_ros_benchmarks:/home/mtrn/4231/ws_moveit2/install/moveit_ros_warehouse:/home/mtrn/4231/ws_moveit2/install/moveit_ros_robot_interaction:/home/mtrn/4231/ws_moveit2/install/moveit_ros_perception:/home/mtrn/4231/ws_moveit2/install/moveit_resources_prbt_pg70_support:/home/mtrn/4231/ws_moveit2/install/moveit_resources_prbt_moveit_config:/home/mtrn/4231/ws_moveit2/install/moveit_ros_move_group:/home/mtrn/4231/ws_moveit2/install/moveit_planners_ompl:/home/mtrn/4231/ws_moveit2/install/moveit_ros_planning:/home/mtrn/4231/ws_moveit2/install/moveit_ros_occupancy_map_monitor:/home/mtrn/4231/ws_moveit2/install/moveit_resources_prbt_ikfast_manipulator_plugin:/home/mtrn/4231/ws_moveit2/install/moveit_planners_chomp:/home/mtrn/4231/ws_moveit2/install/moveit_kinematics:/home/mtrn/4231/ws_moveit2/install/moveit_chomp_optimizer_adapter:/home/mtrn/4231/ws_moveit2/install/chomp_motion_planner:/home/mtrn/4231/ws_moveit2/install/moveit_core:/home/mtrn/4231/ws_moveit2/install/moveit_configs_utils:/home/mtrn/4231/ws_moveit2/install/srdfdom:/home/mtrn/4231/ws_moveit2/install/rviz_marker_tools:/home/mtrn/4231/ws_moveit2/install/rosparam_shortcuts:/home/mtrn/4231/ws_moveit2/install/moveit_task_constructor_msgs:/home/mtrn/4231/ws_moveit2/install/moveit_resources_prbt_support:/home/mtrn/4231/ws_moveit2/install/moveit_resources:/home/mtrn/4231/ws_moveit2/install/moveit_resources_pr2_description:/home/mtrn/4231/ws_moveit2/install/moveit_resources_panda_moveit_config:/home/mtrn/4231/ws_moveit2/install/moveit_resources_panda_description:/home/mtrn/4231/ws_moveit2/install/moveit_resources_fanuc_moveit_config:/home/mtrn/4231/ws_moveit2/install/moveit_resources_fanuc_description:/home/mtrn/4231/ws_moveit2/install/moveit_common:/home/mtrn/4231/ws_moveit2/install/launch_param_builder:/home/mtrn/4231/ros_ur_driver/install/ur:/home/mtrn/4231/ros_ur_driver/install/ur_calibration:/home/mtrn/4231/ros_ur_driver/install/ur_robot_driver:/home/mtrn/4231/ros_ur_driver/install/ur_moveit_config:/home/mtrn/4231/ros_ur_driver/install/ur_bringup:/home/mtrn/4231/ros_ur_driver/install/ur_controllers:/home/mtrn/4231/ros_ur_driver/install/ur_dashboard_msgs:/opt/ros/humble'), ('SHELL', '/bin/bash'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('QT_IM_MODULE', 'ibus'), ('PWD', '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/build/pizza_pos'), ('LC_ALL', 'en_US.UTF-8'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('XDG_DATA_DIRS', '/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros/lib/python3.10/site-packages:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs/local/lib/python3.10/dist-packages:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/image_warper/lib/python3.10/site-packages:/home/mtrn/4231/ws_moveit2/install/moveit_configs_utils/lib/python3.10/site-packages:/home/mtrn/4231/ws_moveit2/install/srdfdom/local/lib/python3.10/dist-packages:/home/mtrn/4231/ws_moveit2/install/moveit_task_constructor_msgs/local/lib/python3.10/dist-packages:/home/mtrn/4231/ws_moveit2/install/launch_param_builder/lib/python3.10/site-packages:/home/mtrn/4231/ros_ur_driver/install/ur_robot_driver/local/lib/python3.10/dist-packages:/home/mtrn/4231/ros_ur_driver/install/ur_moveit_config/local/lib/python3.10/dist-packages:/home/mtrn/4231/ros_ur_driver/install/ur_dashboard_msgs/local/lib/python3.10/dist-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('COLCON', '1'), ('VTE_VERSION', '6800'), ('CMAKE_PREFIX_PATH', '/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_bringup:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/pizza_pos:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_msgs:/home/mtrn/A2_project/A2_Project/src/moveit_ur/install/moveit_ur:/home/mtrn/4231/ws_moveit2/install/pilz_industrial_motion_planner_testutils:/home/mtrn/4231/ws_moveit2/install/moveit_runtime:/home/mtrn/4231/ws_moveit2/install/moveit2_tutorials:/home/mtrn/4231/ws_moveit2/install/moveit:/home/mtrn/4231/ws_moveit2/install/moveit_planners:/home/mtrn/4231/ws_moveit2/install/pilz_industrial_motion_planner:/home/mtrn/4231/ws_moveit2/install/moveit_visual_tools:/home/mtrn/4231/ws_moveit2/install/moveit_task_constructor_visualization:/home/mtrn/4231/ws_moveit2/install/moveit_task_constructor_demo:/home/mtrn/4231/ws_moveit2/install/moveit_task_constructor_capabilities:/home/mtrn/4231/ws_moveit2/install/moveit_task_constructor_core:/home/mtrn/4231/ws_moveit2/install/moveit_ros_control_interface:/home/mtrn/4231/ws_moveit2/install/moveit_plugins:/home/mtrn/4231/ws_moveit2/install/moveit_simple_controller_manager:/home/mtrn/4231/ws_moveit2/install/moveit_setup_assistant:/home/mtrn/4231/ws_moveit2/install/moveit_setup_srdf_plugins:/home/mtrn/4231/ws_moveit2/install/moveit_setup_core_plugins:/home/mtrn/4231/ws_moveit2/install/moveit_setup_controllers:/home/mtrn/4231/ws_moveit2/install/moveit_setup_app_plugins:/home/mtrn/4231/ws_moveit2/install/moveit_setup_framework:/home/mtrn/4231/ws_moveit2/install/moveit_servo:/home/mtrn/4231/ws_moveit2/install/moveit_ros:/home/mtrn/4231/ws_moveit2/install/moveit_ros_visualization:/home/mtrn/4231/ws_moveit2/install/moveit_hybrid_planning:/home/mtrn/4231/ws_moveit2/install/moveit_ros_planning_interface:/home/mtrn/4231/ws_moveit2/install/moveit_ros_benchmarks:/home/mtrn/4231/ws_moveit2/install/moveit_ros_warehouse:/home/mtrn/4231/ws_moveit2/install/moveit_ros_robot_interaction:/home/mtrn/4231/ws_moveit2/install/moveit_ros_perception:/home/mtrn/4231/ws_moveit2/install/moveit_resources_prbt_pg70_support:/home/mtrn/4231/ws_moveit2/install/moveit_resources_prbt_moveit_config:/home/mtrn/4231/ws_moveit2/install/moveit_ros_move_group:/home/mtrn/4231/ws_moveit2/install/moveit_planners_ompl:/home/mtrn/4231/ws_moveit2/install/moveit_ros_planning:/home/mtrn/4231/ws_moveit2/install/moveit_ros_occupancy_map_monitor:/home/mtrn/4231/ws_moveit2/install/moveit_resources_prbt_ikfast_manipulator_plugin:/home/mtrn/4231/ws_moveit2/install/moveit_planners_chomp:/home/mtrn/4231/ws_moveit2/install/moveit_kinematics:/home/mtrn/4231/ws_moveit2/install/moveit_chomp_optimizer_adapter:/home/mtrn/4231/ws_moveit2/install/chomp_motion_planner:/home/mtrn/4231/ws_moveit2/install/moveit_core:/home/mtrn/4231/ws_moveit2/install/srdfdom:/home/mtrn/4231/ws_moveit2/install/rviz_marker_tools:/home/mtrn/4231/ws_moveit2/install/rosparam_shortcuts:/home/mtrn/4231/ws_moveit2/install/moveit_task_constructor_msgs:/home/mtrn/4231/ws_moveit2/install/moveit_resources_prbt_support:/home/mtrn/4231/ws_moveit2/install/moveit_resources:/home/mtrn/4231/ws_moveit2/install/moveit_resources_pr2_description:/home/mtrn/4231/ws_moveit2/install/moveit_resources_panda_moveit_config:/home/mtrn/4231/ws_moveit2/install/moveit_resources_panda_description:/home/mtrn/4231/ws_moveit2/install/moveit_resources_fanuc_moveit_config:/home/mtrn/4231/ws_moveit2/install/moveit_resources_fanuc_description:/home/mtrn/4231/ws_moveit2/install/moveit_common:/home/mtrn/4231/ros_ur_driver/install/ur:/home/mtrn/4231/ros_ur_driver/install/ur_calibration:/home/mtrn/4231/ros_ur_driver/install/ur_robot_driver:/home/mtrn/4231/ros_ur_driver/install/ur_moveit_config:/home/mtrn/4231/ros_ur_driver/install/ur_bringup:/home/mtrn/4231/ros_ur_driver/install/ur_controllers:/home/mtrn/4231/ros_ur_driver/install/ur_dashboard_msgs:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/yolov8_ros:/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/install/image_warper:/home/mtrn/4231/ws_moveit2/install/moveit_configs_utils:/home/mtrn/4231/ws_moveit2/install/launch_param_builder:/opt/ros/humble')]), 'shell': False}
+[0.096729] (-) TimerEvent: {}
+[0.197276] (-) TimerEvent: {}
+[0.297621] (-) TimerEvent: {}
+[0.330464] (pizza_pos) StdoutLine: {'line': b'[ 50%] \x1b[32mBuilding CXX object CMakeFiles/subscriber_node.dir/src/subscriber_node.cpp.o\x1b[0m\n'}
+[0.397936] (-) TimerEvent: {}
+[0.498697] (-) TimerEvent: {}
+[0.599118] (-) TimerEvent: {}
+[0.699573] (-) TimerEvent: {}
+[0.802184] (-) TimerEvent: {}
+[0.902936] (-) TimerEvent: {}
+[1.003349] (-) TimerEvent: {}
+[1.103722] (-) TimerEvent: {}
+[1.204972] (-) TimerEvent: {}
+[1.305399] (-) TimerEvent: {}
+[1.406431] (-) TimerEvent: {}
+[1.507022] (-) TimerEvent: {}
+[1.608090] (-) TimerEvent: {}
+[1.708482] (-) TimerEvent: {}
+[1.808886] (-) TimerEvent: {}
+[1.909413] (-) TimerEvent: {}
+[2.010293] (-) TimerEvent: {}
+[2.111319] (-) TimerEvent: {}
+[2.211654] (-) TimerEvent: {}
+[2.312020] (-) TimerEvent: {}
+[2.413049] (-) TimerEvent: {}
+[2.513546] (-) TimerEvent: {}
+[2.614332] (-) TimerEvent: {}
+[2.714674] (-) TimerEvent: {}
+[2.815298] (-) TimerEvent: {}
+[2.916497] (-) TimerEvent: {}
+[3.016815] (-) TimerEvent: {}
+[3.119329] (-) TimerEvent: {}
+[3.220232] (-) TimerEvent: {}
+[3.320812] (-) TimerEvent: {}
+[3.421430] (-) TimerEvent: {}
+[3.522189] (-) TimerEvent: {}
+[3.622751] (-) TimerEvent: {}
+[3.723908] (-) TimerEvent: {}
+[3.826738] (-) TimerEvent: {}
+[3.927668] (-) TimerEvent: {}
+[4.028237] (-) TimerEvent: {}
+[4.128679] (-) TimerEvent: {}
+[4.229138] (-) TimerEvent: {}
+[4.329633] (-) TimerEvent: {}
+[4.433860] (-) TimerEvent: {}
+[4.537850] (-) TimerEvent: {}
+[4.638884] (-) TimerEvent: {}
+[4.739971] (-) TimerEvent: {}
+[4.840468] (-) TimerEvent: {}
+[4.941273] (-) TimerEvent: {}
+[5.041989] (-) TimerEvent: {}
+[5.142787] (-) TimerEvent: {}
+[5.243270] (-) TimerEvent: {}
+[5.343754] (-) TimerEvent: {}
+[5.444735] (-) TimerEvent: {}
+[5.545417] (-) TimerEvent: {}
+[5.645933] (-) TimerEvent: {}
+[5.746533] (-) TimerEvent: {}
+[5.847337] (-) TimerEvent: {}
+[5.947648] (-) TimerEvent: {}
+[6.048062] (-) TimerEvent: {}
+[6.148786] (-) TimerEvent: {}
+[6.249307] (-) TimerEvent: {}
+[6.350371] (-) TimerEvent: {}
+[6.454108] (-) TimerEvent: {}
+[6.555935] (-) TimerEvent: {}
+[6.657061] (-) TimerEvent: {}
+[6.757533] (-) TimerEvent: {}
+[6.858455] (-) TimerEvent: {}
+[6.959230] (-) TimerEvent: {}
+[7.059652] (-) TimerEvent: {}
+[7.160438] (-) TimerEvent: {}
+[7.261225] (-) TimerEvent: {}
+[7.361806] (-) TimerEvent: {}
+[7.462165] (-) TimerEvent: {}
+[7.563271] (-) TimerEvent: {}
+[7.630409] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/src/pizza_pos/src/subscriber_node.cpp:\x1b[m\x1b[K In member function \xe2\x80\x98\x1b[01m\x1b[Kvoid DetectionSubscriber::callback(yolov8_msgs::msg::DetectionArray_<std::allocator<void> >::SharedPtr)\x1b[m\x1b[K\xe2\x80\x99:\n'}
+[7.630982] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/src/pizza_pos/src/subscriber_node.cpp:78:64:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[Kno matching function for call to \xe2\x80\x98\x1b[01m\x1b[Kstd::vector<cv::Point_<float> >::vector(cv::Point&)\x1b[m\x1b[K\xe2\x80\x99\n'}
+[7.631118] (pizza_pos) StderrLine: {'line': b'   78 |                 std::vector<cv::Point2f> original_points(center\x1b[01;31m\x1b[K)\x1b[m\x1b[K;\n'}
+[7.631292] (pizza_pos) StderrLine: {'line': b'      |                                                                \x1b[01;31m\x1b[K^\x1b[m\x1b[K\n'}
+[7.631421] (pizza_pos) StderrLine: {'line': b'In file included from \x1b[01m\x1b[K/usr/include/c++/11/vector:67\x1b[m\x1b[K,\n'}
+[7.631596] (pizza_pos) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/usr/include/c++/11/functional:62\x1b[m\x1b[K,\n'}
+[7.631702] (pizza_pos) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/usr/include/c++/11/pstl/glue_algorithm_defs.h:13\x1b[m\x1b[K,\n'}
+[7.631803] (pizza_pos) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/usr/include/c++/11/algorithm:74\x1b[m\x1b[K,\n'}
+[7.631910] (pizza_pos) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/executor.hpp:18\x1b[m\x1b[K,\n'}
+[7.632017] (pizza_pos) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/executors/multi_threaded_executor.hpp:25\x1b[m\x1b[K,\n'}
+[7.632137] (pizza_pos) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/executors.hpp:21\x1b[m\x1b[K,\n'}
+[7.632259] (pizza_pos) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/rclcpp.hpp:155\x1b[m\x1b[K,\n'}
+[7.632374] (pizza_pos) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/src/pizza_pos/src/subscriber_node.cpp:1\x1b[m\x1b[K:\n'}
+[7.632496] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:653:9:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[Kcandidate: \xe2\x80\x98\x1b[01m\x1b[Ktemplate<class _InputIterator, class> std::vector<_Tp, _Alloc>::vector(_InputIterator, _InputIterator, const allocator_type&) [with _InputIterator = _InputIterator; <template-parameter-2-2> = <template-parameter-1-2>; _Tp = cv::Point_<float>; _Alloc = std::allocator<cv::Point_<float> >]\x1b[m\x1b[K\xe2\x80\x99\n'}
+[7.632628] (pizza_pos) StderrLine: {'line': b'  653 |         \x1b[01;36m\x1b[Kvector\x1b[m\x1b[K(_InputIterator __first, _InputIterator __last,\n'}
+[7.632740] (pizza_pos) StderrLine: {'line': b'      |         \x1b[01;36m\x1b[K^~~~~~\x1b[m\x1b[K\n'}
+[7.632842] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:653:9:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[K  template argument deduction/substitution failed:\n'}
+[7.638498] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/src/pizza_pos/src/subscriber_node.cpp:78:64:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[K  candidate expects 3 arguments, 1 provided\n'}
+[7.638798] (pizza_pos) StderrLine: {'line': b'   78 |                 std::vector<cv::Point2f> original_points(center\x1b[01;36m\x1b[K)\x1b[m\x1b[K;\n'}
+[7.639037] (pizza_pos) StderrLine: {'line': b'      |                                                                \x1b[01;36m\x1b[K^\x1b[m\x1b[K\n'}
+[7.639650] (pizza_pos) StderrLine: {'line': b'In file included from \x1b[01m\x1b[K/usr/include/c++/11/vector:67\x1b[m\x1b[K,\n'}
+[7.639825] (pizza_pos) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/usr/include/c++/11/functional:62\x1b[m\x1b[K,\n'}
+[7.639942] (pizza_pos) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/usr/include/c++/11/pstl/glue_algorithm_defs.h:13\x1b[m\x1b[K,\n'}
+[7.640045] (pizza_pos) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/usr/include/c++/11/algorithm:74\x1b[m\x1b[K,\n'}
+[7.640155] (pizza_pos) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/executor.hpp:18\x1b[m\x1b[K,\n'}
+[7.640248] (pizza_pos) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/executors/multi_threaded_executor.hpp:25\x1b[m\x1b[K,\n'}
+[7.640340] (pizza_pos) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/executors.hpp:21\x1b[m\x1b[K,\n'}
+[7.640436] (pizza_pos) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/rclcpp.hpp:155\x1b[m\x1b[K,\n'}
+[7.640543] (pizza_pos) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/home/mtrn/A2_project/A2_Project/Computer_Vision/packages/src/pizza_pos/src/subscriber_node.cpp:1\x1b[m\x1b[K:\n'}
+[7.640643] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:625:7:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[Kcandidate: \xe2\x80\x98\x1b[01m\x1b[Kstd::vector<_Tp, _Alloc>::vector(std::initializer_list<_Tp>, const allocator_type&) [with _Tp = cv::Point_<float>; _Alloc = std::allocator<cv::Point_<float> >; std::vector<_Tp, _Alloc>::allocator_type = std::allocator<cv::Point_<float> >]\x1b[m\x1b[K\xe2\x80\x99\n'}
+[7.640744] (pizza_pos) StderrLine: {'line': b'  625 |       \x1b[01;36m\x1b[Kvector\x1b[m\x1b[K(initializer_list<value_type> __l,\n'}
+[7.640838] (pizza_pos) StderrLine: {'line': b'      |       \x1b[01;36m\x1b[K^~~~~~\x1b[m\x1b[K\n'}
+[7.640928] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:625:43:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[K  no known conversion for argument 1 from \xe2\x80\x98\x1b[01m\x1b[Kcv::Point\x1b[m\x1b[K\xe2\x80\x99 {aka \xe2\x80\x98\x1b[01m\x1b[Kcv::Point_<int>\x1b[m\x1b[K\xe2\x80\x99} to \xe2\x80\x98\x1b[01m\x1b[Kstd::initializer_list<cv::Point_<float> >\x1b[m\x1b[K\xe2\x80\x99\n'}
+[7.641049] (pizza_pos) StderrLine: {'line': b'  625 |       vector(\x1b[01;36m\x1b[Kinitializer_list<value_type> __l\x1b[m\x1b[K,\n'}
+[7.641165] (pizza_pos) StderrLine: {'line': b'      |              \x1b[01;36m\x1b[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~\x1b[m\x1b[K\n'}
+[7.641281] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:607:7:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[Kcandidate: \xe2\x80\x98\x1b[01m\x1b[Kstd::vector<_Tp, _Alloc>::vector(std::vector<_Tp, _Alloc>&&, const allocator_type&) [with _Tp = cv::Point_<float>; _Alloc = std::allocator<cv::Point_<float> >; std::vector<_Tp, _Alloc>::allocator_type = std::allocator<cv::Point_<float> >]\x1b[m\x1b[K\xe2\x80\x99\n'}
+[7.641389] (pizza_pos) StderrLine: {'line': b'  607 |       \x1b[01;36m\x1b[Kvector\x1b[m\x1b[K(vector&& __rv, const allocator_type& __m)\n'}
+[7.641506] (pizza_pos) StderrLine: {'line': b'      |       \x1b[01;36m\x1b[K^~~~~~\x1b[m\x1b[K\n'}
+[7.641614] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:607:7:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[K  candidate expects 2 arguments, 1 provided\n'}
+[7.641728] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:589:7:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[Kcandidate: \xe2\x80\x98\x1b[01m\x1b[Kstd::vector<_Tp, _Alloc>::vector(std::vector<_Tp, _Alloc>&&, const allocator_type&, std::false_type) [with _Tp = cv::Point_<float>; _Alloc = std::allocator<cv::Point_<float> >; std::vector<_Tp, _Alloc>::allocator_type = std::allocator<cv::Point_<float> >; std::false_type = std::integral_constant<bool, false>]\x1b[m\x1b[K\xe2\x80\x99\n'}
+[7.641856] (pizza_pos) StderrLine: {'line': b'  589 |       \x1b[01;36m\x1b[Kvector\x1b[m\x1b[K(vector&& __rv, const allocator_type& __m, false_type)\n'}
+[7.641956] (pizza_pos) StderrLine: {'line': b'      |       \x1b[01;36m\x1b[K^~~~~~\x1b[m\x1b[K\n'}
+[7.642050] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:589:7:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[K  candidate expects 3 arguments, 1 provided\n'}
+[7.642155] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:585:7:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[Kcandidate: \xe2\x80\x98\x1b[01m\x1b[Kstd::vector<_Tp, _Alloc>::vector(std::vector<_Tp, _Alloc>&&, const allocator_type&, std::true_type) [with _Tp = cv::Point_<float>; _Alloc = std::allocator<cv::Point_<float> >; std::vector<_Tp, _Alloc>::allocator_type = std::allocator<cv::Point_<float> >; std::true_type = std::integral_constant<bool, true>]\x1b[m\x1b[K\xe2\x80\x99\n'}
+[7.642266] (pizza_pos) StderrLine: {'line': b'  585 |       \x1b[01;36m\x1b[Kvector\x1b[m\x1b[K(vector&& __rv, const allocator_type& __m, true_type) noexcept\n'}
+[7.642383] (pizza_pos) StderrLine: {'line': b'      |       \x1b[01;36m\x1b[K^~~~~~\x1b[m\x1b[K\n'}
+[7.642506] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:585:7:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[K  candidate expects 3 arguments, 1 provided\n'}
+[7.642602] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:575:7:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[Kcandidate: \xe2\x80\x98\x1b[01m\x1b[Kstd::vector<_Tp, _Alloc>::vector(const std::vector<_Tp, _Alloc>&, const allocator_type&) [with _Tp = cv::Point_<float>; _Alloc = std::allocator<cv::Point_<float> >; std::vector<_Tp, _Alloc>::allocator_type = std::allocator<cv::Point_<float> >]\x1b[m\x1b[K\xe2\x80\x99\n'}
+[7.642705] (pizza_pos) StderrLine: {'line': b'  575 |       \x1b[01;36m\x1b[Kvector\x1b[m\x1b[K(const vector& __x, const allocator_type& __a)\n'}
+[7.642811] (pizza_pos) StderrLine: {'line': b'      |       \x1b[01;36m\x1b[K^~~~~~\x1b[m\x1b[K\n'}
+[7.642911] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:575:7:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[K  candidate expects 2 arguments, 1 provided\n'}
+[7.643002] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:572:7:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[Kcandidate: \xe2\x80\x98\x1b[01m\x1b[Kstd::vector<_Tp, _Alloc>::vector(std::vector<_Tp, _Alloc>&&) [with _Tp = cv::Point_<float>; _Alloc = std::allocator<cv::Point_<float> >]\x1b[m\x1b[K\xe2\x80\x99\n'}
+[7.643123] (pizza_pos) StderrLine: {'line': b'  572 |       \x1b[01;36m\x1b[Kvector\x1b[m\x1b[K(vector&&) noexcept = default;\n'}
+[7.643269] (pizza_pos) StderrLine: {'line': b'      |       \x1b[01;36m\x1b[K^~~~~~\x1b[m\x1b[K\n'}
+[7.643377] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:572:14:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[K  no known conversion for argument 1 from \xe2\x80\x98\x1b[01m\x1b[Kcv::Point\x1b[m\x1b[K\xe2\x80\x99 {aka \xe2\x80\x98\x1b[01m\x1b[Kcv::Point_<int>\x1b[m\x1b[K\xe2\x80\x99} to \xe2\x80\x98\x1b[01m\x1b[Kstd::vector<cv::Point_<float> >&&\x1b[m\x1b[K\xe2\x80\x99\n'}
+[7.643490] (pizza_pos) StderrLine: {'line': b'  572 |       vector(\x1b[01;36m\x1b[Kvector&&\x1b[m\x1b[K) noexcept = default;\n'}
+[7.643592] (pizza_pos) StderrLine: {'line': b'      |              \x1b[01;36m\x1b[K^~~~~~~~\x1b[m\x1b[K\n'}
+[7.643696] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:553:7:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[Kcandidate: \xe2\x80\x98\x1b[01m\x1b[Kstd::vector<_Tp, _Alloc>::vector(const std::vector<_Tp, _Alloc>&) [with _Tp = cv::Point_<float>; _Alloc = std::allocator<cv::Point_<float> >]\x1b[m\x1b[K\xe2\x80\x99\n'}
+[7.643795] (pizza_pos) StderrLine: {'line': b'  553 |       \x1b[01;36m\x1b[Kvector\x1b[m\x1b[K(const vector& __x)\n'}
+[7.643914] (pizza_pos) StderrLine: {'line': b'      |       \x1b[01;36m\x1b[K^~~~~~\x1b[m\x1b[K\n'}
+[7.644062] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:553:28:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[K  no known conversion for argument 1 from \xe2\x80\x98\x1b[01m\x1b[Kcv::Point\x1b[m\x1b[K\xe2\x80\x99 {aka \xe2\x80\x98\x1b[01m\x1b[Kcv::Point_<int>\x1b[m\x1b[K\xe2\x80\x99} to \xe2\x80\x98\x1b[01m\x1b[Kconst std::vector<cv::Point_<float> >&\x1b[m\x1b[K\xe2\x80\x99\n'}
+[7.644198] (pizza_pos) StderrLine: {'line': b'  553 |       vector(\x1b[01;36m\x1b[Kconst vector& __x\x1b[m\x1b[K)\n'}
+[7.644303] (pizza_pos) StderrLine: {'line': b'      |              \x1b[01;36m\x1b[K~~~~~~~~~~~~~~^~~\x1b[m\x1b[K\n'}
+[7.644408] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:522:7:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[Kcandidate: \xe2\x80\x98\x1b[01m\x1b[Kstd::vector<_Tp, _Alloc>::vector(std::vector<_Tp, _Alloc>::size_type, const value_type&, const allocator_type&) [with _Tp = cv::Point_<float>; _Alloc = std::allocator<cv::Point_<float> >; std::vector<_Tp, _Alloc>::size_type = long unsigned int; std::vector<_Tp, _Alloc>::value_type = cv::Point_<float>; std::vector<_Tp, _Alloc>::allocator_type = std::allocator<cv::Point_<float> >]\x1b[m\x1b[K\xe2\x80\x99\n'}
+[7.644519] (pizza_pos) StderrLine: {'line': b'  522 |       \x1b[01;36m\x1b[Kvector\x1b[m\x1b[K(size_type __n, const value_type& __value,\n'}
+[7.644625] (pizza_pos) StderrLine: {'line': b'      |       \x1b[01;36m\x1b[K^~~~~~\x1b[m\x1b[K\n'}
+[7.644743] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:522:7:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[K  candidate expects 3 arguments, 1 provided\n'}
+[7.644868] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:510:7:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[Kcandidate: \xe2\x80\x98\x1b[01m\x1b[Kstd::vector<_Tp, _Alloc>::vector(std::vector<_Tp, _Alloc>::size_type, const allocator_type&) [with _Tp = cv::Point_<float>; _Alloc = std::allocator<cv::Point_<float> >; std::vector<_Tp, _Alloc>::size_type = long unsigned int; std::vector<_Tp, _Alloc>::allocator_type = std::allocator<cv::Point_<float> >]\x1b[m\x1b[K\xe2\x80\x99\n'}
+[7.644992] (pizza_pos) StderrLine: {'line': b'  510 |       \x1b[01;36m\x1b[Kvector\x1b[m\x1b[K(size_type __n, const allocator_type& __a = allocator_type())\n'}
+[7.645092] (pizza_pos) StderrLine: {'line': b'      |       \x1b[01;36m\x1b[K^~~~~~\x1b[m\x1b[K\n'}
+[7.645205] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:510:24:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[K  no known conversion for argument 1 from \xe2\x80\x98\x1b[01m\x1b[Kcv::Point\x1b[m\x1b[K\xe2\x80\x99 {aka \xe2\x80\x98\x1b[01m\x1b[Kcv::Point_<int>\x1b[m\x1b[K\xe2\x80\x99} to \xe2\x80\x98\x1b[01m\x1b[Kstd::vector<cv::Point_<float> >::size_type\x1b[m\x1b[K\xe2\x80\x99 {aka \xe2\x80\x98\x1b[01m\x1b[Klong unsigned int\x1b[m\x1b[K\xe2\x80\x99}\n'}
+[7.645352] (pizza_pos) StderrLine: {'line': b'  510 |       vector(\x1b[01;36m\x1b[Ksize_type __n\x1b[m\x1b[K, const allocator_type& __a = allocator_type())\n'}
+[7.645476] (pizza_pos) StderrLine: {'line': b'      |              \x1b[01;36m\x1b[K~~~~~~~~~~^~~\x1b[m\x1b[K\n'}
+[7.645581] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:497:7:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[Kcandidate: \xe2\x80\x98\x1b[01m\x1b[Kstd::vector<_Tp, _Alloc>::vector(const allocator_type&) [with _Tp = cv::Point_<float>; _Alloc = std::allocator<cv::Point_<float> >; std::vector<_Tp, _Alloc>::allocator_type = std::allocator<cv::Point_<float> >]\x1b[m\x1b[K\xe2\x80\x99\n'}
+[7.645707] (pizza_pos) StderrLine: {'line': b'  497 |       \x1b[01;36m\x1b[Kvector\x1b[m\x1b[K(const allocator_type& __a) _GLIBCXX_NOEXCEPT\n'}
+[7.645823] (pizza_pos) StderrLine: {'line': b'      |       \x1b[01;36m\x1b[K^~~~~~\x1b[m\x1b[K\n'}
+[7.645928] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:497:36:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[K  no known conversion for argument 1 from \xe2\x80\x98\x1b[01m\x1b[Kcv::Point\x1b[m\x1b[K\xe2\x80\x99 {aka \xe2\x80\x98\x1b[01m\x1b[Kcv::Point_<int>\x1b[m\x1b[K\xe2\x80\x99} to \xe2\x80\x98\x1b[01m\x1b[Kconst allocator_type&\x1b[m\x1b[K\xe2\x80\x99 {aka \xe2\x80\x98\x1b[01m\x1b[Kconst std::allocator<cv::Point_<float> >&\x1b[m\x1b[K\xe2\x80\x99}\n'}
+[7.646040] (pizza_pos) StderrLine: {'line': b'  497 |       vector(\x1b[01;36m\x1b[Kconst allocator_type& __a\x1b[m\x1b[K) _GLIBCXX_NOEXCEPT\n'}
+[7.646139] (pizza_pos) StderrLine: {'line': b'      |              \x1b[01;36m\x1b[K~~~~~~~~~~~~~~~~~~~~~~^~~\x1b[m\x1b[K\n'}
+[7.646251] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:487:7:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[Kcandidate: \xe2\x80\x98\x1b[01m\x1b[Kstd::vector<_Tp, _Alloc>::vector() [with _Tp = cv::Point_<float>; _Alloc = std::allocator<cv::Point_<float> >]\x1b[m\x1b[K\xe2\x80\x99\n'}
+[7.646360] (pizza_pos) StderrLine: {'line': b'  487 |       \x1b[01;36m\x1b[Kvector\x1b[m\x1b[K() = default;\n'}
+[7.646448] (pizza_pos) StderrLine: {'line': b'      |       \x1b[01;36m\x1b[K^~~~~~\x1b[m\x1b[K\n'}
+[7.646547] (pizza_pos) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/stl_vector.h:487:7:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[K  candidate expects 0 arguments, 1 provided\n'}
+[7.663230] (-) TimerEvent: {}
+[7.763659] (-) TimerEvent: {}
+[7.865631] (-) TimerEvent: {}
+[7.966036] (-) TimerEvent: {}
+[8.066535] (-) TimerEvent: {}
+[8.166981] (-) TimerEvent: {}
+[8.267408] (-) TimerEvent: {}
+[8.367836] (-) TimerEvent: {}
+[8.468752] (-) TimerEvent: {}
+[8.569153] (-) TimerEvent: {}
+[8.669507] (-) TimerEvent: {}
+[8.769919] (-) TimerEvent: {}
+[8.870471] (-) TimerEvent: {}
+[8.970975] (-) TimerEvent: {}
+[9.071621] (-) TimerEvent: {}
+[9.171940] (-) TimerEvent: {}
+[9.275917] (-) TimerEvent: {}
+[9.377026] (-) TimerEvent: {}
+[9.477817] (-) TimerEvent: {}
+[9.578984] (-) TimerEvent: {}
+[9.680688] (-) TimerEvent: {}
+[9.781330] (-) TimerEvent: {}
+[9.881918] (-) TimerEvent: {}
+[9.982398] (-) TimerEvent: {}
+[10.083242] (-) TimerEvent: {}
+[10.183867] (-) TimerEvent: {}
+[10.284242] (-) TimerEvent: {}
+[10.384651] (-) TimerEvent: {}
+[10.485226] (-) TimerEvent: {}
+[10.585835] (-) TimerEvent: {}
+[10.686254] (-) TimerEvent: {}
+[10.786700] (-) TimerEvent: {}
+[10.887448] (-) TimerEvent: {}
+[10.988051] (-) TimerEvent: {}
+[11.088575] (-) TimerEvent: {}
+[11.189913] (-) TimerEvent: {}
+[11.291241] (-) TimerEvent: {}
+[11.391805] (-) TimerEvent: {}
+[11.493051] (-) TimerEvent: {}
+[11.593836] (-) TimerEvent: {}
+[11.694471] (-) TimerEvent: {}
+[11.795364] (-) TimerEvent: {}
+[11.895841] (-) TimerEvent: {}
+[11.996625] (-) TimerEvent: {}
+[12.096987] (-) TimerEvent: {}
+[12.197897] (-) TimerEvent: {}
+[12.298395] (-) TimerEvent: {}
+[12.399041] (-) TimerEvent: {}
+[12.499972] (-) TimerEvent: {}
+[12.600978] (-) TimerEvent: {}
+[12.702250] (-) TimerEvent: {}
+[12.802724] (-) TimerEvent: {}
+[12.903078] (-) TimerEvent: {}
+[13.003656] (-) TimerEvent: {}
+[13.104016] (-) TimerEvent: {}
+[13.204988] (-) TimerEvent: {}
+[13.305604] (-) TimerEvent: {}
+[13.405976] (-) TimerEvent: {}
+[13.506612] (-) TimerEvent: {}
+[13.607382] (-) TimerEvent: {}
+[13.707750] (-) TimerEvent: {}
+[13.808144] (-) TimerEvent: {}
+[13.908684] (-) TimerEvent: {}
+[14.009061] (-) TimerEvent: {}
+[14.110065] (-) TimerEvent: {}
+[14.210481] (-) TimerEvent: {}
+[14.313185] (-) TimerEvent: {}
+[14.413984] (-) TimerEvent: {}
+[14.514422] (-) TimerEvent: {}
+[14.615067] (-) TimerEvent: {}
+[14.715815] (-) TimerEvent: {}
+[14.816236] (-) TimerEvent: {}
+[14.917445] (-) TimerEvent: {}
+[15.019256] (-) TimerEvent: {}
+[15.120567] (-) TimerEvent: {}
+[15.221837] (-) TimerEvent: {}
+[15.322359] (-) TimerEvent: {}
+[15.422852] (-) TimerEvent: {}
+[15.523716] (-) TimerEvent: {}
+[15.624825] (-) TimerEvent: {}
+[15.725323] (-) TimerEvent: {}
+[15.825837] (-) TimerEvent: {}
+[15.926429] (-) TimerEvent: {}
+[16.026879] (-) TimerEvent: {}
+[16.127580] (-) TimerEvent: {}
+[16.228383] (-) TimerEvent: {}
+[16.329041] (-) TimerEvent: {}
+[16.430075] (-) TimerEvent: {}
+[16.530706] (-) TimerEvent: {}
+[16.631633] (-) TimerEvent: {}
+[16.732629] (-) TimerEvent: {}
+[16.833102] (-) TimerEvent: {}
+[16.934054] (-) TimerEvent: {}
+[17.034632] (-) TimerEvent: {}
+[17.135026] (-) TimerEvent: {}
+[17.235430] (-) TimerEvent: {}
+[17.336242] (-) TimerEvent: {}
+[17.436767] (-) TimerEvent: {}
+[17.537109] (-) TimerEvent: {}
+[17.637897] (-) TimerEvent: {}
+[17.738744] (-) TimerEvent: {}
+[17.839346] (-) TimerEvent: {}
+[17.940184] (-) TimerEvent: {}
+[18.040842] (-) TimerEvent: {}
+[18.141307] (-) TimerEvent: {}
+[18.242261] (-) TimerEvent: {}
+[18.343036] (-) TimerEvent: {}
+[18.443787] (-) TimerEvent: {}
+[18.544522] (-) TimerEvent: {}
+[18.644950] (-) TimerEvent: {}
+[18.745532] (-) TimerEvent: {}
+[18.846248] (-) TimerEvent: {}
+[18.946771] (-) TimerEvent: {}
+[19.047349] (-) TimerEvent: {}
+[19.148137] (-) TimerEvent: {}
+[19.249224] (-) TimerEvent: {}
+[19.350211] (-) TimerEvent: {}
+[19.451237] (-) TimerEvent: {}
+[19.551686] (-) TimerEvent: {}
+[19.601020] (pizza_pos) StderrLine: {'line': b'gmake[2]: *** [CMakeFiles/subscriber_node.dir/build.make:76: CMakeFiles/subscriber_node.dir/src/subscriber_node.cpp.o] Error 1\n'}
+[19.601731] (pizza_pos) StderrLine: {'line': b'gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/subscriber_node.dir/all] Error 2\n'}
+[19.601927] (pizza_pos) StderrLine: {'line': b'gmake: *** [Makefile:146: all] Error 2\n'}
+[19.611778] (pizza_pos) CommandEnded: {'returncode': 2}
+[19.651795] (-) TimerEvent: {}
+[19.752181] (-) TimerEvent: {}
+[19.856207] (-) TimerEvent: {}
+[19.897680] (pizza_pos) JobEnded: {'identifier': 'pizza_pos', 'rc': 2}
+[19.901958] (-) EventReactorShutdown: {}

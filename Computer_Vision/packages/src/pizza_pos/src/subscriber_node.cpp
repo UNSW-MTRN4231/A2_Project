@@ -18,11 +18,7 @@ public:
             "/yolo/old_detections", 10, std::bind(&DetectionSubscriber::callback, this, std::placeholders::_1));
         image_subscription_ = this->create_subscription<sensor_msgs::msg::Image>(
             "image_warped", 10, std::bind(&DetectionSubscriber::image_callback, this, std::placeholders::_1));
-        homography_subscription_ = this->create_subscription<std_msgs::msg::Float64MultiArray>(
-            "homography_matrix", 10, std::bind(&DetectionSubscriber::homography_callback, this, std::placeholders::_1));
-        pov_inv_subscription_ = this->create_subscription<std_msgs::msg::Float64MultiArray>(
-            "warp_pov_inv_tf", 10, std::bind(&DetectionSubscriber::pov_inv_callback, this, std::placeholders::_1));
-        
+
         image_publisher_ = this->create_publisher<sensor_msgs::msg::Image>("image_with_circles", 10);
         centroid_publisher_ = this->create_publisher<geometry_msgs::msg::Point>("transformed_centroid", 10);
     }
@@ -35,17 +31,6 @@ private:
     void image_callback(const sensor_msgs::msg::Image::SharedPtr msg)
     {
         current_image_ = cv_bridge::toCvCopy(msg, "bgr8")->image;
-    }
-
-    void homography_callback(const std_msgs::msg::Float64MultiArray::SharedPtr msg)
-    {
-        // Assume it's a 3x3 matrix for the homography
-        homography_matrix_ = cv::Mat(3, 3, CV_64F, msg->data.data());
-    }
-    void pov_inv_callback(const std_msgs::msg::Float64MultiArray::SharedPtr msg)
-    {
-        // Assume it's a 3x3 matrix for the inverse transformation
-        pov_inv_matrix_ = cv::Mat(3, 3, CV_64F, msg->data.data());
     }
     
     void callback(const yolov8_msgs::msg::DetectionArray::SharedPtr msg)
@@ -62,28 +47,7 @@ private:
             // Gstd::cout << "Homography matrix: " << homography_matrix_ << std::endl;
             auto mask_centroid = computeCentroid(detection.mask);
             cv::Point center(mask_centroid.first, mask_centroid.second);
-            std::vector<cv::Point2f> warped_points = {center};
-            std::vector<cv::Point2f> original_points;
-            if (!pov_inv_matrix_.empty()) {
-                cv::perspectiveTransform(warped_points, original_points, pov_inv_matrix_);
-                center = original_points[0];  // Update center to original image coordinates
-                cv::circle(image_with_circle, center, 5, cv::Scalar(255, 255, 0), -1);
-            }
-            if (!homography_matrix_.empty()) {
-
-                std::vector<cv::Point2f> original_points = {center};
-                std::vector<cv::Point2f> transformed_points;
-                cv::perspectiveTransform(original_points, transformed_points, homography_matrix_);
-                center = original_points[0];  // Update center to original image coordinates
-                cv::circle(image_with_circle, center, 15, cv::Scalar(255, 0, 0), -1);
-                std::cout << "Original point: " << original_points[0] << std::endl;
-
-                std::cout << "Transformed point: " << transformed_points[0] << std::endl;
-                geometry_msgs::msg::Point transformed_centroid_msg;
-                transformed_centroid_msg.x = transformed_points[0].x;
-                transformed_centroid_msg.y = transformed_points[0].y;
-                centroid_publisher_->publish(transformed_centroid_msg);
-            }
+            cv::circle(image_with_circle, center, 5, cv::Scalar(0, 255, 0), -1);
 
             //RCLCPP_INFO(this->get_logger(), "Mask Centroid: (%f, %f)", mask_centroid.first, mask_centroid.second);
 
@@ -110,11 +74,8 @@ private:
 
     rclcpp::Subscription<yolov8_msgs::msg::DetectionArray>::SharedPtr subscription_;
     rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_subscription_;
-    rclcpp::Subscription<std_msgs::msg::Float64MultiArray>::SharedPtr homography_subscription_;
     rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr image_publisher_;
     rclcpp::Publisher<geometry_msgs::msg::Point>::SharedPtr centroid_publisher_;
-    rclcpp::Subscription<std_msgs::msg::Float64MultiArray>::SharedPtr pov_inv_subscription_;
-    
 };
 
 int main(int argc, char * argv[])

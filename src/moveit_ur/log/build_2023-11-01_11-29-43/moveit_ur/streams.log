@@ -1,0 +1,10 @@
+[0.052s] Invoking command in '/home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/mtrn/4231/ws_moveit2/install/moveit_configs_utils:/home/mtrn/4231/ws_moveit2/install/launch_param_builder:/opt/ros/humble /home/mtrn/.local/bin/cmake --build /home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur -- -j12 -l12
+[0.302s] [ 50%] [32mBuilding CXX object CMakeFiles/moveit_trajectory.dir/src/moveit_trajectory.cpp.o[0m
+[0.555s] [01m[K/home/mtrn/A2_project/A2_Project/src/moveit_ur/src/moveit_trajectory.cpp:5:10:[m[K [01;31m[Kfatal error: [m[Kconio.h: No such file or directory
+[0.555s]     5 | #include [01;31m[K<conio.h>[m[K
+[0.555s]       |          [01;31m[K^~~~~~~~~[m[K
+[0.556s] compilation terminated.
+[0.565s] gmake[2]: *** [CMakeFiles/moveit_trajectory.dir/build.make:76: CMakeFiles/moveit_trajectory.dir/src/moveit_trajectory.cpp.o] Error 1
+[0.565s] gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/moveit_trajectory.dir/all] Error 2
+[0.566s] gmake: *** [Makefile:146: all] Error 2
+[0.584s] Invoked command in '/home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/mtrn/4231/ws_moveit2/install/moveit_configs_utils:/home/mtrn/4231/ws_moveit2/install/launch_param_builder:/opt/ros/humble /home/mtrn/.local/bin/cmake --build /home/mtrn/A2_project/A2_Project/src/moveit_ur/build/moveit_ur -- -j12 -l12
