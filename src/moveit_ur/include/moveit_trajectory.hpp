@@ -31,23 +31,26 @@ class moveit_trajectory : public rclcpp::Node
     // Basic movement
     void move_to_pose(geometry_msgs::msg::Pose target_pose);
     void move_to_pose_box_constraint(geometry_msgs::msg::Pose target_pose);
-    void move_to_pose_cartesian(std::vector<geometry_msgs::msg::Pose> waypoints);
+    void move_to_pose_cartesian(std::vector<geometry_msgs::msg::Pose> waypoints, std::string ns);
     void set_orientation(geometry_msgs::msg::Quaternion target_orientation);
     void setOrientationConstraint(std::string desired_orientation);
     geometry_msgs::msg::Pose get_end_effector_pose();
 
     // Trajectory planning
-    void plan_slices();
+    void plan_cuts();
+    void plan_serve_pick();
 
     // Trajectory execution
     void cut_pizza();
+    void pick_slice();
 
     // Visualization
     void draw_title(std::string text);
-    void visualize_cartesian_path(std::vector<geometry_msgs::msg::Pose> waypoints, std::string  );
+    void visualize_cartesian_path(std::vector<geometry_msgs::msg::Pose> waypoints, std::string ns);
 
     void visualize_pizza();
     void visualize_cut_points();
+    void visualize_serve_pick_points();
 
     // Subscription callbacks
     void operation_command_callback(std_msgs::msg::String operation_command);
@@ -78,12 +81,15 @@ class moveit_trajectory : public rclcpp::Node
 
     // State checking
     bool cutting_is_planned = false;
+    bool serve_picking_is_planned = false;
 
     // Trajectory planning
     int num_slices = 8;
     // 2D array of (x,y) points, representing the start and end of each cut
     std::vector<std::vector<geometry_msgs::msg::Point>> cut_points;
     std::vector<geometry_msgs::msg::Quaternion> cut_orientations;
+    std::vector<std::vector<geometry_msgs::msg::Point>> serve_pick_points;
+    std::vector<geometry_msgs::msg::Quaternion> serve_pick_orientations;
 };
 
 #endif // MOVEIT_TRAJECTORY_HPP

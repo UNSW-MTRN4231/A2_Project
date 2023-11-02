@@ -55,10 +55,6 @@ auto generatePoseMsg(float x,float y, float z,float qx,float qy,float qz,float q
     return msg;
 }
 
-double radiansToDegrees(double radians) {
-    return radians * 180.0 / M_PI_4;
-}
-
 void wait(int t) {
   std::chrono::seconds duration(t);
   std::this_thread::sleep_for(duration);
@@ -73,12 +69,9 @@ geometry_msgs::msg::Point rotate_point(
   float tempX = point.x - centre.x;
   float tempY = point.y - centre.y;
 
-  // Convert theta to radians for trigonometric functions
-  float radTheta = theta * M_PI / 180.0;
-
   // Apply rotation
-  float rotatedX = tempX * cos(radTheta) - tempY * sin(radTheta);
-  float rotatedY = tempX * sin(radTheta) + tempY * cos(radTheta);
+  float rotatedX = tempX * cos(theta) - tempY * sin(theta);
+  float rotatedY = tempX * sin(theta) + tempY * cos(theta);
 
   // Translate back to the center
   geometry_msgs::msg::Point rotated_point;
@@ -131,9 +124,18 @@ geometry_msgs::msg::Quaternion RPYToQuaternion(double roll, double pitch, double
 
 geometry_msgs::msg::Quaternion get_cut_quaternion(float yaw_angle) {
   geometry_msgs::msg::Quaternion down_rotation = RPYToQuaternion(0,M_PI,0);
-  geometry_msgs::msg::Quaternion yaw_rotation = RPYToQuaternion(0,0,M_PI/180 * yaw_angle);
+  geometry_msgs::msg::Quaternion yaw_rotation = RPYToQuaternion(0,0,yaw_angle);
 
   geometry_msgs::msg::Quaternion combined = combineQuaternions(yaw_rotation,down_rotation);
+  return combined;
+}
+
+geometry_msgs::msg::Quaternion get_serve_pick_quaternion(float yaw_angle) {
+  float inclination_angle = (2.0/3.0) * M_PI;
+  geometry_msgs::msg::Quaternion inclination_rotation = RPYToQuaternion(0,inclination_angle,0);
+  geometry_msgs::msg::Quaternion yaw_rotation = RPYToQuaternion(0,0,yaw_angle);
+
+  geometry_msgs::msg::Quaternion combined = combineQuaternions(yaw_rotation,inclination_rotation);
   return combined;
 }
 
@@ -260,7 +262,7 @@ void moveit_trajectory::move_to_pose_box_constraint(geometry_msgs::msg::Pose tar
     move_group_interface->clearPathConstraints();
 }
 
-void moveit_trajectory::move_to_pose_cartesian(std::vector<geometry_msgs::msg::Pose> waypoints) {
+void moveit_trajectory::move_to_pose_cartesian(std::vector<geometry_msgs::msg::Pose> waypoints, std::string ns) {
 
   // Plan the trajectory
   moveit_msgs::msg::RobotTrajectory trajectory;
@@ -269,7 +271,7 @@ void moveit_trajectory::move_to_pose_cartesian(std::vector<geometry_msgs::msg::P
   move_group_interface->computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory);
 
   // Visualize the plan in RViz
-  visualize_cartesian_path(waypoints, "Cutting Path");
+  visualize_cartesian_path(waypoints,ns);
 
   // Execute the trajectory
   move_group_interface->execute(trajectory);
@@ -281,7 +283,7 @@ void moveit_trajectory::move_to_pose_cartesian(std::vector<geometry_msgs::msg::P
 }
 
 void moveit_trajectory::set_orientation(geometry_msgs::msg::Quaternion target_orientation) {
-  // TODO
+  // Not implemented
   return;
 }
 
@@ -338,26 +340,27 @@ geometry_msgs::msg::Pose moveit_trajectory::get_end_effector_pose(){
 
 // Plan slice centres, slicing operation start/end points on pizza, and slicing
 // operation start/complete points (lead in and lead out)
-void moveit_trajectory::plan_slices() {
+void moveit_trajectory::plan_cuts() {
 
   int num_cuts = num_slices/2;
-  float cut_height = 0.1;
+  float TCP_height = 0.12;
+
   // Define an initial, horizontal cut
   geometry_msgs::msg::Point start;
   start.x = pizza_pose.position.x - pizza_radius.data;
   start.y = pizza_pose.position.y;
-  start.z = cut_height;
+  start.z = TCP_height;
 
   geometry_msgs::msg::Point end;
   end.x = pizza_pose.position.x + pizza_radius.data;
   end.y = pizza_pose.position.y;
-  end.z = cut_height;
+  end.z = TCP_height;
 
   // Rotate the cut to find all cuts
   for (int i = 0; i<(num_cuts); i++){
 
     // Find start/end points
-    float cut_angle = i * 180.0/num_cuts;
+    float cut_angle = i * M_PI/num_cuts;
     geometry_msgs::msg::Point cut_start = rotate_point(start,pizza_pose.position,cut_angle);
     geometry_msgs::msg::Point cut_end = rotate_point(end,pizza_pose.position,cut_angle);
 
@@ -367,7 +370,7 @@ void moveit_trajectory::plan_slices() {
     single_cut_points.push_back(cut_end);
     cut_points.push_back(single_cut_points);
 
-    // TODO set this value correctly
+    // Set orientation such that cutter blade is aligned with the cut direction
     geometry_msgs::msg::Quaternion cut_orientation = get_cut_quaternion(cut_angle);
     cut_orientations.push_back(cut_orientation);
   }
@@ -375,11 +378,55 @@ void moveit_trajectory::plan_slices() {
   cutting_is_planned = true;
 }
 
+void moveit_trajectory::plan_serve_pick() {
+
+  float TCP_height = 0.15; // Height of spatula tip
+  float lead_in_length = 0.05; // Starting distance from spatula tip from pizza perimeter
+  float spatula_length = 0.1; // Length of flat section of spatula, from the tip to the bend
+  float slide_length = spatula_length + lead_in_length; // Total length of the sliding motion
+  
+  // Define an initial slice pickup
+  geometry_msgs::msg::Point start;
+  start.x = pizza_pose.position.x - pizza_radius.data - lead_in_length;
+  start.y = pizza_pose.position.y;
+  start.z = TCP_height;
+
+  geometry_msgs::msg::Point end;
+  end.x = start.x + slide_length;
+  end.y = pizza_pose.position.y;
+  end.z = TCP_height;
+
+  // Rotate the cut to find all cuts
+  for (int i = 0; i<(num_slices); i++){
+
+    // Find start/end points
+    float pick_angle = (i + 0.5) * (2*M_PI)/num_slices; // angle from which spatula approaches (in XY plane)
+    geometry_msgs::msg::Point pick_start = rotate_point(start,pizza_pose.position,pick_angle);
+    geometry_msgs::msg::Point pick_end = rotate_point(end,pizza_pose.position,pick_angle);
+
+    // Store in vector
+    std::vector<geometry_msgs::msg::Point> single_pick_points;
+    single_pick_points.push_back(pick_start);
+    single_pick_points.push_back(pick_end);
+    serve_pick_points.push_back(single_pick_points);
+
+    // Set orientation such that spatula is horizontal and points toward pizza centre
+    geometry_msgs::msg::Quaternion pick_orientation = get_serve_pick_quaternion(pick_angle);
+    serve_pick_orientations.push_back(pick_orientation);
+  }
+
+  serve_picking_is_planned = true;
+  return;
+}
+
 /////////////////////////////////////////////////////////////////////
 //                       TRAJECTORY EXECUTION                      //
 /////////////////////////////////////////////////////////////////////
 
 void moveit_trajectory::cut_pizza() {
+  float centre_pose_height = 0.2;
+  float lift_height  = 0.04; // Height of vertical lead in and lead out
+
   // Create 'down' orientation
   geometry_msgs::msg::Quaternion down_orientation;
   down_orientation.x = 0;
@@ -389,7 +436,7 @@ void moveit_trajectory::cut_pizza() {
 
   // Create centre pose (returned to between cuts)
   geometry_msgs::msg::Pose centre_pose = pizza_pose;
-  centre_pose.position.z = 0.2;
+  centre_pose.position.z = pizza_pose.position.z + centre_pose_height;;
   centre_pose.orientation = down_orientation;
 
   // Loop through cut points and execute
@@ -398,21 +445,21 @@ void moveit_trajectory::cut_pizza() {
 
     geometry_msgs::msg::Pose above_cut_start;
     above_cut_start.position = cut_points.at(i).at(0);
-    above_cut_start.position.z += 0.03;
-    above_cut_start.orientation = cut_orientations.at(i); // TODO orientation adjustment for tool use
+    above_cut_start.position.z += lift_height;
+    above_cut_start.orientation = cut_orientations.at(i);
 
     geometry_msgs::msg::Pose cut_start;
     cut_start.position = cut_points.at(i).at(0);
-    cut_start.orientation = cut_orientations.at(i); // TODO orientation adjustment for tool use
+    cut_start.orientation = cut_orientations.at(i);
 
     geometry_msgs::msg::Pose cut_end;
     cut_end.position = cut_points.at(i).at(1);
-    cut_end.orientation = cut_orientations.at(i); // TODO orientation adjustment for tool use
+    cut_end.orientation = cut_orientations.at(i);
 
     geometry_msgs::msg::Pose above_cut_end;
     above_cut_end.position = cut_points.at(i).at(1);
-    above_cut_end.position.z += 0.03;
-    above_cut_end.orientation = cut_orientations.at(i); // TODO orientation adjustment for tool use
+    above_cut_end.position.z += lift_height;
+    above_cut_end.orientation = cut_orientations.at(i);
 
     std::vector<geometry_msgs::msg::Pose> waypoints;
     waypoints.push_back(centre_pose);
@@ -421,9 +468,61 @@ void moveit_trajectory::cut_pizza() {
     waypoints.push_back(cut_end);
     waypoints.push_back(above_cut_end);
     waypoints.push_back(centre_pose);
-    move_to_pose_cartesian(waypoints);
+    move_to_pose_cartesian(waypoints, "Cutting Path");
 
     wait(5);
+  }
+
+  return;
+}
+
+void moveit_trajectory::pick_slice() {
+  float centre_pose_height = 0.2;
+  float lift_height  = 0.08; // Height of vertical lead in and lead out
+
+  // Create centre pose, with orientation for spatula
+  geometry_msgs::msg::Pose centre_pose = pizza_pose;
+  centre_pose.position.z = pizza_pose.position.z + centre_pose_height;
+  centre_pose.orientation = serve_pick_orientations.at(0);
+
+  // Plan trajectory for the first set of pick points
+  std::cout<<"Executing pick"<<std::endl;
+
+  geometry_msgs::msg::Pose above_pick_start;
+  above_pick_start.position = serve_pick_points.at(0).at(0);
+  above_pick_start.position.z += lift_height;
+  above_pick_start.orientation = serve_pick_orientations.at(0);
+
+  geometry_msgs::msg::Pose pick_start;
+  pick_start.position = serve_pick_points.at(0).at(0);
+  pick_start.orientation = serve_pick_orientations.at(0);
+
+  geometry_msgs::msg::Pose pick_end;
+  pick_end.position = serve_pick_points.at(0).at(1);
+  pick_end.orientation = serve_pick_orientations.at(0);
+
+  geometry_msgs::msg::Pose above_pick_end;
+  above_pick_end.position = serve_pick_points.at(0).at(1);
+  above_pick_end.position.z += lift_height;
+  above_pick_end.orientation = serve_pick_orientations.at(0);
+
+  std::vector<geometry_msgs::msg::Pose> waypoints;
+  waypoints.push_back(centre_pose);
+  waypoints.push_back(above_pick_start);
+  waypoints.push_back(pick_start);
+  waypoints.push_back(pick_end);
+  waypoints.push_back(above_pick_end);
+  waypoints.push_back(centre_pose);
+  move_to_pose_cartesian(waypoints, "Pick path");
+
+  wait(5);
+
+  // Remove this slice from stored trajectories
+  if (!serve_pick_points.empty()) {
+    serve_pick_points.erase(serve_pick_points.begin());
+  }
+  if (!serve_pick_orientations.empty()) {
+    serve_pick_orientations.erase(serve_pick_orientations.begin());
   }
 
   return;
@@ -449,8 +548,12 @@ void moveit_trajectory::visualize_cartesian_path(std::vector<geometry_msgs::msg:
   visual_tools_->publishPath(waypoints, rviz_visual_tools::LIME_GREEN, rviz_visual_tools::SMALL,ns);
 
   // Label points
-  for (size_t i = 0; i < waypoints.size(); i++)
-    visual_tools_->publishAxis(waypoints[i], rviz_visual_tools::SMALL, ns);
+  bool show_axes = false;
+  if (show_axes) {
+    for (size_t i = 0; i < waypoints.size(); i++) {
+       visual_tools_->publishAxis(waypoints[i], rviz_visual_tools::SMALL, ns);
+    }
+  }
   visual_tools_->trigger();
 }
 
@@ -463,7 +566,7 @@ void moveit_trajectory::visualize_pizza() {
 
   // Centre
   visual_tools_->publishSphere(pizza_pose,rviz_visual_tools::GREEN,0.02,"Pizza Centre");
-  
+
   visual_tools_->trigger();
 }
 
@@ -479,7 +582,25 @@ void moveit_trajectory::visualize_cut_points() {
     // Change z coordinate, so that the cut lines appear on top of the pizza cylinder
     cut_start.z += 0.012;
     cut_end.z += 0.012;
-    visual_tools_->publishLine(cut_start, cut_end, rviz_visual_tools::BLUE,rviz_visual_tools::SMALL);
+    visual_tools_->publishLine(cut_start,cut_end,rviz_visual_tools::BLUE,rviz_visual_tools::SMALL);
+  }
+
+  visual_tools_->trigger();
+}
+
+void moveit_trajectory::visualize_serve_pick_points() {
+  RCLCPP_INFO(this->get_logger(), "Vizualizing Serve Pick Points");
+
+  for (size_t i = 0; i<serve_pick_points.size(); i++) {
+
+    // Get start/end points
+    geometry_msgs::msg::Point pick_start = serve_pick_points.at(i).at(0);
+    geometry_msgs::msg::Point pick_end = serve_pick_points.at(i).at(1);
+
+    // Change z coordinate, so that the cut lines appear on top of the pizza cylinder
+    pick_start.z += 0.012;
+    pick_end.z += 0.012;
+    visual_tools_->publishLine(pick_start,pick_end,rviz_visual_tools::CYAN,rviz_visual_tools::SMALL);
   }
 
   visual_tools_->trigger();
@@ -509,6 +630,13 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
     draw_title("Cutting");
     cut_pizza();
   }
+
+  if (operation_command.data == "Pick Slice") {
+    RCLCPP_INFO(this->get_logger(), "Picking Slice");
+    draw_title("Picking_Slice");
+    pick_slice();
+  }
+
   return;
 }
 
@@ -520,14 +648,26 @@ void moveit_trajectory::operation_status_callback(std_msgs::msg::String operatio
     RCLCPP_INFO(this->get_logger(), "Detection Complete");
     visualize_pizza();
 
-    RCLCPP_INFO(this->get_logger(), "Planning Cuts");
-    draw_title("Planning_Cuts");
     if (!cutting_is_planned){
-      plan_slices();
+      // Plan cutting
+      RCLCPP_INFO(this->get_logger(), "Planning Cuts");
+      draw_title("Planning_Cuts");
+      plan_cuts();
+
+      // Visualize
+      RCLCPP_INFO(this->get_logger(), "Visualising Cuts");
+      visualize_cut_points();
     }
 
-    RCLCPP_INFO(this->get_logger(), "Visualising Cuts");
-    visualize_cut_points();
+    if (!serve_picking_is_planned){
+      // Plan serve picking
+      RCLCPP_INFO(this->get_logger(), "Planning Serve Pick");
+      draw_title("Planning_Serve_Pick");
+      plan_serve_pick();
+
+      RCLCPP_INFO(this->get_logger(), "Visualising Serve Pick");
+      visualize_serve_pick_points();
+    }
   }
 
   return;
