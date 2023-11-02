@@ -1,8 +1,0 @@
-[01m[K/home/mtrn/A2_project/A2_Project/src/moveit_ur/src/moveit_trajectory.cpp:[m[K In member function ‘[01m[Kvoid moveit_trajectory::move_to_pose_cartesian(std::vector<geometry_msgs::msg::Pose_<std::allocator<void> > >)[m[K’:
-[01m[K/home/mtrn/A2_project/A2_Project/src/moveit_ur/src/moveit_trajectory.cpp:261:10:[m[K [01;35m[Kwarning: [m[Kunused variable ‘[01m[Kfraction[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable-Wunused-variable]8;;[m[K]
-  261 |   double [01;35m[Kfraction[m[K = move_group_interface->computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory);
-      |          [01;35m[K^~~~~~~~[m[K
-[01m[K/home/mtrn/A2_project/A2_Project/src/moveit_ur/src/moveit_trajectory.cpp:[m[K In member function ‘[01m[Kvoid moveit_trajectory::set_orientation(geometry_msgs::msg::Quaternion)[m[K’:
-[01m[K/home/mtrn/A2_project/A2_Project/src/moveit_ur/src/moveit_trajectory.cpp:280:72:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Ktarget_orientation[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
-  280 | void moveit_trajectory::set_orientation([01;35m[Kgeometry_msgs::msg::Quaternion target_orientation[m[K) {
-      |                                         [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~[m[K
