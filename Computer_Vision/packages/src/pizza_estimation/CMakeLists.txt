@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(pizza_pos)
+project(pizza_estimation)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -18,12 +18,12 @@ find_package(cv_bridge REQUIRED)
 # find_package(yolov8_ros REQUIRED)
 
 # Add the executable
-add_executable(subscriber_node src/subscriber_node.cpp)
-ament_target_dependencies(subscriber_node rclcpp yolov8_msgs sensor_msgs OpenCV cv_bridge)
+add_executable(pizza_estimation src/pizza_estimation.cpp)
+ament_target_dependencies(pizza_estimation rclcpp yolov8_msgs sensor_msgs OpenCV cv_bridge)
 
 # Install the executable
 install(TARGETS
-  subscriber_node
+  pizza_estimation
   DESTINATION lib/${PROJECT_NAME}
 )
 
