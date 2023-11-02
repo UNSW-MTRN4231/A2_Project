@@ -24,8 +24,6 @@ class ImageWarper(Node):
 
         if len(purple_dots) != 4:
             self.get_logger().warn('Did not detect exactly four purple dots.')
-           
-
             if self.prev_M is not None:
                 M = self.prev_M
             else:
@@ -34,6 +32,7 @@ class ImageWarper(Node):
             sorted_purple_dots = sort_coordinates(purple_dots)
             M = self.get_perspective_transform(sorted_purple_dots)
             self.prev_M = M
+            
             labelled_image = cv_image.copy()
             for index, (x, y) in enumerate(sorted_purple_dots):
                 cv2.putText(labelled_image, str(index), (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
@@ -46,14 +45,15 @@ class ImageWarper(Node):
 
     def get_perspective_transform(self, purple_dots):
         src = np.array(purple_dots, dtype=np.float32)
-        dst = np.array([[0, 0], [1000, 0], [0, 1000], [1000, 1000]], dtype=np.float32)
+        src = np.array(purple_dots, dtype=np.float32)
+        dst = np.array([[0, 0], [575, 0], [0, 715], [575, 715]], dtype=np.float32)
         return cv2.getPerspectiveTransform(src, dst)
 
     def warp_image(self, img, M):
         matrix_msg = Float64MultiArray()
         matrix_msg.data = [float(value) for value in M.ravel()]
         self.pov_publisher_.publish(matrix_msg)
-        return cv2.warpPerspective(img, M, (1000, 1000))
+        return cv2.warpPerspective(img, M, (575, 715))
 
 def get_purple_dots_coordinates(image):
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)

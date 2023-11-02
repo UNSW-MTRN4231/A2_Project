@@ -1,4 +1,0 @@
-[console_scripts]
-ImagePublisher = image_warper.ImagePublisher:main
-image_warper = image_warper.image_warper:main
-
