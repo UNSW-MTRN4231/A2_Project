@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>bringup</name>
+  <version>0.0.1</version>
+  <description>Brings up all packages in the A2 project workspace</description>
+
+  <maintainer email="you@yourdomain.tld">Your Name</maintainer>
+
+  <license>TODO</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>moveit_trajectory</depend>
+  <depend>high_level_control</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+
+</package>
