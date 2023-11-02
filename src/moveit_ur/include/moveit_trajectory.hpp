@@ -43,6 +43,9 @@ class moveit_trajectory : public rclcpp::Node
     void cut_pizza();
 
     // Visualization
+    void draw_title(std::string text);
+    void visualize_cartesian_path(std::vector<geometry_msgs::msg::Pose> waypoints, std::string  );
+
     void visualize_pizza();
     void visualize_cut_points();
 

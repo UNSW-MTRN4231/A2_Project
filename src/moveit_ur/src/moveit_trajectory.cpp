@@ -1,4 +1,5 @@
 #include <memory>
+#include <chrono>
 #include <thread>
 #include <vector>
 #include <cmath>
@@ -58,9 +59,9 @@ double radiansToDegrees(double radians) {
     return radians * 180.0 / M_PI_4;
 }
 
-// Input
-void wait_for_key_press() {
-  // std::cin.get();
+void wait(int t) {
+  std::chrono::seconds duration(t);
+  std::this_thread::sleep_for(duration);
   return;
 }
 
@@ -177,8 +178,11 @@ moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
   planning_scene_interface.applyCollisionObject(col_object_sideWall);
 
   // Instantiate visualization tool
-  visual_tools_ = std::make_unique<moveit_visual_tools::MoveItVisualTools>(std::unique_ptr<rclcpp::Node>(this), "base_link", rviz_visual_tools::RVIZ_MARKER_TOPIC,
-                                          move_group_interface->getRobotModel());
+  visual_tools_ = std::make_unique<moveit_visual_tools::MoveItVisualTools>(
+    std::unique_ptr<rclcpp::Node>(this), 
+    "base_link", 
+    rviz_visual_tools::RVIZ_MARKER_TOPIC,
+    move_group_interface->getRobotModel());
   visual_tools_->deleteAllMarkers();
   visual_tools_->loadRemoteControl();
 }
@@ -257,31 +261,23 @@ void moveit_trajectory::move_to_pose_box_constraint(geometry_msgs::msg::Pose tar
 }
 
 void moveit_trajectory::move_to_pose_cartesian(std::vector<geometry_msgs::msg::Pose> waypoints) {
-  // We want the Cartesian path to be interpolated at a resolution of 1 cm
-  // which is why we will specify 0.01 as the max step in Cartesian
-  // translation.  We will specify the jump threshold as 0.0, effectively disabling it.
-  // Warning - disabling the jump threshold while operating real hardware can cause
-  // large unpredictable motions of redundant joints and could be a safety issue
+
+  // Plan the trajectory
   moveit_msgs::msg::RobotTrajectory trajectory;
-  const double jump_threshold = 0.0;
-  const double eef_step = 0.01;
-  double fraction = move_group_interface->computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory);
-  // RCLCPP_INFO(this->get_logger(), "Visualizing Cartesian path (%.2f%% achieved)", fraction * 100.0);
+  const double jump_threshold = 0.0; // Disabled jump threshold
+  const double eef_step = 0.01; // Resolution the path will be interpolated at
+  move_group_interface->computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory);
 
   // Visualize the plan in RViz
-  // visual_tools_->deleteAllMarkers();
-  visual_tools_->publishPath(waypoints, rviz_visual_tools::LIME_GREEN, rviz_visual_tools::SMALL);
-  for (std::size_t i = 0; i < waypoints.size(); ++i)
-    visual_tools_->publishAxisLabeled(waypoints[i], "pt" + std::to_string(i), rviz_visual_tools::SMALL);
-  visual_tools_->trigger();
+  visualize_cartesian_path(waypoints, "Cutting Path");
 
-  // Cartesian motions should often be slow, e.g. when approaching objects. The speed of Cartesian
-  // plans cannot currently be set through the maxVelocityScalingFactor, but requires you to time
-  // the trajectory manually, as described `here <https://groups.google.com/forum/#!topic/moveit-users/MOoFxy2exT4>`_.
-  // Pull requests are welcome.
-  //
-  // You can execute a trajectory like this.
+  // Execute the trajectory
   move_group_interface->execute(trajectory);
+
+  // Note that this function will return *before* the trajectory is completely executed.
+  // Planning new trajectories before the current one is completely executed leads to errors.
+  // Therefore, include some delay after calling this function to ensure trajectory is completed
+  // before program progresses.
 }
 
 void moveit_trajectory::set_orientation(geometry_msgs::msg::Quaternion target_orientation) {
@@ -398,8 +394,6 @@ void moveit_trajectory::cut_pizza() {
 
   // Loop through cut points and execute
   for (size_t i = 0; i<cut_points.size(); i++) {
-    std::cout<<"Press enter to execute next cut..."<< i << std::endl;
-    wait_for_key_press();
     std::cout<<"Executing cut "<< i << std::endl;
 
     geometry_msgs::msg::Pose above_cut_start;
@@ -426,7 +420,10 @@ void moveit_trajectory::cut_pizza() {
     waypoints.push_back(cut_start);
     waypoints.push_back(cut_end);
     waypoints.push_back(above_cut_end);
+    waypoints.push_back(centre_pose);
     move_to_pose_cartesian(waypoints);
+
+    wait(5);
   }
 
   return;
@@ -436,6 +433,27 @@ void moveit_trajectory::cut_pizza() {
 //                          VISUALIZATION                          //
 /////////////////////////////////////////////////////////////////////
 
+void moveit_trajectory::draw_title(std::string text) {
+  auto const text_pose = [] {
+    auto msg = Eigen::Isometry3d::Identity();
+    msg.translation().x() = 0.5;
+    msg.translation().z() = 1.0;
+    return msg;
+  }();
+  visual_tools_->publishText(text_pose, text, rviz_visual_tools::WHITE, rviz_visual_tools::XXLARGE);
+  visual_tools_->trigger();
+}
+
+void moveit_trajectory::visualize_cartesian_path(std::vector<geometry_msgs::msg::Pose> waypoints,std::string ns){
+  // Publish lines
+  visual_tools_->publishPath(waypoints, rviz_visual_tools::LIME_GREEN, rviz_visual_tools::SMALL,ns);
+
+  // Label points
+  for (size_t i = 0; i < waypoints.size(); i++)
+    visual_tools_->publishAxis(waypoints[i], rviz_visual_tools::SMALL, ns);
+  visual_tools_->trigger();
+}
+
 void moveit_trajectory::visualize_pizza() {
   RCLCPP_INFO(this->get_logger(), "Vizualizing Pizza");
 
@@ -444,8 +462,8 @@ void moveit_trajectory::visualize_pizza() {
     pizza_pose, rviz_visual_tools::RED,0.01,pizza_radius.data*2,"Pizza");
 
   // Centre
-  visual_tools_->publishSphere(pizza_pose, rviz_visual_tools::GREEN, 0.02);
-
+  visual_tools_->publishSphere(pizza_pose,rviz_visual_tools::GREEN,0.02,"Pizza Centre");
+  
   visual_tools_->trigger();
 }
 
@@ -461,7 +479,7 @@ void moveit_trajectory::visualize_cut_points() {
     // Change z coordinate, so that the cut lines appear on top of the pizza cylinder
     cut_start.z += 0.012;
     cut_end.z += 0.012;
-    visual_tools_->publishLine(cut_start, cut_end, rviz_visual_tools::BLUE);
+    visual_tools_->publishLine(cut_start, cut_end, rviz_visual_tools::BLUE,rviz_visual_tools::SMALL);
   }
 
   visual_tools_->trigger();
@@ -488,7 +506,7 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
 {
   if (operation_command.data == "Cut") {
     RCLCPP_INFO(this->get_logger(), "Executing Cuts");
-
+    draw_title("Cutting");
     cut_pizza();
   }
   return;
@@ -498,10 +516,12 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
 void moveit_trajectory::operation_status_callback(std_msgs::msg::String operation_status)
 { 
   if (operation_status.data == "Detection Complete") {
+    draw_title("Detection_Complete");
     RCLCPP_INFO(this->get_logger(), "Detection Complete");
     visualize_pizza();
 
-    RCLCPP_INFO(this->get_logger(), "Planning Slicing");
+    RCLCPP_INFO(this->get_logger(), "Planning Cuts");
+    draw_title("Planning_Cuts");
     if (!cutting_is_planned){
       plan_slices();
     }
