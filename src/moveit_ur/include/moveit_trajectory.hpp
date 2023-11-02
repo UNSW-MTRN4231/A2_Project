@@ -29,14 +29,11 @@ class moveit_trajectory : public rclcpp::Node
     /////////////////////////////////////////////////////////////////////
 
     // Basic movement
-    void move_to_pose(geometry_msgs::msg::Pose target_pose);
-    void move_to_pose_box_constraint(geometry_msgs::msg::Pose target_pose);
-    void move_to_pose_cartesian(std::vector<geometry_msgs::msg::Pose> waypoints, std::string ns);
-    void set_orientation(geometry_msgs::msg::Quaternion target_orientation);
-    void setOrientationConstraint(std::string desired_orientation);
-    geometry_msgs::msg::Pose get_end_effector_pose();
+    void follow_path_cartesian(std::vector<geometry_msgs::msg::Pose> waypoints, std::string ns);
 
     // Trajectory planning
+    geometry_msgs::msg::Quaternion get_cut_quaternion(float yaw);
+    geometry_msgs::msg::Quaternion get_serve_pick_quaternion(float yaw);
     void plan_cuts();
     void plan_serve_pick();
 
@@ -71,9 +68,6 @@ class moveit_trajectory : public rclcpp::Node
     rclcpp::Subscription<std_msgs::msg::String>::SharedPtr operation_status_subscription_;
     rclcpp::Subscription<std_msgs::msg::Float32>::SharedPtr pizza_radius_subscription_;
     rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr pizza_pose_subscription_;
-    rclcpp::TimerBase::SharedPtr timer_;
-    std::shared_ptr<tf2_ros::TransformListener> tf_listener_{nullptr};
-    std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
 
     // Stored variables from messages
     std_msgs::msg::Float32 pizza_radius;
@@ -85,9 +79,10 @@ class moveit_trajectory : public rclcpp::Node
 
     // Trajectory planning
     int num_slices = 8;
-    // 2D array of (x,y) points, representing the start and end of each cut
+    // 2D vector of points, representing the start and end of each cut
     std::vector<std::vector<geometry_msgs::msg::Point>> cut_points;
     std::vector<geometry_msgs::msg::Quaternion> cut_orientations;
+    // 2D vector of points, representing the start and end of each motion when picking up each slice
     std::vector<std::vector<geometry_msgs::msg::Point>> serve_pick_points;
     std::vector<geometry_msgs::msg::Quaternion> serve_pick_orientations;
 };
