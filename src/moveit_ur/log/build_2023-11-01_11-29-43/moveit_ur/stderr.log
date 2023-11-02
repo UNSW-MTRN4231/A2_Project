@@ -1,7 +1,0 @@
-[01m[K/home/mtrn/A2_project/A2_Project/src/moveit_ur/src/moveit_trajectory.cpp:5:10:[m[K [01;31m[Kfatal error: [m[Kconio.h: No such file or directory
-    5 | #include [01;31m[K<conio.h>[m[K
-      |          [01;31m[K^~~~~~~~~[m[K
-compilation terminated.
-gmake[2]: *** [CMakeFiles/moveit_trajectory.dir/build.make:76: CMakeFiles/moveit_trajectory.dir/src/moveit_trajectory.cpp.o] Error 1
-gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/moveit_trajectory.dir/all] Error 2
-gmake: *** [Makefile:146: all] Error 2
