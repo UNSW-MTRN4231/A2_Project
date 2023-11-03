@@ -1,0 +1,41 @@
+<?xml version = "1.0"?>
+
+<robot name = "pizza_spatula">
+
+<!-- Color Def - for Material blue-->
+<material name = "blue">
+    <color rgba = "0 0.8 1"/>
+</material>
+
+<!-- Base Link Definition-->
+
+<link name="pizza_spatula_handle">
+    <visual>
+        <origin xyz="0.0 0.0 0.1" rpy="0.0 0.0 0.0"/>
+        <geometry>
+            <box size="0.025 0.025 0.15"/>
+            <!--box size="0.15 0.024 0.022"/-->
+        </geometry>
+    </visual>
+</link>
+
+<link name="pizza_spatula_blade">
+    <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <geometry>
+            <box size="0.06 0.005 0.12"/>
+            <!--box size="0.12 0.06 0.1"/-->
+        </geometry>
+        <material name="blue"/>
+    </visual>
+</link>
+
+<joint name="cutting_joint" type="fixed">
+    <parent link="pizza_spatula_handle"/>
+    <child link="pizza_spatula_blade"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <origin xyz="0.0 0.0 0.22" rpy="0.0 0.0 0.0"/>
+    
+</joint>
+
+</robot>
