@@ -24,7 +24,7 @@ public:
         centroid_publisher_ = this->create_publisher<geometry_msgs::msg::Point>("pizza_centroid", 10);
         radius_publisher_ = this->create_publisher<std_msgs::msg::Float64>("pizza_radius", 10);
 
-        robot_arm_position_ = cv::Point(-50, -250);
+        robot_arm_position_ = cv::Point(-228, 58); // corner0 in base frame of robot: x = -228mm, y = -58mm, z = 0mm
     }
 
 private:
