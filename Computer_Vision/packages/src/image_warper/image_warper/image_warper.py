@@ -46,14 +46,15 @@ class ImageWarper(Node):
     def get_perspective_transform(self, purple_dots):
         src = np.array(purple_dots, dtype=np.float32)
         src = np.array(purple_dots, dtype=np.float32)
-        dst = np.array([[0, 0], [575, 0], [0, 715], [575, 715]], dtype=np.float32)
+        dst = np.array([[0, 0], [575, 0], [0, 760], [575, 760]], dtype=np.float32)
+        # corner1 in base frame of robot: x = -231mm, y = -518mm, z = 0mm
         return cv2.getPerspectiveTransform(src, dst)
 
     def warp_image(self, img, M):
         matrix_msg = Float64MultiArray()
         matrix_msg.data = [float(value) for value in M.ravel()]
         self.pov_publisher_.publish(matrix_msg)
-        return cv2.warpPerspective(img, M, (575, 715))
+        return cv2.warpPerspective(img, M, (575, 760))
 
 def get_purple_dots_coordinates(image):
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
@@ -76,10 +77,10 @@ def get_purple_dots_coordinates(image):
 
 def sort_coordinates(coordinates):
     sorted_coordinates = sorted(coordinates, key=lambda coord: coord[0])
-    left = sorted_coordinates[:2]
-    right = sorted_coordinates[2:]
-    return [sorted(left, key=lambda coord: coord[1])[0], sorted(right, key=lambda coord: coord[1])[0],
-            sorted(left, key=lambda coord: coord[1])[1], sorted(right, key=lambda coord: coord[1])[1]]
+    left = sorted_coordinates[2:]
+    right = sorted_coordinates[:2]
+    return [sorted(right, key=lambda coord: coord[1])[1], sorted(right, key=lambda coord: coord[1])[0],
+        sorted(left, key=lambda coord: coord[1])[1], sorted(left, key=lambda coord: coord[1])[0]]
 
 # def compute_homography_to_robot_base(src_points):
 #     src_points = np.array(src_points, dtype=np.float32)  # Ensure it's a numpy array
