@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
             'image_warper = image_warper.image_warper:main',
+            'aruco_detector = image_warper.aruco_detector:main',
             'ImagePublisher = image_warper.ImagePublisher:main',
         ],
     },
