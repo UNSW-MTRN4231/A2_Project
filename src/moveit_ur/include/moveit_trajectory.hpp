@@ -33,7 +33,7 @@ class moveit_trajectory : public rclcpp::Node
 
     // Trajectory planning
     geometry_msgs::msg::Quaternion get_cut_quaternion(float yaw);
-    geometry_msgs::msg::Quaternion get_serve_pick_quaternion(float yaw);
+    geometry_msgs::msg::Quaternion get_serve_pick_quaternion(float inclination, float yaw);
     void plan_cuts();
     void plan_serve_pick();
 

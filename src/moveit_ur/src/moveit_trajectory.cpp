@@ -193,9 +193,8 @@ geometry_msgs::msg::Quaternion moveit_trajectory::get_cut_quaternion(float yaw) 
 }
 
 // Creates a quaternion for which spatula is flat and with yaw angle given
-geometry_msgs::msg::Quaternion moveit_trajectory::get_serve_pick_quaternion(float yaw) {
-  float inclination_angle = (2.0/3.0) * M_PI;
-  geometry_msgs::msg::Quaternion inclination_rotation = RPYToQuaternion(0,inclination_angle,0);
+geometry_msgs::msg::Quaternion moveit_trajectory::get_serve_pick_quaternion(float inclination, float yaw) {
+  geometry_msgs::msg::Quaternion inclination_rotation = RPYToQuaternion(0,inclination,0);
   geometry_msgs::msg::Quaternion yaw_rotation = RPYToQuaternion(0,0,yaw);
 
   geometry_msgs::msg::Quaternion combined = combineQuaternions(yaw_rotation,inclination_rotation);
@@ -248,6 +247,7 @@ void moveit_trajectory::plan_serve_pick() {
   float lead_in_length = 0.05; // Starting distance from spatula tip from pizza perimeter
   float spatula_length = 0.1; // Length of flat section of spatula, from the tip to the bend
   float slide_length = spatula_length + lead_in_length; // Total length of the sliding motion
+  float inclination_angle = (2.0/3.0) * M_PI;
   
   // Define an initial slice pickup
   geometry_msgs::msg::Point start;
@@ -275,7 +275,7 @@ void moveit_trajectory::plan_serve_pick() {
     serve_pick_points.push_back(single_pick_points);
 
     // Set orientation such that spatula is horizontal and points toward pizza centre
-    geometry_msgs::msg::Quaternion pick_orientation = get_serve_pick_quaternion(pick_angle);
+    geometry_msgs::msg::Quaternion pick_orientation = get_serve_pick_quaternion(inclination_angle,pick_angle);
     serve_pick_orientations.push_back(pick_orientation);
   }
 
@@ -358,6 +358,18 @@ void moveit_trajectory::pick_slice() {
   centre_pose.position.z = pizza_pose.position.z + centre_pose_height;
   centre_pose.orientation = serve_pick_orientations.at(0);
 
+  std::vector<geometry_msgs::msg::Pose> waypoints;
+  waypoints.push_back(centre_pose);
+
+  // Testing here
+  for (int i = 4; i>0; i--) {
+    geometry_msgs::msg::Pose rotation_pose = pizza_pose;
+    rotation_pose.position.z = pizza_pose.position.z + centre_pose_height;
+    rotation_pose.orientation = get_serve_pick_quaternion(-4/(3*i), M_PI);
+    waypoints.push_back(rotation_pose);
+  }
+
+  /*
   geometry_msgs::msg::Pose above_pick_start;
   above_pick_start.position = serve_pick_points.at(0).at(0);
   above_pick_start.position.z += lift_height;
@@ -383,6 +395,7 @@ void moveit_trajectory::pick_slice() {
   waypoints.push_back(pick_end);
   waypoints.push_back(above_pick_end);
   waypoints.push_back(centre_pose);
+  */
 
   // Execute path
   RCLCPP_INFO(this->get_logger(), "Executing pick");
@@ -423,7 +436,7 @@ void moveit_trajectory::visualize_cartesian_path(std::vector<geometry_msgs::msg:
   visual_tools_->publishPath(waypoints, rviz_visual_tools::LIME_GREEN, rviz_visual_tools::SMALL,ns);
 
   // Label points
-  bool show_axes = false;
+  bool show_axes = true;
   if (show_axes) {
     for (size_t i = 0; i < waypoints.size(); i++) {
        visual_tools_->publishAxis(waypoints[i], rviz_visual_tools::SMALL, ns);
