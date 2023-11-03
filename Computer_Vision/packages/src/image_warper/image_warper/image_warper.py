@@ -5,22 +5,50 @@ from std_msgs.msg import Float64MultiArray
 import cv2
 import numpy as np
 from cv_bridge import CvBridge
+from geometry_msgs.msg import Pose,PoseArray
 
 class ImageWarper(Node):
 
     def __init__(self):
         super().__init__('image_warper')
         self.subscription = self.create_subscription(Image, 'image_raw', self.listener_callback, 10)
+        self.aruco_subscription = self.create_subscription(PoseArray, 'markers_pose', self.aruco_callback, 10)
         self.publisher_ = self.create_publisher(Image, 'image_warped', 10)
         self.pov_publisher_ = self.create_publisher(Float64MultiArray, 'warp_pov_tf', 10)
         self.labelled_publisher_ = self.create_publisher(Image, 'image_labelled', 10)# New publisher
 
         self.bridge = CvBridge()
         self.prev_M = None
+        self.tag0Pose = Pose()
+        self.tag1Pose = Pose()
+        self.tag2Pose = Pose()
+        self.tag3Pose = Pose()
+
+
+
+    def aruco_callback(self,msg):
+        [self.tag0Pose,self.tag1Pose,self.tag2Pose,self.tag3Pose] = msg.poses
+
 
     def listener_callback(self, msg):
         cv_image = self.bridge.imgmsg_to_cv2(msg, 'bgr8')
-        purple_dots = get_purple_dots_coordinates(cv_image)
+
+        if not self.tag0Pose.position.x:
+            # empty pose. Therefore publish original image
+            self.get_logger().warn("tag not found")
+            self.publisher_.publish(msg)
+
+
+        purple_dots = [[int(self.tag0Pose.position.x),int(self.tag0Pose.position.y)],
+                       [int(self.tag1Pose.position.x),int(self.tag1Pose.position.y)],
+                       [int(self.tag2Pose.position.x),int(self.tag2Pose.position.y)],
+                       [int(self.tag3Pose.position.x),int(self.tag3Pose.position.y)]] 
+
+        self.get_logger().info("Pruple dots: " + str(len(purple_dots)))
+
+
+
+        # purple_dots = get_purple_dots_coordinates(cv_image)
 
         if len(purple_dots) != 4:
             self.get_logger().warn('Did not detect exactly four purple dots.')
