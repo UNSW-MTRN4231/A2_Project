@@ -135,7 +135,7 @@ moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
   move_group_interface->setPlannerId("RRTConnectkConfigDefault");
   move_group_interface->setPlanningTime(10.0);
   move_group_interface->setNumPlanningAttempts(10);
-  move_group_interface->setMaxVelocityScalingFactor(0.1);
+  move_group_interface->setMaxVelocityScalingFactor(0.05);
   std::string frame_id = move_group_interface->getPlanningFrame();
 
   // Define collision objects (size, pos, frame, id)
@@ -334,7 +334,8 @@ void moveit_trajectory::cut_pizza() {
     RCLCPP_INFO(this->get_logger(), "Executing cut");
     follow_path_cartesian(waypoints, "Cutting Path");
 
-    wait(5);
+    std::cout<<"execute() returned"<<std::endl;
+    wait(3);
   }
 
   return;
