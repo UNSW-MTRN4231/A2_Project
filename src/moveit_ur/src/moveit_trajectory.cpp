@@ -1,6 +1,5 @@
 #include <memory>
 #include <chrono>
-#include <thread>
 #include <vector>
 #include <cmath>
 
@@ -119,16 +118,27 @@ geometry_msgs::msg::Quaternion RPYToQuaternion(double roll, double pitch, double
 /////////////////////////////////////////////////////////////////////
 
 moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
+  // Callback groups
+  state_cb_group = this->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
+  operation_cb_group = this->create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
+
+  // Add callbacks to subscription options
+  auto sub_options_state = rclcpp::SubscriptionOptions();
+  sub_options_state.callback_group = state_cb_group;
+  auto sub_options_operation = rclcpp::SubscriptionOptions();
+  sub_options_operation.callback_group = operation_cb_group;
 
   // Subscriptions
+  joint_states_subscription_ = this->create_subscription<sensor_msgs::msg::JointState>(
+    "joint_states", 10, std::bind(&moveit_trajectory::joint_states_callback, this, std::placeholders::_1), sub_options_state);
   operation_command_subscription_ = this->create_subscription<std_msgs::msg::String>(
-    "operation_command", 10, std::bind(&moveit_trajectory::operation_command_callback, this, std::placeholders::_1));
+    "operation_command", 10, std::bind(&moveit_trajectory::operation_command_callback, this, std::placeholders::_1),sub_options_operation);
   operation_status_subscription_ = this->create_subscription<std_msgs::msg::String>(
-    "operation_status", 10, std::bind(&moveit_trajectory::operation_status_callback, this, std::placeholders::_1));
+    "operation_status", 10, std::bind(&moveit_trajectory::operation_status_callback, this, std::placeholders::_1),sub_options_operation);
   pizza_radius_subscription_ = this->create_subscription<std_msgs::msg::Float32>(
-    "pizza_radius", 10, std::bind(&moveit_trajectory::set_pizza_radius, this, std::placeholders::_1));
+    "pizza_radius", 10, std::bind(&moveit_trajectory::pizza_radius_callback, this, std::placeholders::_1),sub_options_operation);
   pizza_pose_subscription_ = this->create_subscription<geometry_msgs::msg::Pose>(
-    "pizza_pose", 10, std::bind(&moveit_trajectory::set_pizza_pose, this, std::placeholders::_1));
+    "pizza_pose", 10, std::bind(&moveit_trajectory::pizza_pose_callback, this, std::placeholders::_1),sub_options_operation);
 
   // Generate the movegroup interface
   move_group_interface = std::make_unique<moveit::planning_interface::MoveGroupInterface>(std::unique_ptr<rclcpp::Node>(this), "ur_manipulator");
@@ -159,6 +169,9 @@ moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
   visual_tools_->loadRemoteControl();
 }
 
+/////////////////////////////////////////////////////////////////////
+//                           BASIC MOVEMENT                        //
+/////////////////////////////////////////////////////////////////////
 void moveit_trajectory::follow_path_cartesian(std::vector<geometry_msgs::msg::Pose> waypoints, std::string ns) {
 
   // Plan the trajectory
@@ -179,13 +192,51 @@ void moveit_trajectory::follow_path_cartesian(std::vector<geometry_msgs::msg::Po
   // before program progresses.
 }
 
+void moveit_trajectory::rotate_joint(std::string joint, float theta) {
+  std::vector<double> desired_joint_positions;
+
+  // Get current joint positions
+  // mutex lock
+  std::lock_guard<std::mutex> lock(mutex_);
+  desired_joint_positions = joint_positions;
+  // mutex unlock
+  mutex_.unlock();
+
+  // Calculate desired joint positions
+  if (joint == "shoulder lift") {
+    desired_joint_positions[0] += theta; 
+  } else if (joint == "elbow") {
+    desired_joint_positions[1] += theta; 
+  } else if (joint == "wrist 1") {
+    desired_joint_positions[2] += theta; 
+  } else if (joint == "wrist 2") {
+    desired_joint_positions[3] += theta; 
+  } else if (joint == "wrist 3") {
+    desired_joint_positions[4] += theta; 
+  } else if (joint == "shoulder pan") {
+    desired_joint_positions[5] += theta; 
+  }
+
+  // Check bounds
+  bool within_bounds = move_group_interface->setJointValueTarget(des);
+  if (!within_bounds)
+  {
+    RCLCPP_WARN(this->get_logger(), "Target joint position(s) were outside of limits, but we will plan and clamp to the limits ");
+  }
+
+  // Plan motion
+  moveit::planning_interface::MoveGroupInterface::Plan joint_space_plan;
+  auto success = (move_group_interface->plan(joint_space_plan) == moveit::core::MoveItErrorCode::SUCCESS);
+  move_group_interface->move();
+}
+
 /////////////////////////////////////////////////////////////////////
 //                       TRAJECTORY PLANNING                       //
 /////////////////////////////////////////////////////////////////////
 
 // Creates a quaternion which points down and with yaw angle given
 geometry_msgs::msg::Quaternion moveit_trajectory::get_cut_quaternion(float yaw) {
-  geometry_msgs::msg::Quaternion down_rotation = RPYToQuaternion(0,M_PI,0);
+  geometry_msgs::msg::Quaternion down_rotation = RPYToQuaternion(M_PI,0,0);
   geometry_msgs::msg::Quaternion yaw_rotation = RPYToQuaternion(0,0,yaw);
 
   geometry_msgs::msg::Quaternion combined = combineQuaternions(yaw_rotation,down_rotation);
@@ -287,18 +338,18 @@ void moveit_trajectory::plan_serve_pick() {
 //                       TRAJECTORY EXECUTION                      //
 /////////////////////////////////////////////////////////////////////
 
+// Inverts wrist for greater clearance over table
+void moveit_trajectory::invert_wrist(){
+
+  rotate_joint("shoulder pan", 0.1);
+
+  return;
+}
+
+
 // Completes all planned cuts of the pizza
 void moveit_trajectory::cut_pizza() {
-  float centre_pose_height = 0.2;
   float lift_height  = 0.04; // Height of vertical lead in and lead out
-
-  // Create 'down' orientation
-  geometry_msgs::msg::Quaternion down_orientation = RPYToQuaternion(0,M_PI,0);
-
-  // Create centre pose (returned to between cuts)
-  geometry_msgs::msg::Pose centre_pose = pizza_pose;
-  centre_pose.position.z = pizza_pose.position.z + centre_pose_height;;
-  centre_pose.orientation = down_orientation;
 
   // Loop through cut points and execute
   for (size_t i = 0; i<cut_points.size(); i++) {
@@ -343,7 +394,6 @@ void moveit_trajectory::cut_pizza() {
 // Picks a single slice and removes it from the planned trajectories
 void moveit_trajectory::pick_slice() {
 
-  float centre_pose_height = 0.2;
   float lift_height  = 0.08; // Height of vertical lead in and lead out
 
   // Return if all slices picked up
@@ -352,24 +402,16 @@ void moveit_trajectory::pick_slice() {
     return;
   }
 
-  // Create waypoints
-  // Centre pose, with orientation for spatula
-  geometry_msgs::msg::Pose centre_pose = pizza_pose;
-  centre_pose.position.z = pizza_pose.position.z + centre_pose_height;
-  centre_pose.orientation = serve_pick_orientations.at(0);
-
-  std::vector<geometry_msgs::msg::Pose> waypoints;
-  waypoints.push_back(centre_pose);
-
-  // Testing here
-  for (int i = 4; i>0; i--) {
-    geometry_msgs::msg::Pose rotation_pose = pizza_pose;
-    rotation_pose.position.z = pizza_pose.position.z + centre_pose_height;
-    rotation_pose.orientation = get_serve_pick_quaternion(-4/(3*i), M_PI);
-    waypoints.push_back(rotation_pose);
-  }
+  // TODO remove FOR TESTING ONLY!!!
+  invert_wrist();
 
   /*
+
+  // Create waypoints
+  // Centre pose, with orientation for spatula
+  geometry_msgs::msg::Pose centre_rotated_pose = centre_pose;
+  centre_rotated_pose.orientation = serve_pick_orientations.at(0);
+
   geometry_msgs::msg::Pose above_pick_start;
   above_pick_start.position = serve_pick_points.at(0).at(0);
   above_pick_start.position.z += lift_height;
@@ -389,13 +431,12 @@ void moveit_trajectory::pick_slice() {
   above_pick_end.orientation = serve_pick_orientations.at(0);
 
   std::vector<geometry_msgs::msg::Pose> waypoints;
-  waypoints.push_back(centre_pose);
+  waypoints.push_back(centre_rotated_pose);
   waypoints.push_back(above_pick_start);
   waypoints.push_back(pick_start);
   waypoints.push_back(pick_end);
   waypoints.push_back(above_pick_end);
-  waypoints.push_back(centre_pose);
-  */
+  waypoints.push_back(centre_rotated_pose);
 
   // Execute path
   RCLCPP_INFO(this->get_logger(), "Executing pick");
@@ -410,6 +451,8 @@ void moveit_trajectory::pick_slice() {
   if (!serve_pick_orientations.empty()) {
     serve_pick_orientations.erase(serve_pick_orientations.begin());
   }
+
+  */
 
   return;
 }
@@ -502,15 +545,23 @@ void moveit_trajectory::visualize_serve_pick_points() {
 /////////////////////////////////////////////////////////////////////
 
 // Callback for /pizza_radius
-void moveit_trajectory::set_pizza_radius(std_msgs::msg::Float32 pizza_radius){
+void moveit_trajectory::pizza_radius_callback(std_msgs::msg::Float32 pizza_radius){
   RCLCPP_INFO(this->get_logger(), "Pizza radius set");
   this->pizza_radius = pizza_radius;
 }
 
 // Callback for /pizza_pose
-void moveit_trajectory::set_pizza_pose(geometry_msgs::msg::Pose pizza_pose){
+void moveit_trajectory::pizza_pose_callback(geometry_msgs::msg::Pose pizza_pose){
+  // Set pizza pose
   RCLCPP_INFO(this->get_logger(), "Pizza pose set");
   this->pizza_pose = pizza_pose;
+
+  // Update centre pose (above pizza)
+  centre_pose = pizza_pose;
+  centre_pose.position.z += 0.3; // Clearance above pizza
+  // Rotation
+  geometry_msgs::msg::Quaternion down_orientation = RPYToQuaternion(0,M_PI,0);
+  centre_pose.orientation = down_orientation;
 }
 
 // Callback for /operation_command topic
@@ -564,6 +615,14 @@ void moveit_trajectory::operation_status_callback(std_msgs::msg::String operatio
   }
 
   return;
+}
+
+void moveit_trajectory::joint_states_callback(sensor_msgs::msg::JointState joint_state_msg){
+  std::lock_guard<std::mutex> lock(mutex_);
+  
+  for (int i=0; i<6; i++) {
+    joint_positions.push_back(joint_state_msg.position[i]);
+  }
 }
 
 /////////////////////////////////////////////////////////////////////
