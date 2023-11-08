@@ -185,11 +185,6 @@ void moveit_trajectory::follow_path_cartesian(std::vector<geometry_msgs::msg::Po
 
   // Execute the trajectory
   move_group_interface->execute(trajectory);
-
-  // Note that this function will return *before* the trajectory is completely executed.
-  // Planning new trajectories before the current one is completely executed leads to errors.
-  // Therefore, include some delay after calling this function to ensure trajectory is completed
-  // before program progresses.
 }
 
 void moveit_trajectory::rotate_joint(std::string joint, float theta) {
@@ -216,9 +211,17 @@ void moveit_trajectory::rotate_joint(std::string joint, float theta) {
   } else if (joint == "shoulder pan") {
     desired_joint_positions[5] += theta; 
   }
+  
+  std::vector<double> test_only;
+  test_only.push_back(0.0);
+  test_only.push_back(-0.2);
+  test_only.push_back(0.0);
+  test_only.push_back(0.0);
+  test_only.push_back(M_PI/2);
+  test_only.push_back(0.0);
 
   // Check bounds
-  bool within_bounds = move_group_interface->setJointValueTarget(des);
+  bool within_bounds = move_group_interface->setJointValueTarget(test_only);
   if (!within_bounds)
   {
     RCLCPP_WARN(this->get_logger(), "Target joint position(s) were outside of limits, but we will plan and clamp to the limits ");
