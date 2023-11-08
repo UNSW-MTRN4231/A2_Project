@@ -76,6 +76,9 @@ class moveit_trajectory : public rclcpp::Node
     rclcpp::CallbackGroup::SharedPtr state_cb_group;
     rclcpp::CallbackGroup::SharedPtr operation_cb_group;
 
+    // Publishers
+    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr operation_status_publisher_;
+
     // Subscriptions
     rclcpp::Subscription<std_msgs::msg::String>::SharedPtr operation_command_subscription_;
     rclcpp::Subscription<std_msgs::msg::String>::SharedPtr operation_status_subscription_;

@@ -128,6 +128,9 @@ moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
   auto sub_options_operation = rclcpp::SubscriptionOptions();
   sub_options_operation.callback_group = operation_cb_group;
 
+  // Publishers
+  operation_status_publisher_ = this->create_publisher<std_msgs::msg::String>("operation_status", 10);
+
   // Subscriptions
   joint_states_subscription_ = this->create_subscription<sensor_msgs::msg::JointState>(
     "joint_states", 10, std::bind(&moveit_trajectory::joint_states_callback, this, std::placeholders::_1), sub_options_state);
@@ -631,6 +634,11 @@ void moveit_trajectory::operation_status_callback(std_msgs::msg::String operatio
       RCLCPP_INFO(this->get_logger(), "Visualising Serve Pick");
       visualize_serve_pick_points();
     }
+
+    // Send message to /operation_status
+    std_msgs::msg::String msg;
+    msg.data = "Planning Complete";
+    operation_status_publisher_->publish(msg);
   }
 
   return;
