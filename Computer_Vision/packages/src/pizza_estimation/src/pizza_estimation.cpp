@@ -31,7 +31,7 @@ public:
 private:
     cv::Mat current_image_;
     cv::Point robot_arm_position_;
-    cv::Point centroid_point, radius_end;
+    cv::Point centroid_point, radius_end, last_centroid_point_;
     geometry_msgs::msg::Point centroid_msg;
     std_msgs::msg::Float64 radius_msg;
     double avg_radius;
@@ -52,26 +52,24 @@ private:
         for (const auto& detection : msg->detections) {
             if (detection.class_id == 53) {
                 std::tie(avg_radius, centroid_point, radius_end) = computeEstimation(detection.mask);
-
-                cv::circle(image_with_circle, centroid_point+robot_arm_position_, 5, cv::Scalar(0, 0, 255), -1); // centroid
-                cv::line(image_with_circle, centroid_point+robot_arm_position_, radius_end, cv::Scalar(255, 0, 0), 2); // radius line
-
                 if (isSignificantMovement(centroid_point, last_centroid_point_)) {
                     last_centroid_point_ = centroid_point;
-
-                    centroid_msg.x = centroid_point.y;
-                    centroid_msg.y = centroid_point.x;
-                    centroid_msg.z = 0;
-                    centroid_publisher_->publish(centroid_msg);
-
-                    radius_msg.data = avg_radius;
-                    radius_publisher_->publish(radius_msg);
                 }
+
+                cv::circle(image_with_circle, last_centroid_point_+robot_arm_position_, 5, cv::Scalar(0, 0, 255), -1); // centroid
+                cv::line(image_with_circle, last_centroid_point_+robot_arm_position_, radius_end, cv::Scalar(255, 0, 0), 2); // radius line
+
 
             }
         }
+        centroid_msg.x = last_centroid_point_.y;
+        centroid_msg.y = last_centroid_point_.x;
+        centroid_msg.z = 0;
+        radius_msg.data = avg_radius;
         auto image_msg = cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", image_with_circle).toImageMsg();
         image_publisher_->publish(*image_msg);
+        centroid_publisher_->publish(centroid_msg);
+        radius_publisher_->publish(radius_msg);
     }
     
     std::pair<float, float> computeCentroid(const yolov8_msgs::msg::Mask& mask) const
