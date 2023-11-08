@@ -101,6 +101,7 @@ class moveit_trajectory : public rclcpp::Node
     // 2D vector of points, representing the start and end of each motion when picking up each slice
     std::vector<std::vector<geometry_msgs::msg::Point>> serve_pick_points;
     std::vector<geometry_msgs::msg::Quaternion> serve_pick_orientations;
+    std::vector<bool> serve_invert_flags;
 
 };
 

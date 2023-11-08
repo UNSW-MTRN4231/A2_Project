@@ -193,35 +193,31 @@ void moveit_trajectory::rotate_joint(std::string joint, float theta) {
   // Get current joint positions
   // mutex lock
   std::lock_guard<std::mutex> lock(mutex_);
-  desired_joint_positions = joint_positions;
+  desired_joint_positions.push_back(joint_positions[5]); // Shoulder pan
+  desired_joint_positions.push_back(joint_positions[0]); // Shoulder lift
+  desired_joint_positions.push_back(joint_positions[1]); // Elbow
+  desired_joint_positions.push_back(joint_positions[2]); // Wrist 1
+  desired_joint_positions.push_back(joint_positions[3]); // Wrist 2
+  desired_joint_positions.push_back(joint_positions[4]); // Wrist 3
   // mutex unlock
   mutex_.unlock();
 
   // Calculate desired joint positions
-  if (joint == "shoulder lift") {
+  if (joint == "shoulder pan") {
     desired_joint_positions[0] += theta; 
-  } else if (joint == "elbow") {
+  } else if (joint == "shoulder lift") {
     desired_joint_positions[1] += theta; 
-  } else if (joint == "wrist 1") {
+  } else if (joint == "elbow") {
     desired_joint_positions[2] += theta; 
-  } else if (joint == "wrist 2") {
+  } else if (joint == "wrist 1") {
     desired_joint_positions[3] += theta; 
-  } else if (joint == "wrist 3") {
+  } else if (joint == "wrist 2") {
     desired_joint_positions[4] += theta; 
-  } else if (joint == "shoulder pan") {
+  } else if (joint == "wrist 3") {
     desired_joint_positions[5] += theta; 
   }
-  
-  std::vector<double> test_only;
-  test_only.push_back(0.0);
-  test_only.push_back(-0.2);
-  test_only.push_back(0.0);
-  test_only.push_back(0.0);
-  test_only.push_back(M_PI/2);
-  test_only.push_back(0.0);
-
   // Check bounds
-  bool within_bounds = move_group_interface->setJointValueTarget(test_only);
+  bool within_bounds = move_group_interface->setJointValueTarget(desired_joint_positions);
   if (!within_bounds)
   {
     RCLCPP_WARN(this->get_logger(), "Target joint position(s) were outside of limits, but we will plan and clamp to the limits ");
@@ -268,6 +264,9 @@ void moveit_trajectory::plan_cuts() {
   start.y = pizza_pose.position.y;
   start.z = TCP_height;
 
+  geometry_msgs::msg::Point cut_centre = pizza_pose.position;
+  cut_centre.z = TCP_height;
+
   geometry_msgs::msg::Point end;
   end.x = pizza_pose.position.x + pizza_radius.data;
   end.y = pizza_pose.position.y;
@@ -284,6 +283,7 @@ void moveit_trajectory::plan_cuts() {
     // Store in vector
     std::vector<geometry_msgs::msg::Point> single_cut_points;
     single_cut_points.push_back(cut_start);
+    single_cut_points.push_back(cut_centre);
     single_cut_points.push_back(cut_end);
     cut_points.push_back(single_cut_points);
 
@@ -331,6 +331,13 @@ void moveit_trajectory::plan_serve_pick() {
     // Set orientation such that spatula is horizontal and points toward pizza centre
     geometry_msgs::msg::Quaternion pick_orientation = get_serve_pick_quaternion(inclination_angle,pick_angle);
     serve_pick_orientations.push_back(pick_orientation);
+
+    // Set 'invert wrist' flags
+    bool should_invert_wrist = false;
+    if ((pick_angle+M_PI/2) < M_PI) {
+      should_invert_wrist = true;
+    }
+    serve_invert_flags.push_back(should_invert_wrist);
   }
 
   serve_picking_is_planned = true;
@@ -344,11 +351,13 @@ void moveit_trajectory::plan_serve_pick() {
 // Inverts wrist for greater clearance over table
 void moveit_trajectory::invert_wrist(){
 
-  rotate_joint("shoulder pan", 0.1);
+  rotate_joint("wrist 2", M_PI);
+  std::cout<<"First rotation complete"<<std::endl;
+  wait(0.5);
+  rotate_joint("wrist 1", M_PI/2);
 
   return;
 }
-
 
 // Completes all planned cuts of the pizza
 void moveit_trajectory::cut_pizza() {
@@ -367,12 +376,16 @@ void moveit_trajectory::cut_pizza() {
     cut_start.position = cut_points.at(i).at(0);
     cut_start.orientation = cut_orientations.at(i);
 
+    geometry_msgs::msg::Pose cut_centre;
+    cut_centre.position = cut_points.at(i).at(1);
+    cut_centre.orientation = cut_orientations.at(i);
+
     geometry_msgs::msg::Pose cut_end;
-    cut_end.position = cut_points.at(i).at(1);
+    cut_end.position = cut_points.at(i).at(2);
     cut_end.orientation = cut_orientations.at(i);
 
     geometry_msgs::msg::Pose above_cut_end;
-    above_cut_end.position = cut_points.at(i).at(1);
+    above_cut_end.position = cut_points.at(i).at(2);
     above_cut_end.position.z += lift_height;
     above_cut_end.orientation = cut_orientations.at(i);
 
@@ -380,6 +393,7 @@ void moveit_trajectory::cut_pizza() {
     waypoints.push_back(centre_pose);
     waypoints.push_back(above_cut_start);
     waypoints.push_back(cut_start);
+    waypoints.push_back(cut_centre);
     waypoints.push_back(cut_end);
     waypoints.push_back(above_cut_end);
     waypoints.push_back(centre_pose);
@@ -405,10 +419,9 @@ void moveit_trajectory::pick_slice() {
     return;
   }
 
-  // TODO remove FOR TESTING ONLY!!!
-  invert_wrist();
-
-  /*
+  if (serve_invert_flags.at(0)) {
+    invert_wrist();
+  }
 
   // Create waypoints
   // Centre pose, with orientation for spatula
@@ -440,6 +453,7 @@ void moveit_trajectory::pick_slice() {
   waypoints.push_back(pick_end);
   waypoints.push_back(above_pick_end);
   waypoints.push_back(centre_rotated_pose);
+  waypoints.push_back(centre_pose); // TODO remove when tool picking is implemented
 
   // Execute path
   RCLCPP_INFO(this->get_logger(), "Executing pick");
@@ -454,8 +468,9 @@ void moveit_trajectory::pick_slice() {
   if (!serve_pick_orientations.empty()) {
     serve_pick_orientations.erase(serve_pick_orientations.begin());
   }
-
-  */
+  if (!serve_invert_flags.empty()) {
+    serve_invert_flags.erase(serve_invert_flags.begin());
+  }
 
   return;
 }
@@ -623,6 +638,7 @@ void moveit_trajectory::operation_status_callback(std_msgs::msg::String operatio
 void moveit_trajectory::joint_states_callback(sensor_msgs::msg::JointState joint_state_msg){
   std::lock_guard<std::mutex> lock(mutex_);
   
+  joint_positions.clear();
   for (int i=0; i<6; i++) {
     joint_positions.push_back(joint_state_msg.position[i]);
   }
