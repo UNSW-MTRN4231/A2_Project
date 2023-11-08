@@ -14,6 +14,7 @@ find_package(control_msgs REQUIRED)
 find_package(controller_manager_msgs REQUIRED)
 find_package(std_srvs)
 find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
@@ -31,6 +32,7 @@ ament_target_dependencies(
   "rclcpp"
   "tf2"
   "tf2_ros"
+  "sensor_msgs"
 )
 
 # Install

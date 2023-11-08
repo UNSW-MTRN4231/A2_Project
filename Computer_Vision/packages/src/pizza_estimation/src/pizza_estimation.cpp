@@ -24,7 +24,8 @@ public:
         centroid_publisher_ = this->create_publisher<geometry_msgs::msg::Point>("pizza_centroid", 10);
         radius_publisher_ = this->create_publisher<std_msgs::msg::Float64>("pizza_radius", 10);
 
-        robot_arm_position_ = cv::Point(-50, -250);
+        last_centroid_point_ = cv::Point(-1, -1);
+        robot_arm_position_ = cv::Point(-228, 58); // corner0 in base frame of robot: x = -228mm, y = -58mm, z = 0mm
     }
 
 private:
@@ -55,13 +56,18 @@ private:
                 cv::circle(image_with_circle, centroid_point+robot_arm_position_, 5, cv::Scalar(0, 0, 255), -1); // centroid
                 cv::line(image_with_circle, centroid_point+robot_arm_position_, radius_end, cv::Scalar(255, 0, 0), 2); // radius line
 
-                centroid_msg.x = centroid_point.y;
-                centroid_msg.y = centroid_point.x;
-                centroid_msg.z = 0;
-                centroid_publisher_->publish(centroid_msg);
+                if (isSignificantMovement(centroid_point, last_centroid_point_)) {
+                    last_centroid_point_ = centroid_point;
 
-                radius_msg.data = avg_radius;
-                radius_publisher_->publish(radius_msg);
+                    centroid_msg.x = centroid_point.y;
+                    centroid_msg.y = centroid_point.x;
+                    centroid_msg.z = 0;
+                    centroid_publisher_->publish(centroid_msg);
+
+                    radius_msg.data = avg_radius;
+                    radius_publisher_->publish(radius_msg);
+                }
+
             }
         }
         auto image_msg = cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", image_with_circle).toImageMsg();
@@ -93,6 +99,13 @@ private:
         cv::Point top_center(bounding_rect.x + bounding_rect.width / 2, bounding_rect.y);
         double avg_radius = cv::norm(top_center - center);
         return std::make_tuple(avg_radius, center - robot_arm_position_, top_center);
+    }
+
+    bool isSignificantMovement(const cv::Point& current, const cv::Point& last) const
+    {
+        if (last.x == -1 && last.y == -1) return true;
+        double distance = cv::norm(current - last);
+        return distance > 20.0; // Check if the movement is more than 20mm
     }
     rclcpp::Subscription<yolov8_msgs::msg::DetectionArray>::SharedPtr subscription_;
     rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_subscription_;
