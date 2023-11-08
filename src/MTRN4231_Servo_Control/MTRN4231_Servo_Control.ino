@@ -41,7 +41,7 @@ void loop() {
     } else if (command == "close") {
       Serial.println("Closing Gripper");
       servo1.write(40);
-      servo2.write(20);  
+      servo2.write(0);  
       delay(10);
     }
     else {
