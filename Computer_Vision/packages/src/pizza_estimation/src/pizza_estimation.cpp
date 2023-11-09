@@ -31,7 +31,7 @@ public:
 private:
     cv::Mat current_image_;
     cv::Point robot_arm_position_;
-    cv::Point centroid_point, radius_end;
+    cv::Point centroid_point, radius_end, last_centroid_point_;
     geometry_msgs::msg::Point centroid_msg;
     std_msgs::msg::Float64 radius_msg;
     double avg_radius;

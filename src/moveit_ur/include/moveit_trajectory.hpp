@@ -80,7 +80,7 @@ class moveit_trajectory : public rclcpp::Node
     rclcpp::CallbackGroup::SharedPtr operation_cb_group;
 
     // Publishers
-    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr operation_command_publisher_;
+    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr operation_status_publisher_;
 
     // Subscriptions
     rclcpp::Subscription<std_msgs::msg::String>::SharedPtr operation_command_subscription_;

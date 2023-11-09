@@ -137,7 +137,7 @@ moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
   sub_options_operation.callback_group = operation_cb_group;
 
   // Publishers
-  operation_command_publisher_ = this->create_publisher<std_msgs::msg::String>("operation_command", 10);
+  operation_status_publisher_ = this->create_publisher<std_msgs::msg::String>("operation_status", 10);
 
   // Subscriptions
   joint_states_subscription_ = this->create_subscription<sensor_msgs::msg::JointState>(
