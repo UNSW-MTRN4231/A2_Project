@@ -113,6 +113,14 @@ geometry_msgs::msg::Quaternion RPYToQuaternion(double roll, double pitch, double
     return quat_msg;
 }
 
+geometry_msgs::msg::Pose add_translation_offset(geometry_msgs::msg::Pose pose, float x, float y, float z) {
+  pose.position.x += x;
+  pose.position.y += y;
+  pose.position.z += z;
+
+  return pose;
+}
+
 /////////////////////////////////////////////////////////////////////
 //                  MOVEIT_TRAJECTORY CLASS MEMBERS                //
 /////////////////////////////////////////////////////////////////////
@@ -128,6 +136,9 @@ moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
   auto sub_options_operation = rclcpp::SubscriptionOptions();
   sub_options_operation.callback_group = operation_cb_group;
 
+  // Publishers
+  operation_command_publisher_ = this->create_publisher<std_msgs::msg::String>("operation_command", 10);
+
   // Subscriptions
   joint_states_subscription_ = this->create_subscription<sensor_msgs::msg::JointState>(
     "joint_states", 10, std::bind(&moveit_trajectory::joint_states_callback, this, std::placeholders::_1), sub_options_state);
@@ -139,6 +150,8 @@ moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
     "pizza_radius", 10, std::bind(&moveit_trajectory::pizza_radius_callback, this, std::placeholders::_1),sub_options_operation);
   pizza_pose_subscription_ = this->create_subscription<geometry_msgs::msg::Pose>(
     "pizza_pose", 10, std::bind(&moveit_trajectory::pizza_pose_callback, this, std::placeholders::_1),sub_options_operation);
+  tool_jig_pose_subscription_ = this->create_subscription<geometry_msgs::msg::Pose>(
+    "tool_jig_pose", 10, std::bind(&moveit_trajectory::tool_jig_pose_callback, this, std::placeholders::_1),sub_options_operation);
 
   // Generate the movegroup interface
   move_group_interface = std::make_unique<moveit::planning_interface::MoveGroupInterface>(std::unique_ptr<rclcpp::Node>(this), "ur_manipulator");
@@ -227,6 +240,18 @@ void moveit_trajectory::rotate_joint(std::string joint, float theta) {
   moveit::planning_interface::MoveGroupInterface::Plan joint_space_plan;
   auto success = (move_group_interface->plan(joint_space_plan) == moveit::core::MoveItErrorCode::SUCCESS);
   move_group_interface->move();
+}
+
+
+// Inverts wrist for greater clearance over table
+void moveit_trajectory::invert_wrist(){
+
+  rotate_joint("wrist 2", M_PI);
+  std::cout<<"First rotation complete"<<std::endl;
+  wait(0.5);
+  rotate_joint("wrist 1", M_PI/2);
+
+  return;
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -348,17 +373,6 @@ void moveit_trajectory::plan_serve_pick() {
 //                       TRAJECTORY EXECUTION                      //
 /////////////////////////////////////////////////////////////////////
 
-// Inverts wrist for greater clearance over table
-void moveit_trajectory::invert_wrist(){
-
-  rotate_joint("wrist 2", M_PI);
-  std::cout<<"First rotation complete"<<std::endl;
-  wait(0.5);
-  rotate_joint("wrist 1", M_PI/2);
-
-  return;
-}
-
 // Completes all planned cuts of the pizza
 void moveit_trajectory::cut_pizza() {
   float lift_height  = 0.04; // Height of vertical lead in and lead out
@@ -476,6 +490,61 @@ void moveit_trajectory::pick_slice() {
   return;
 }
 
+void moveit_trajectory::pick_cutting_tool() {
+  float approach_height;
+  
+  // Create waypoints
+  geometry_msgs::msg::Pose above_cutting_tool = cutting_tool_pose;
+  above_cutting_tool.position.z += approach_height;
+
+  std::vector<geometry_msgs::msg::Pose> waypoints;
+  waypoints.push_back(centre_pose);
+  waypoints.push_back(above_cutting_tool);
+  waypoints.push_back(cutting_tool_pose);
+
+  // Execute path
+  RCLCPP_INFO(this->get_logger(), "Approaching cutting tool");
+  follow_path_cartesian(waypoints, "Cutting tool approach");
+
+  // TODO close gripper
+
+  waypoints.clear();
+  waypoints.push_back(above_cutting_tool);
+  waypoints.push_back(centre_pose);
+
+  // Execute path
+  RCLCPP_INFO(this->get_logger(), "Returning to centre");
+  follow_path_cartesian(waypoints, "Return to centre");
+}
+
+
+void moveit_trajectory::pick_serving_tool() {
+  float approach_height;
+  
+  // Create waypoints
+  geometry_msgs::msg::Pose above_serving_tool = serving_tool_pose;
+  above_serving_tool.position.z += approach_height;
+
+  std::vector<geometry_msgs::msg::Pose> waypoints;
+  waypoints.push_back(centre_pose);
+  waypoints.push_back(above_serving_tool);
+  waypoints.push_back(serving_tool_pose);
+
+  // Execute path
+  RCLCPP_INFO(this->get_logger(), "Approaching serving tool");
+  follow_path_cartesian(waypoints, "Serving tool approach");
+
+  // TODO close gripper
+
+  waypoints.clear();
+  waypoints.push_back(above_serving_tool);
+  waypoints.push_back(centre_pose);
+
+  // Execute path
+  RCLCPP_INFO(this->get_logger(), "Returning to centre");
+  follow_path_cartesian(waypoints, "Return to centre");
+}
+
 /////////////////////////////////////////////////////////////////////
 //                          VISUALIZATION                          //
 /////////////////////////////////////////////////////////////////////
@@ -564,13 +633,13 @@ void moveit_trajectory::visualize_serve_pick_points() {
 /////////////////////////////////////////////////////////////////////
 
 // Callback for /pizza_radius
-void moveit_trajectory::pizza_radius_callback(std_msgs::msg::Float32 pizza_radius){
+void moveit_trajectory::pizza_radius_callback(std_msgs::msg::Float32 pizza_radius) {
   RCLCPP_INFO(this->get_logger(), "Pizza radius set");
   this->pizza_radius = pizza_radius;
 }
 
 // Callback for /pizza_pose
-void moveit_trajectory::pizza_pose_callback(geometry_msgs::msg::Pose pizza_pose){
+void moveit_trajectory::pizza_pose_callback(geometry_msgs::msg::Pose pizza_pose) {
   // Set pizza pose
   RCLCPP_INFO(this->get_logger(), "Pizza pose set");
   this->pizza_pose = pizza_pose;
@@ -583,14 +652,52 @@ void moveit_trajectory::pizza_pose_callback(geometry_msgs::msg::Pose pizza_pose)
   centre_pose.orientation = down_orientation;
 }
 
+// Callback for /tool_jig_pose
+void moveit_trajectory::tool_jig_pose_callback(geometry_msgs::msg::Pose tool_jig_pose) {
+  RCLCPP_INFO(this->get_logger(), "Tool jig pose set");
+  this->tool_jig_pose = tool_jig_pose;
+
+  this->cutting_tool_pose = addTranslationOffset(tool_jig_pose,0,0,0); // TODO determine offset
+  this->serving_tool_pose = addTranslationOffset(tool_jig_pose,0,0,0); // TODO determine offset
+}
+
 // Callback for /operation_command topic
 void moveit_trajectory::operation_command_callback(std_msgs::msg::String operation_command)
 {
+  // Planning
+  if (operation_status.data == "Plan Trajectories") {
+    draw_title("Planning_Trajectoties");
+    RCLCPP_INFO(this->get_logger(), "Planning Trajectories");
+    visualize_pizza();
+
+    // Cut planning
+    if (!cutting_is_planned){
+      plan_cuts();
+      visualize_cut_points();
+    }
+
+    // Serve picking planning
+    if (!serve_picking_is_planned){
+      plan_serve_pick();
+      visualize_serve_pick_points();
+    }
+
+    // Publish to /operation_status
+    std_msgs::msg::String msg;
+    msg.data = "Plan Trajectories Complete";
+    operation_command_publisher_->publish(msg);
+  }
+
   // Cutting
   if (operation_command.data == "Cut") {
-    RCLCPP_INFO(this->get_logger(), "Executing Cuts");
+    RCLCPP_INFO(this->get_logger(), "Cutting");
     draw_title("Cutting");
     cut_pizza();
+
+    // Publish to /operation_status
+    std_msgs::msg::String msg;
+    msg.data = "Cutting Complete";
+    operation_command_publisher_->publish(msg);
   }
 
   // Picking slice
@@ -598,6 +705,11 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
     RCLCPP_INFO(this->get_logger(), "Picking Slice");
     draw_title("Picking_Slice");
     pick_slice();
+
+    // Publish to /operation_status
+    std_msgs::msg::String msg;
+    msg.data = "Pick Slice Complete";
+    operation_command_publisher_->publish(msg);
   }
 
   return;
@@ -606,33 +718,7 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
 // Callback for /operation_status topic
 void moveit_trajectory::operation_status_callback(std_msgs::msg::String operation_status)
 { 
-  if (operation_status.data == "Detection Complete") {
-    draw_title("Detection_Complete");
-    RCLCPP_INFO(this->get_logger(), "Detection Complete");
-    visualize_pizza();
-
-    // Cut planning
-    if (!cutting_is_planned){
-      RCLCPP_INFO(this->get_logger(), "Planning Cuts");
-      draw_title("Planning_Cuts");
-      plan_cuts();
-
-      // Visualize
-      RCLCPP_INFO(this->get_logger(), "Visualising Cuts");
-      visualize_cut_points();
-    }
-
-    // Serve picking planning
-    if (!serve_picking_is_planned){
-      RCLCPP_INFO(this->get_logger(), "Planning Serve Pick");
-      draw_title("Planning_Serve_Pick");
-      plan_serve_pick();
-
-      RCLCPP_INFO(this->get_logger(), "Visualising Serve Pick");
-      visualize_serve_pick_points();
-    }
-  }
-
+  // Stub - may be removed later.
   return;
 }
 
