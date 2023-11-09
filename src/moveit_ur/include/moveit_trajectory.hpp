@@ -34,6 +34,7 @@ class moveit_trajectory : public rclcpp::Node
     // Basic movement
     void follow_path_cartesian(std::vector<geometry_msgs::msg::Pose> waypoints, std::string ns);
     void rotate_joint(std::string joint, float theta);
+    void invert_wrist();
 
     // Trajectory planning
     geometry_msgs::msg::Quaternion get_cut_quaternion(float yaw);
@@ -42,9 +43,10 @@ class moveit_trajectory : public rclcpp::Node
     void plan_serve_pick();
 
     // Trajectory execution
-    void invert_wrist();
     void cut_pizza();
     void pick_slice();
+    void pick_cutting_tool();
+    void pick_serving_tool();
 
     // Visualization
     void draw_title(std::string text);
@@ -59,6 +61,7 @@ class moveit_trajectory : public rclcpp::Node
     void operation_status_callback(std_msgs::msg::String operation_status);
     void pizza_radius_callback(std_msgs::msg::Float32 pizza_radius);
     void pizza_pose_callback(geometry_msgs::msg::Pose pizza_pose);
+    void tool_jig_pose_callback(geometry_msgs::msg::Pose tool_jig_pose);
     void joint_states_callback(sensor_msgs::msg::JointState joint_state_msg);
 
     /////////////////////////////////////////////////////////////////////
@@ -84,11 +87,13 @@ class moveit_trajectory : public rclcpp::Node
     rclcpp::Subscription<std_msgs::msg::String>::SharedPtr operation_status_subscription_;
     rclcpp::Subscription<std_msgs::msg::Float32>::SharedPtr pizza_radius_subscription_;
     rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr pizza_pose_subscription_;
+    rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr tool_jig_pose_subscription_;
     rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr joint_states_subscription_;
 
     // Stored variables from messages
     std_msgs::msg::Float32 pizza_radius;
     geometry_msgs::msg::Pose pizza_pose;
+    geometry_msgs::msg::Pose tool_jig_pose;
     std::vector<double> joint_positions; // Order - shoulder lift, elbow, wrist 1, wrist 2, wrist 3, shoulder pan
 
     // Completion checking
@@ -96,11 +101,17 @@ class moveit_trajectory : public rclcpp::Node
     bool serve_picking_is_planned = false;
 
     // Trajectory planning
+    // General
     int num_slices = 8;
     geometry_msgs::msg::Pose centre_pose;
+    // Tool change
+    geometry_msgs::msg::Pose cutting_tool_pose;
+    geometry_msgs::msg::Pose serving_tool_pose;
+    // Cutting
     // 2D vector of points, representing the start and end of each cut
     std::vector<std::vector<geometry_msgs::msg::Point>> cut_points;
     std::vector<geometry_msgs::msg::Quaternion> cut_orientations;
+    // Serving (pick)
     // 2D vector of points, representing the start and end of each motion when picking up each slice
     std::vector<std::vector<geometry_msgs::msg::Point>> serve_pick_points;
     std::vector<geometry_msgs::msg::Quaternion> serve_pick_orientations;
