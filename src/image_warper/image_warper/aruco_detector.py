@@ -15,13 +15,27 @@ class ArucoDetector(Node):
         self.publisher_ = self.create_publisher(Image, 'image_aruco_detected', 10) # TO CHANGE TO CORRECT TYPE
         self.arucoMarkers_publisher = self.create_publisher(PoseArray,'markers_pose',10)
 
+        self.pizza_publisher = self.create_publisher(Pose,'pizza_aruco_marker',10)
+        self.jig_publisher = self.create_publisher(Pose,'jig_aruco_marker',10)
+        self.plate_publisher = self.create_publisher(Pose,'plate_aruco_marker',10)
+
         self.startingAngles = -10
         self.angleChange = 0
 
+        # transform boarders
         self.tag0Pose = Pose()
         self.tag1Pose = Pose()
         self.tag2Pose = Pose()
         self.tag3Pose = Pose()
+
+        # pizza roation
+        self.pizzaPose = Pose()
+
+        # jig location
+        self.jigPose = Pose()
+        # plate location
+        self.platePose = Pose()
+
         # self.pov_publisher_ = self.create_publisher(Float64MultiArray, 'warp_pov_tf', 10)
         # self.labelled_publisher_ = self.create_publisher(Image, 'image_labelled', 10)# New publisher
         #         image_publisher_ = this->create_publisher<sensor_msgs::msg::Image>("image_with_circles", 10);
@@ -83,6 +97,19 @@ class ArucoDetector(Node):
                     self.tag3Pose.position.x = cX
                     self.tag3Pose.position.y = cY
                     self.tag3Pose.orientation.w = angle
+                elif markerID == 4:
+                    self.pizzaPose.position.x = cX
+                    self.pizzaPose.position.y = cY
+                    self.pizzaPose.orientation.w = angle
+                elif markerID == 5:
+                    self.jigPose.position.x = cX
+                    self.jigPose.position.y = cY
+                    self.jigPose.orientation.w = angle
+                elif markerID == 6:
+                    self.platePose.position.x = cX
+                    self.platePose.position.y = cY
+                    self.platePose.orientation.w = angle    
+
                 else:
                     self.get_logger().warn("No markers found")
                     #initialising first marker detection and its orientation
@@ -107,6 +134,9 @@ class ArucoDetector(Node):
         markers_pose_msg = PoseArray()
         markers_pose_msg.poses = [self.tag0Pose,self.tag1Pose,self.tag2Pose,self.tag3Pose]
         self.arucoMarkers_publisher.publish(markers_pose_msg)
+        self.pizza_publisher.publish(self.pizzaPose)
+        self.jig_publisher.publish(self.jigPose)
+        self.plate_publisher.publish(self.platePose)
 
         # self.publisher_.publish(img_msg)
  

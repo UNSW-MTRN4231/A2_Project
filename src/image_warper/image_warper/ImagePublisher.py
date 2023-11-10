@@ -11,7 +11,7 @@ class ImagePublisher(Node):
         self.publisher_ = self.create_publisher(Image, 'image_raw', 10)
         self.timer = self.create_timer(0.5, self.publish_image)
         self.bridge = CvBridge()
-        self.image_path = "/home/mtrn/4231/A2_Project/Computer_Vision/packages/src/image_warper/2.jpeg" # Adjust the path to your image /home/mtrn/4231/A2_Project/Computer_Vision/packages/src/image_warper/image_warper/1.jpeg
+        self.image_path = "/home/mtrn/4231/A2_Project/Computer_Vision/packages/src/image_warper/image_warper/1.jpeg" # Adjust the path to your image /home/mtrn/4231/A2_Project/Computer_Vision/packages/src/image_warper/image_warper/1.jpeg
         self.cv_image = cv2.imread(self.image_path)
 
     def publish_image(self):
