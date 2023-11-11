@@ -84,7 +84,6 @@ class moveit_trajectory : public rclcpp::Node
 
     // Subscriptions
     rclcpp::Subscription<std_msgs::msg::String>::SharedPtr operation_command_subscription_;
-    rclcpp::Subscription<std_msgs::msg::String>::SharedPtr operation_status_subscription_;
     rclcpp::Subscription<std_msgs::msg::Float32>::SharedPtr pizza_radius_subscription_;
     rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr pizza_pose_subscription_;
     rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr tool_jig_pose_subscription_;

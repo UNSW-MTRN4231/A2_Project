@@ -144,8 +144,6 @@ moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
     "joint_states", 10, std::bind(&moveit_trajectory::joint_states_callback, this, std::placeholders::_1), sub_options_state);
   operation_command_subscription_ = this->create_subscription<std_msgs::msg::String>(
     "operation_command", 10, std::bind(&moveit_trajectory::operation_command_callback, this, std::placeholders::_1),sub_options_operation);
-  operation_status_subscription_ = this->create_subscription<std_msgs::msg::String>(
-    "operation_status", 10, std::bind(&moveit_trajectory::operation_status_callback, this, std::placeholders::_1),sub_options_operation);
   pizza_radius_subscription_ = this->create_subscription<std_msgs::msg::Float32>(
     "pizza_radius", 10, std::bind(&moveit_trajectory::pizza_radius_callback, this, std::placeholders::_1),sub_options_operation);
   pizza_pose_subscription_ = this->create_subscription<geometry_msgs::msg::Pose>(
@@ -491,7 +489,7 @@ void moveit_trajectory::pick_slice() {
 }
 
 void moveit_trajectory::pick_cutting_tool() {
-  float approach_height;
+  float approach_height = 0.15;
   
   // Create waypoints
   geometry_msgs::msg::Pose above_cutting_tool = cutting_tool_pose;
@@ -519,7 +517,7 @@ void moveit_trajectory::pick_cutting_tool() {
 
 
 void moveit_trajectory::pick_serving_tool() {
-  float approach_height;
+  float approach_height = 0.15;
   
   // Create waypoints
   geometry_msgs::msg::Pose above_serving_tool = serving_tool_pose;
@@ -657,16 +655,16 @@ void moveit_trajectory::tool_jig_pose_callback(geometry_msgs::msg::Pose tool_jig
   RCLCPP_INFO(this->get_logger(), "Tool jig pose set");
   this->tool_jig_pose = tool_jig_pose;
 
-  this->cutting_tool_pose = addTranslationOffset(tool_jig_pose,0,0,0); // TODO determine offset
-  this->serving_tool_pose = addTranslationOffset(tool_jig_pose,0,0,0); // TODO determine offset
+  this->cutting_tool_pose = add_translation_offset(tool_jig_pose,0,0,0); // TODO determine offset
+  this->serving_tool_pose = add_translation_offset(tool_jig_pose,0,0,0); // TODO determine offset
 }
 
 // Callback for /operation_command topic
 void moveit_trajectory::operation_command_callback(std_msgs::msg::String operation_command)
 {
   // Planning
-  if (operation_status.data == "Plan Trajectories") {
-    draw_title("Planning_Trajectoties");
+  if (operation_command.data == "Plan Trajectories") {
+    draw_title("Planning_Trajectories");
     RCLCPP_INFO(this->get_logger(), "Planning Trajectories");
     visualize_pizza();
 
@@ -685,7 +683,19 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
     // Publish to /operation_status
     std_msgs::msg::String msg;
     msg.data = "Plan Trajectories Complete";
-    operation_command_publisher_->publish(msg);
+    operation_status_publisher_->publish(msg);
+  }
+
+  // Pick cutting tool
+  if (operation_command.data == "Pick Cutting Tool") {
+    RCLCPP_INFO(this->get_logger(), "Picking Cutting Tool");
+    draw_title("Pick_Cutting_Tool");
+    pick_cutting_tool();
+
+    // Publish to /operation_status
+    std_msgs::msg::String msg;
+    msg.data = "Pick Cutting Tool Complete";
+    operation_status_publisher_->publish(msg);
   }
 
   // Cutting
@@ -696,8 +706,20 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
 
     // Publish to /operation_status
     std_msgs::msg::String msg;
-    msg.data = "Cutting Complete";
-    operation_command_publisher_->publish(msg);
+    msg.data = "Cut Complete";
+    operation_status_publisher_->publish(msg);
+  }
+
+  // Pick serving tool
+  if (operation_command.data == "Pick Serving Tool") {
+    RCLCPP_INFO(this->get_logger(), "Picking Serving Tool");
+    draw_title("Pick_Serving_Tool");
+    pick_serving_tool();
+
+    // Publish to /operation_status
+    std_msgs::msg::String msg;
+    msg.data = "Pick Serving Tool Complete";
+    operation_status_publisher_->publish(msg);
   }
 
   // Picking slice
@@ -709,16 +731,9 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
     // Publish to /operation_status
     std_msgs::msg::String msg;
     msg.data = "Pick Slice Complete";
-    operation_command_publisher_->publish(msg);
+    operation_status_publisher_->publish(msg);
   }
 
-  return;
-}
-
-// Callback for /operation_status topic
-void moveit_trajectory::operation_status_callback(std_msgs::msg::String operation_status)
-{ 
-  // Stub - may be removed later.
   return;
 }
 

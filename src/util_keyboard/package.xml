@@ -16,4 +16,12 @@
   <export>
     <build_type>ament_python</build_type>
   </export>
+
+  <run_depend>ament_cmake</run_depend>
+  <run_depend>rclpy</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>ros2launch</run_depend>
+
+  <!-- Explicitly include launch folder -->
+  <run_depend>util_keyboard_launch</run_depend>
 </package>
