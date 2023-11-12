@@ -58,7 +58,7 @@ void high_level_control::execute_next_operation() {
 
 // Checks if pizza radius and pose are set, and publishes a message to /operation_status
 void high_level_control::update_detection_status() {
-  if (pizza_radius_is_set && pizza_pose_is_set && tool_jig_pose_is_set) {
+  if (pizza_radius_is_set && pizza_pose_is_set && tool_jig_pose_is_set && !detection_is_complete) {
     detection_is_complete = true;
 
     // Publish message // TODO get computer vision to do this
