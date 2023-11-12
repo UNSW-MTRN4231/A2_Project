@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(moveit_ur)
+project(high_level_control)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -7,38 +7,29 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(moveit_ros_planning_interface REQUIRED)
-find_package(moveit_visual_tools REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(control_msgs REQUIRED)
-find_package(controller_manager_msgs REQUIRED)
-find_package(std_srvs)
 find_package(std_msgs REQUIRED)
-find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
-find_package(tf2 REQUIRED)
-find_package(tf2_ros REQUIRED)
+# uncomment the following section in order to fill in
+# further dependencies manually.
+# find_package(<dependency> REQUIRED)
 
-add_executable(moveit_trajectory src/moveit_trajectory.cpp)
-target_include_directories(moveit_trajectory PUBLIC
+add_executable(high_level_control src/high_level_control.cpp)
+target_include_directories(high_level_control PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
-target_compile_features(moveit_trajectory PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+target_compile_features(high_level_control PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
 ament_target_dependencies(
-  moveit_trajectory
-  "moveit_ros_planning_interface"
-  "std_msgs"
-  "moveit_visual_tools"
+  high_level_control
   "rclcpp"
-  "tf2"
-  "tf2_ros"
-  "sensor_msgs"
+  "std_msgs"
+  "geometry_msgs"
 )
 
-# Install
-install(TARGETS 
-  moveit_trajectory
-DESTINATION lib/${PROJECT_NAME})
+install(TARGETS
+  high_level_control
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 # Install launch files.
 install(DIRECTORY
