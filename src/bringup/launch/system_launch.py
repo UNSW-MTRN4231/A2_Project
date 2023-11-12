@@ -16,6 +16,6 @@ def generate_launch_description():
             PythonLaunchDescriptionSource([os.path.join(get_package_share_directory('high_level_control'), 'launch', 'high_level_control_launch.py')]),
         ),
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([os.path.join(get_package_share_directory('util_keyboard'), 'util_keyboard.launch.py')]),
+            PythonLaunchDescriptionSource([os.path.join(get_package_share_directory('util_keyboard'), 'launch','util_keyboard_launch.py')]),
         )
     ])
