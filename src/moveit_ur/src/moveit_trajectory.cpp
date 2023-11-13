@@ -138,6 +138,7 @@ moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
 
   // Publishers
   operation_status_publisher_ = this->create_publisher<std_msgs::msg::String>("operation_status", 10);
+  arduino_command_publisher_ = this->create_publisher<std_msgs::msg::String>("arduino_command", 10);
 
   // Subscriptions
   joint_states_subscription_ = this->create_subscription<sensor_msgs::msg::JointState>(
@@ -395,6 +396,13 @@ void moveit_trajectory::plan_serve() {
 //                       TRAJECTORY EXECUTION                      //
 /////////////////////////////////////////////////////////////////////
 
+// Sends string command to /arduino_command
+void moveit_trajectory::send_gripper_command(std::string command) {
+  std_msgs::msg::String msg;
+  msg.data = command;
+  arduino_command_publisher_->publish(msg);
+}
+
 // Completes all planned cuts of the pizza
 void moveit_trajectory::cut_pizza() {
   float lift_height  = 0.04; // Height of vertical lead in and lead out
@@ -587,7 +595,9 @@ void moveit_trajectory::pick_cutting_tool() {
   RCLCPP_INFO(this->get_logger(), "Approaching cutting tool");
   follow_path_cartesian(waypoints, "Cutting tool approach");
 
-  // TODO close gripper
+  // Close gripper
+  send_gripper_command("close");
+  wait(2); // TODO modify this duration
 
   waypoints.clear();
   waypoints.push_back(above_cutting_tool);
@@ -614,7 +624,9 @@ void moveit_trajectory::place_cutting_tool() {
   RCLCPP_INFO(this->get_logger(), "Approaching jig");
   follow_path_cartesian(waypoints, "Place cutting tool approach");
 
-  // TODO open gripper
+  // Open Gripper
+  send_gripper_command("open");
+  wait(2); // TODO modify this duration
 
   waypoints.clear();
   waypoints.push_back(above_cutting_tool);
@@ -642,7 +654,9 @@ void moveit_trajectory::pick_serving_tool() {
   RCLCPP_INFO(this->get_logger(), "Approaching serving tool");
   follow_path_cartesian(waypoints, "Serving tool approach");
 
-  // TODO close gripper
+  // Close gripper
+  send_gripper_command("close");
+  wait(2); // TODO modify this duration
 
   waypoints.clear();
   waypoints.push_back(above_serving_tool);
@@ -669,7 +683,9 @@ void moveit_trajectory::place_serving_tool() {
   RCLCPP_INFO(this->get_logger(), "Approaching tool jig");
   follow_path_cartesian(waypoints, "Place serving tool approach");
 
-  // TODO open gripper
+  // Open Gripper
+  send_gripper_command("open");
+  wait(2); // TODO modify this duration
 
   waypoints.clear();
   waypoints.push_back(above_serving_tool);

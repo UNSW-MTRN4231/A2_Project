@@ -44,6 +44,7 @@ class moveit_trajectory : public rclcpp::Node
     void plan_serve();
 
     // Trajectory execution
+    void send_gripper_command(std::string command);
     void cut_pizza();
     void pick_slice();
     void place_slice();
@@ -100,6 +101,7 @@ class moveit_trajectory : public rclcpp::Node
 
     // Publishers
     rclcpp::Publisher<std_msgs::msg::String>::SharedPtr operation_status_publisher_;
+    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr arduino_command_publisher_;
 
     // Subscriptions
     rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr joint_states_subscription_;

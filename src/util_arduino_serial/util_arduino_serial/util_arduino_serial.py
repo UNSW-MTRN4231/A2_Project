@@ -6,7 +6,7 @@ import serial
 class ArduinoNode(Node):
     def __init__(self):
         super().__init__('util_arduino_serial')
-        self.subscription = self.create_subscription(String, 'arduinoCommand', self.command_callback, 10)
+        self.subscription = self.create_subscription(String, 'arduino_command', self.command_callback, 10)
         self.serial_port = serial.Serial('/dev/ttyACM0', 9600)  # Update the baud rate as required
         self.timer = self.create_timer(1,self.timer_callback)
         self.prevCommand = ""
