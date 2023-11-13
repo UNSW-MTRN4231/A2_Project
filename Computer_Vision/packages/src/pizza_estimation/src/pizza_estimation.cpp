@@ -2,6 +2,7 @@
 #include "yolov8_msgs/msg/detection_array.hpp"
 #include "sensor_msgs/msg/image.hpp"
 #include "geometry_msgs/msg/point.hpp"
+#include "std_msgs/msg/string.hpp"
 #include "std_msgs/msg/float64.hpp"  
 #include "cv_bridge/cv_bridge.h"
 #include <opencv2/highgui/highgui.hpp>
@@ -18,7 +19,9 @@ public:
         subscription_ = this->create_subscription<yolov8_msgs::msg::DetectionArray>(
             "/yolo/old_detections", 10, std::bind(&DetectionSubscriber::callback, this, std::placeholders::_1));
         image_subscription_ = this->create_subscription<sensor_msgs::msg::Image>(
-            "image_raw", 10, std::bind(&DetectionSubscriber::image_callback, this, std::placeholders::_1));
+            "image_warped", 10, std::bind(&DetectionSubscriber::image_callback, this, std::placeholders::_1));
+        operation_command_subscription_ = this->create_subscription<std_msgs::msg::String>(
+            "/operation_command", 10, std::bind(&DetectionSubscriber::operation_command_callback, this, std::placeholders::_1));
 
         image_publisher_ = this->create_publisher<sensor_msgs::msg::Image>("image_with_circles", 10);
         centroid_publisher_ = this->create_publisher<geometry_msgs::msg::Point>("pizza_centroid", 10);
@@ -39,18 +42,19 @@ private:
     void image_callback(const sensor_msgs::msg::Image::SharedPtr msg)
     {
         current_image_ = cv_bridge::toCvCopy(msg, "bgr8")->image;
+    }
+
+    void operation_command_callback(const std_msgs::msg::String::SharedPtr msg)
+    {
+        if (msg->data != "Detect") {
+            return; // Exit early if not a "Detect" message
+        }
 
         if (current_image_.empty()) {
             RCLCPP_WARN(this->get_logger(), "No image data yet.");
             return;
         }
-        cv::Mat image_with_circle = current_image_.clone();
-        cv::circle(image_with_circle, last_centroid_point_+robot_arm_position_, 5, cv::Scalar(0, 0, 255), -1); // centroid
-        cv::line(image_with_circle, last_centroid_point_+robot_arm_position_, radius_end, cv::Scalar(255, 0, 0), 2); // radius line
-        auto image_msg = cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", image_with_circle).toImageMsg();
-        image_publisher_->publish(*image_msg);
-        centroid_publisher_->publish(centroid_msg);
-        radius_publisher_->publish(radius_msg);
+        publish_poses_and_radii();
     }
     
     void callback(const yolov8_msgs::msg::DetectionArray::SharedPtr msg)
@@ -67,8 +71,6 @@ private:
                 if (isSignificantMovement(centroid_point, last_centroid_point_)) {
                     last_centroid_point_ = centroid_point;
                 }
-                // cv::circle(image_with_circle, last_centroid_point_+robot_arm_position_, 5, cv::Scalar(0, 0, 255), -1); // centroid
-                // cv::line(image_with_circle, last_centroid_point_+robot_arm_position_, radius_end, cv::Scalar(255, 0, 0), 2); // radius line
             }
         }
         centroid_msg.x = last_centroid_point_.y;
@@ -110,8 +112,21 @@ private:
         double distance = cv::norm(current - last);
         return distance > 20.0; // Check if the movement is more than 20mm
     }
+
+    void publish_poses_and_radii()
+    {
+        cv::Mat image_with_circle = current_image_.clone();
+        cv::circle(image_with_circle, last_centroid_point_ + robot_arm_position_, 5, cv::Scalar(0, 0, 255), -1); // centroid
+        cv::line(image_with_circle, last_centroid_point_ + robot_arm_position_, radius_end + robot_arm_position_, cv::Scalar(255, 0, 0), 2); // radius line
+
+        auto image_msg = cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", image_with_circle).toImageMsg();
+        image_publisher_->publish(*image_msg);
+        centroid_publisher_->publish(centroid_msg);
+        radius_publisher_->publish(radius_msg);
+    }
     rclcpp::Subscription<yolov8_msgs::msg::DetectionArray>::SharedPtr subscription_;
     rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_subscription_;
+    rclcpp::Subscription<std_msgs::msg::String>::SharedPtr operation_command_subscription_;
     rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr image_publisher_;
     rclcpp::Publisher<geometry_msgs::msg::Point>::SharedPtr centroid_publisher_;
     rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr radius_publisher_;
