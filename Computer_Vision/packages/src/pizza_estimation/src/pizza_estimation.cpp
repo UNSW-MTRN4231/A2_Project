@@ -2,6 +2,7 @@
 #include "yolov8_msgs/msg/detection_array.hpp"
 #include "sensor_msgs/msg/image.hpp"
 #include "geometry_msgs/msg/point.hpp"
+#include "std_msgs/msg/string.hpp"
 #include "std_msgs/msg/float64.hpp"  
 #include "cv_bridge/cv_bridge.h"
 #include <opencv2/highgui/highgui.hpp>
