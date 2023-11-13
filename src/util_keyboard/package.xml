@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>util_keyboard</name>
+  <version>0.0.0</version>
+  <description>Simple keyboard interface node</description>
+
+  <maintainer email="mitch.torok@gmail.com">Your Name</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <build_depend>rclpy</build_depend>
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>
