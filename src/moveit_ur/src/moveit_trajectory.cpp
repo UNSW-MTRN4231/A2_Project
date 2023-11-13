@@ -148,6 +148,8 @@ moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
     "pizza_radius", 10, std::bind(&moveit_trajectory::pizza_radius_callback, this, std::placeholders::_1),sub_options_operation);
   pizza_pose_subscription_ = this->create_subscription<geometry_msgs::msg::Pose>(
     "pizza_pose", 10, std::bind(&moveit_trajectory::pizza_pose_callback, this, std::placeholders::_1),sub_options_operation);
+  plate_pose_subscription_ = this->create_subscription<geometry_msgs::msg::Pose>(
+    "plate_pose", 10, std::bind(&moveit_trajectory::plate_pose_callback, this, std::placeholders::_1),sub_options_operation);
   tool_jig_pose_subscription_ = this->create_subscription<geometry_msgs::msg::Pose>(
     "tool_jig_pose", 10, std::bind(&moveit_trajectory::tool_jig_pose_callback, this, std::placeholders::_1),sub_options_operation);
 
@@ -231,7 +233,7 @@ void moveit_trajectory::rotate_joint(std::string joint, float theta) {
   bool within_bounds = move_group_interface->setJointValueTarget(desired_joint_positions);
   if (!within_bounds)
   {
-    RCLCPP_WARN(this->get_logger(), "Target joint position(s) were outside of limits, but we will plan and clamp to the limits ");
+    RCLCPP_WARN(this->get_logger(), "Target joint position(s) were outside of limits");
   }
 
   // Plan motion
@@ -245,12 +247,22 @@ void moveit_trajectory::rotate_joint(std::string joint, float theta) {
 void moveit_trajectory::invert_wrist(){
 
   rotate_joint("wrist 2", M_PI);
-  std::cout<<"First rotation complete"<<std::endl;
   wait(0.5);
   rotate_joint("wrist 1", M_PI/2);
 
   return;
 }
+
+// TODO need to place and pick tool
+void moveit_trajectory::uninvert_wrist(){
+
+  rotate_joint("wrist 1", -M_PI/2);
+  wait(0.5);
+  rotate_joint("wrist 2", -M_PI);
+
+  return;
+}
+
 
 /////////////////////////////////////////////////////////////////////
 //                       TRAJECTORY PLANNING                       //
@@ -266,7 +278,7 @@ geometry_msgs::msg::Quaternion moveit_trajectory::get_cut_quaternion(float yaw) 
 }
 
 // Creates a quaternion for which spatula is flat and with yaw angle given
-geometry_msgs::msg::Quaternion moveit_trajectory::get_serve_pick_quaternion(float inclination, float yaw) {
+geometry_msgs::msg::Quaternion moveit_trajectory::get_serve_quaternion(float inclination, float yaw) {
   geometry_msgs::msg::Quaternion inclination_rotation = RPYToQuaternion(0,inclination,0);
   geometry_msgs::msg::Quaternion yaw_rotation = RPYToQuaternion(0,0,yaw);
 
@@ -318,13 +330,12 @@ void moveit_trajectory::plan_cuts() {
   cutting_is_planned = true;
 }
 
-void moveit_trajectory::plan_serve_pick() {
+void moveit_trajectory::plan_serve() {
 
   float TCP_height = 0.15; // Height of spatula tip
   float lead_in_length = 0.05; // Starting distance from spatula tip from pizza perimeter
   float spatula_length = 0.1; // Length of flat section of spatula, from the tip to the bend
   float slide_length = spatula_length + lead_in_length; // Total length of the sliding motion
-  float inclination_angle = (2.0/3.0) * M_PI;
   
   // Define an initial slice pickup
   geometry_msgs::msg::Point start;
@@ -352,18 +363,31 @@ void moveit_trajectory::plan_serve_pick() {
     serve_pick_points.push_back(single_pick_points);
 
     // Set orientation such that spatula is horizontal and points toward pizza centre
-    geometry_msgs::msg::Quaternion pick_orientation = get_serve_pick_quaternion(inclination_angle,pick_angle);
+    geometry_msgs::msg::Quaternion pick_orientation = get_serve_quaternion(flat_spatula_angle,pick_angle);
     serve_pick_orientations.push_back(pick_orientation);
+
+    // Determine if slice is on the half nearest the robot base
+    bool in_half_near_robot_base = (pick_angle+M_PI/2-atan2(pizza_pose.position.y, pizza_pose.position.x)) < M_PI;
+    // Set place orientation to avoid unplanned wrist inversions
+    geometry_msgs::msg::Quaternion place_orientation;
+    if (in_half_near_robot_base) {
+      place_orientation = get_serve_quaternion(flat_spatula_angle,0);
+      should_invert_place_direction.push_back(false);
+    } else {
+      place_orientation = get_serve_quaternion(flat_spatula_angle, M_PI);
+      should_invert_place_direction.push_back(true);
+    }
+    serve_place_orientations.push_back(place_orientation);
 
     // Set 'invert wrist' flags
     bool should_invert_wrist = false;
-    if ((pick_angle+M_PI/2) < M_PI) {
+    if (in_half_near_robot_base) {
       should_invert_wrist = true;
     }
     serve_invert_flags.push_back(should_invert_wrist);
   }
 
-  serve_picking_is_planned = true;
+  serve_is_planned = true;
   return;
 }
 
@@ -415,7 +439,7 @@ void moveit_trajectory::cut_pizza() {
     follow_path_cartesian(waypoints, "Cutting Path");
 
     std::cout<<"execute() returned"<<std::endl;
-    wait(3);
+    wait(0.5);
   }
 
   return;
@@ -431,9 +455,14 @@ void moveit_trajectory::pick_slice() {
     RCLCPP_WARN(this->get_logger(), "No slice picking trajectories planned.");
     return;
   }
-
-  if (serve_invert_flags.at(0)) {
+  
+  // Set wrist inversion
+  if (serve_invert_flags.at(0) && !wrist_is_inverted) {
     invert_wrist();
+    wrist_is_inverted = true;
+  } else if (!serve_invert_flags.at(0) && wrist_is_inverted) {
+    uninvert_wrist();
+    wrist_is_inverted = false;
   }
 
   // Create waypoints
@@ -466,13 +495,12 @@ void moveit_trajectory::pick_slice() {
   waypoints.push_back(pick_end);
   waypoints.push_back(above_pick_end);
   waypoints.push_back(centre_rotated_pose);
-  waypoints.push_back(centre_pose); // TODO remove when tool picking is implemented
 
   // Execute path
   RCLCPP_INFO(this->get_logger(), "Executing pick");
   follow_path_cartesian(waypoints, "Pick path");
 
-  wait(5);
+  wait(0.5);
 
   // Remove picked slice from stored trajectories
   if (!serve_pick_points.empty()) {
@@ -484,6 +512,61 @@ void moveit_trajectory::pick_slice() {
   if (!serve_invert_flags.empty()) {
     serve_invert_flags.erase(serve_invert_flags.begin());
   }
+
+  return;
+}
+
+void moveit_trajectory::place_slice() {
+  // Create waypoints
+  // Centre pose, with orientation for spatula
+  geometry_msgs::msg::Pose centre_rotated_pose = centre_pose;
+  centre_rotated_pose.orientation = serve_place_orientations.at(0);
+
+  geometry_msgs::msg::Pose above_plate;
+  above_plate.position = plate_pose.position;
+  above_plate.position.z += serve_height;
+  above_plate.orientation = serve_place_orientations.at(0);
+
+  geometry_msgs::msg::Pose incline;
+  incline.position = above_plate.position;
+  if (!should_invert_place_direction.at(0)) {
+    incline.orientation = get_serve_quaternion(flat_spatula_angle+serve_incline,0);
+  } else {
+    incline.orientation = get_serve_quaternion(flat_spatula_angle+serve_incline,M_PI);
+  }
+  
+
+  geometry_msgs::msg::Pose slide_out;
+  if (!should_invert_place_direction.at(0)) {
+    slide_out.position.x = above_plate.position.x - (serve_retreat*sin(serve_incline));
+  } else {
+    slide_out.position.x = above_plate.position.x + (serve_retreat*sin(serve_incline));
+  }
+  slide_out.position.y = above_plate.position.y;
+  slide_out.position.z = above_plate.position.z + (serve_retreat*cos(serve_incline));
+  slide_out.orientation = incline.orientation;
+
+  std::vector<geometry_msgs::msg::Pose> waypoints;
+  waypoints.push_back(centre_rotated_pose);
+  waypoints.push_back(above_plate);
+  waypoints.push_back(incline);
+  waypoints.push_back(slide_out);
+  waypoints.push_back(centre_rotated_pose);
+
+  // Execute path
+  RCLCPP_INFO(this->get_logger(), "Placing slice");
+  follow_path_cartesian(waypoints, "Place path");
+
+  wait(0.5);
+
+  // Remove placed slice from stored trajectories
+  if (!serve_place_orientations.empty()) {
+    serve_place_orientations.erase(serve_place_orientations.begin());
+  }
+  if (!should_invert_place_direction.empty()) {
+    should_invert_place_direction.erase(should_invert_place_direction.begin());
+  }
+  
 
   return;
 }
@@ -505,6 +588,33 @@ void moveit_trajectory::pick_cutting_tool() {
   follow_path_cartesian(waypoints, "Cutting tool approach");
 
   // TODO close gripper
+
+  waypoints.clear();
+  waypoints.push_back(above_cutting_tool);
+  waypoints.push_back(centre_pose);
+
+  // Execute path
+  RCLCPP_INFO(this->get_logger(), "Returning to centre");
+  follow_path_cartesian(waypoints, "Return to centre");
+}
+
+void moveit_trajectory::place_cutting_tool() {
+  float approach_height = 0.15;
+  
+  // Create waypoints
+  geometry_msgs::msg::Pose above_cutting_tool = cutting_tool_pose;
+  above_cutting_tool.position.z += approach_height;
+
+  std::vector<geometry_msgs::msg::Pose> waypoints;
+  waypoints.push_back(centre_pose);
+  waypoints.push_back(above_cutting_tool);
+  waypoints.push_back(cutting_tool_pose);
+
+  // Execute path
+  RCLCPP_INFO(this->get_logger(), "Approaching jig");
+  follow_path_cartesian(waypoints, "Place cutting tool approach");
+
+  // TODO open gripper
 
   waypoints.clear();
   waypoints.push_back(above_cutting_tool);
@@ -542,6 +652,34 @@ void moveit_trajectory::pick_serving_tool() {
   RCLCPP_INFO(this->get_logger(), "Returning to centre");
   follow_path_cartesian(waypoints, "Return to centre");
 }
+
+void moveit_trajectory::place_serving_tool() {
+  float approach_height = 0.15;
+  
+  // Create waypoints
+  geometry_msgs::msg::Pose above_serving_tool = serving_tool_pose;
+  above_serving_tool.position.z += approach_height;
+
+  std::vector<geometry_msgs::msg::Pose> waypoints;
+  waypoints.push_back(centre_pose);
+  waypoints.push_back(above_serving_tool);
+  waypoints.push_back(serving_tool_pose);
+
+  // Execute path
+  RCLCPP_INFO(this->get_logger(), "Approaching tool jig");
+  follow_path_cartesian(waypoints, "Place serving tool approach");
+
+  // TODO open gripper
+
+  waypoints.clear();
+  waypoints.push_back(above_serving_tool);
+  waypoints.push_back(centre_pose);
+
+  // Execute path
+  RCLCPP_INFO(this->get_logger(), "Returning to centre");
+  follow_path_cartesian(waypoints, "Return to centre");
+}
+
 
 /////////////////////////////////////////////////////////////////////
 //                          VISUALIZATION                          //
@@ -588,6 +726,17 @@ void moveit_trajectory::visualize_pizza() {
   visual_tools_->trigger();
 }
 
+// Visualises the plate in RVIZ using a cylinder
+void moveit_trajectory::visualize_plate() {
+  RCLCPP_INFO(this->get_logger(), "Vizualizing Plate");
+
+  // Plate
+  visual_tools_->publishCylinder(
+    plate_pose, rviz_visual_tools::MAGENTA,0.01,plate_radius*2,"Plate");
+
+  visual_tools_->trigger();
+}
+
 // Draws lines in RVIZ between the start and end points of each planned cut
 void moveit_trajectory::visualize_cut_points() {
   RCLCPP_INFO(this->get_logger(), "Vizualizing Cut Points");
@@ -630,6 +779,16 @@ void moveit_trajectory::visualize_serve_pick_points() {
 //                      SUBSCRIPTION CALLBACKS                     //
 /////////////////////////////////////////////////////////////////////
 
+// Callback for /joint_states
+void moveit_trajectory::joint_states_callback(sensor_msgs::msg::JointState joint_state_msg){
+  std::lock_guard<std::mutex> lock(mutex_);
+  
+  joint_positions.clear();
+  for (int i=0; i<6; i++) {
+    joint_positions.push_back(joint_state_msg.position[i]);
+  }
+}
+
 // Callback for /pizza_radius
 void moveit_trajectory::pizza_radius_callback(std_msgs::msg::Float32 pizza_radius) {
   RCLCPP_INFO(this->get_logger(), "Pizza radius set");
@@ -650,6 +809,12 @@ void moveit_trajectory::pizza_pose_callback(geometry_msgs::msg::Pose pizza_pose)
   centre_pose.orientation = down_orientation;
 }
 
+// Callback for /plate_pose
+void moveit_trajectory::plate_pose_callback(geometry_msgs::msg::Pose plate_pose) {
+  RCLCPP_INFO(this->get_logger(), "Plate pose set");
+  this->plate_pose = plate_pose;
+}
+
 // Callback for /tool_jig_pose
 void moveit_trajectory::tool_jig_pose_callback(geometry_msgs::msg::Pose tool_jig_pose) {
   RCLCPP_INFO(this->get_logger(), "Tool jig pose set");
@@ -666,7 +831,11 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
   if (operation_command.data == "Plan Trajectories") {
     draw_title("Planning_Trajectories");
     RCLCPP_INFO(this->get_logger(), "Planning Trajectories");
+
+    // Visualize detections
     visualize_pizza();
+    visualize_plate();
+    // TODO visualize tool jig
 
     // Cut planning
     if (!cutting_is_planned){
@@ -675,8 +844,8 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
     }
 
     // Serve picking planning
-    if (!serve_picking_is_planned){
-      plan_serve_pick();
+    if (!serve_is_planned){
+      plan_serve();
       visualize_serve_pick_points();
     }
 
@@ -710,6 +879,18 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
     operation_status_publisher_->publish(msg);
   }
 
+  // Pick cutting tool
+  if (operation_command.data == "Place Cutting Tool") {
+    RCLCPP_INFO(this->get_logger(), "Placing Cutting Tool");
+    draw_title("Place_Cutting_Tool");
+    place_cutting_tool();
+
+    // Publish to /operation_status
+    std_msgs::msg::String msg;
+    msg.data = "Place Cutting Tool Complete";
+    operation_status_publisher_->publish(msg);
+  }
+
   // Pick serving tool
   if (operation_command.data == "Pick Serving Tool") {
     RCLCPP_INFO(this->get_logger(), "Picking Serving Tool");
@@ -734,16 +915,31 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
     operation_status_publisher_->publish(msg);
   }
 
-  return;
-}
+  // Placing Slice
+  if (operation_command.data == "Place Slice") {
+    RCLCPP_INFO(this->get_logger(), "Placing Slice");
+    draw_title("Placing_Slice");
+    place_slice();
 
-void moveit_trajectory::joint_states_callback(sensor_msgs::msg::JointState joint_state_msg){
-  std::lock_guard<std::mutex> lock(mutex_);
-  
-  joint_positions.clear();
-  for (int i=0; i<6; i++) {
-    joint_positions.push_back(joint_state_msg.position[i]);
+    // Publish to /operation_status
+    std_msgs::msg::String msg;
+    msg.data = "Place Slice Complete";
+    operation_status_publisher_->publish(msg);
   }
+
+  // Place serving tool
+  if (operation_command.data == "Place Serving Tool") {
+    RCLCPP_INFO(this->get_logger(), "Placinging Serving Tool");
+    draw_title("Place_Serving_Tool");
+    place_serving_tool();
+
+    // Publish to /operation_status
+    std_msgs::msg::String msg;
+    msg.data = "Place Serving Tool Complete";
+    operation_status_publisher_->publish(msg);
+  }
+
+  return;
 }
 
 /////////////////////////////////////////////////////////////////////
