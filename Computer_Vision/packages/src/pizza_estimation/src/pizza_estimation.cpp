@@ -28,7 +28,7 @@ public:
         warp_pov_tf_subscription_ = this->create_subscription<std_msgs::msg::Float64MultiArray>(
             "warp_pov_tf", 10, std::bind(&DetectionSubscriber::warp_pov_tf_callback, this, std::placeholders::_1));
         pizza_aruco_marker_subscription_ = this->create_subscription<geometry_msgs::msg::Pose>(
-        "pizza_aruco_marker", 10, std::bind(&DetectionSubscriber::pizza_aruco_marker_callback, this, std::placeholders::_1));
+            "pizza_aruco_marker", 10, std::bind(&DetectionSubscriber::pizza_aruco_marker_callback, this, std::placeholders::_1));
 
         image_publisher_ = this->create_publisher<sensor_msgs::msg::Image>("image_with_circles", 10);
         centroid_publisher_ = this->create_publisher<geometry_msgs::msg::Point>("pizza_centroid", 10);
@@ -198,9 +198,9 @@ private:
         if (angle_change > angle_change_threshold_) {
             std_msgs::msg::Float64 angle_msg;
             angle_msg.data = current_angle;
-            pizza_angle_publisher_->publish(angle_msg);
             last_pizza_angle_ = current_angle;
         }
+        pizza_angle_publisher_->publish(angle_msg);
     }
     rclcpp::Subscription<yolov8_msgs::msg::DetectionArray>::SharedPtr subscription_;
     rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_subscription_;
@@ -214,11 +214,7 @@ private:
     rclcpp::Publisher<geometry_msgs::msg::Point>::SharedPtr plate_centroid_publisher_;
     rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr radius_publisher_;
     rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pizza_angle_publisher_;
-
-
 };
-
-
 
 int main(int argc, char * argv[])
 {
