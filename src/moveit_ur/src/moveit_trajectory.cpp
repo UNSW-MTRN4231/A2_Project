@@ -161,7 +161,8 @@ moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
   move_group_interface->setPlannerId("RRTConnectkConfigDefault");
   move_group_interface->setPlanningTime(10.0);
   move_group_interface->setNumPlanningAttempts(10);
-  move_group_interface->setMaxVelocityScalingFactor(0.05);
+  move_group_interface->setMaxVelocityScalingFactor(0.3);
+  move_group_interface->setMaxAccelerationScalingFactor(0.3);
   std::string frame_id = move_group_interface->getPlanningFrame();
 
   // Define collision objects (size, pos, frame, id)
@@ -188,6 +189,7 @@ moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
 /////////////////////////////////////////////////////////////////////
 //                           BASIC MOVEMENT                        //
 /////////////////////////////////////////////////////////////////////
+
 void moveit_trajectory::follow_path_cartesian(std::vector<geometry_msgs::msg::Pose> waypoints, std::string ns) {
 
   // Plan the trajectory
