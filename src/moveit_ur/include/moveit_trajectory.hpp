@@ -97,6 +97,7 @@ class moveit_trajectory : public rclcpp::Node
 
     // Callback groups
     rclcpp::CallbackGroup::SharedPtr state_cb_group;
+    rclcpp::CallbackGroup::SharedPtr detection_cb_group;
     rclcpp::CallbackGroup::SharedPtr operation_cb_group;
 
     // Publishers
@@ -139,12 +140,9 @@ class moveit_trajectory : public rclcpp::Node
     // Serving (pick)
     // 2D vector of points, representing the start and end of each motion when picking up each slice
     std::vector<std::vector<geometry_msgs::msg::Point>> serve_pick_points;
-    std::vector<geometry_msgs::msg::Quaternion> serve_pick_orientations;
-    std::vector<bool> serve_invert_flags;
+    std::vector<float> serve_slice_angles;
     // Serving (place)
     float plate_radius = 0.1; // TODO measure this
-    std::vector<geometry_msgs::msg::Quaternion> serve_place_orientations;
-    std::vector<bool> should_invert_place_direction;
 };
 
 #endif // MOVEIT_TRAJECTORY_HPP

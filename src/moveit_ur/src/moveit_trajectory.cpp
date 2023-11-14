@@ -133,6 +133,8 @@ moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
   // Add callbacks to subscription options
   auto sub_options_state = rclcpp::SubscriptionOptions();
   sub_options_state.callback_group = state_cb_group;
+  auto sub_options_detection = rclcpp::SubscriptionOptions();
+  sub_options_detection.callback_group = detection_cb_group;
   auto sub_options_operation = rclcpp::SubscriptionOptions();
   sub_options_operation.callback_group = operation_cb_group;
 
@@ -146,13 +148,13 @@ moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
   operation_command_subscription_ = this->create_subscription<std_msgs::msg::String>(
     "operation_command", 10, std::bind(&moveit_trajectory::operation_command_callback, this, std::placeholders::_1),sub_options_operation);
   pizza_radius_subscription_ = this->create_subscription<std_msgs::msg::Float32>(
-    "pizza_radius", 10, std::bind(&moveit_trajectory::pizza_radius_callback, this, std::placeholders::_1),sub_options_operation);
+    "pizza_radius", 10, std::bind(&moveit_trajectory::pizza_radius_callback, this, std::placeholders::_1),sub_options_detection);
   pizza_pose_subscription_ = this->create_subscription<geometry_msgs::msg::Pose>(
-    "pizza_pose", 10, std::bind(&moveit_trajectory::pizza_pose_callback, this, std::placeholders::_1),sub_options_operation);
+    "pizza_pose", 10, std::bind(&moveit_trajectory::pizza_pose_callback, this, std::placeholders::_1),sub_options_detection);
   plate_pose_subscription_ = this->create_subscription<geometry_msgs::msg::Pose>(
-    "plate_pose", 10, std::bind(&moveit_trajectory::plate_pose_callback, this, std::placeholders::_1),sub_options_operation);
+    "plate_pose", 10, std::bind(&moveit_trajectory::plate_pose_callback, this, std::placeholders::_1),sub_options_detection);
   tool_jig_pose_subscription_ = this->create_subscription<geometry_msgs::msg::Pose>(
-    "tool_jig_pose", 10, std::bind(&moveit_trajectory::tool_jig_pose_callback, this, std::placeholders::_1),sub_options_operation);
+    "tool_jig_pose", 10, std::bind(&moveit_trajectory::tool_jig_pose_callback, this, std::placeholders::_1),sub_options_detection);
 
   // Generate the movegroup interface
   move_group_interface = std::make_unique<moveit::planning_interface::MoveGroupInterface>(std::unique_ptr<rclcpp::Node>(this), "ur_manipulator");
@@ -363,29 +365,7 @@ void moveit_trajectory::plan_serve() {
     single_pick_points.push_back(pick_end);
     serve_pick_points.push_back(single_pick_points);
 
-    // Set orientation such that spatula is horizontal and points toward pizza centre
-    geometry_msgs::msg::Quaternion pick_orientation = get_serve_quaternion(flat_spatula_angle,pick_angle);
-    serve_pick_orientations.push_back(pick_orientation);
-
-    // Determine if slice is on the half nearest the robot base
-    bool in_half_near_robot_base = (pick_angle+M_PI/2-atan2(pizza_pose.position.y, pizza_pose.position.x)) < M_PI;
-    // Set place orientation to avoid unplanned wrist inversions
-    geometry_msgs::msg::Quaternion place_orientation;
-    if (in_half_near_robot_base) {
-      place_orientation = get_serve_quaternion(flat_spatula_angle,0);
-      should_invert_place_direction.push_back(false);
-    } else {
-      place_orientation = get_serve_quaternion(flat_spatula_angle, M_PI);
-      should_invert_place_direction.push_back(true);
-    }
-    serve_place_orientations.push_back(place_orientation);
-
-    // Set 'invert wrist' flags
-    bool should_invert_wrist = false;
-    if (in_half_near_robot_base) {
-      should_invert_wrist = true;
-    }
-    serve_invert_flags.push_back(should_invert_wrist);
+    serve_slice_angles.push_back(pick_angle);
   }
 
   serve_is_planned = true;
@@ -463,38 +443,43 @@ void moveit_trajectory::pick_slice() {
     RCLCPP_WARN(this->get_logger(), "No slice picking trajectories planned.");
     return;
   }
+
+  bool in_half_near_base = (cos(serve_slice_angles.at(0)-atan2(pizza_pose.position.y,pizza_pose.position.x)) > 0);
   
   // Set wrist inversion
-  if (serve_invert_flags.at(0) && !wrist_is_inverted) {
+  if (in_half_near_base && !wrist_is_inverted) {
     invert_wrist();
     wrist_is_inverted = true;
-  } else if (!serve_invert_flags.at(0) && wrist_is_inverted) {
+  } else if (!in_half_near_base && wrist_is_inverted) {
     uninvert_wrist();
     wrist_is_inverted = false;
   }
 
+  // Set pick orientation
+  geometry_msgs::msg::Quaternion pick_orientation = get_serve_quaternion(flat_spatula_angle,serve_slice_angles.at(0));
+
   // Create waypoints
   // Centre pose, with orientation for spatula
   geometry_msgs::msg::Pose centre_rotated_pose = centre_pose;
-  centre_rotated_pose.orientation = serve_pick_orientations.at(0);
+  centre_rotated_pose.orientation = pick_orientation;
 
   geometry_msgs::msg::Pose above_pick_start;
   above_pick_start.position = serve_pick_points.at(0).at(0);
   above_pick_start.position.z += lift_height;
-  above_pick_start.orientation = serve_pick_orientations.at(0);
+  above_pick_start.orientation = pick_orientation;
 
   geometry_msgs::msg::Pose pick_start;
   pick_start.position = serve_pick_points.at(0).at(0);
-  pick_start.orientation = serve_pick_orientations.at(0);
+  pick_start.orientation = pick_orientation;
 
   geometry_msgs::msg::Pose pick_end;
   pick_end.position = serve_pick_points.at(0).at(1);
-  pick_end.orientation = serve_pick_orientations.at(0);
+  pick_end.orientation = pick_orientation;
 
   geometry_msgs::msg::Pose above_pick_end;
   above_pick_end.position = serve_pick_points.at(0).at(1);
   above_pick_end.position.z += lift_height;
-  above_pick_end.orientation = serve_pick_orientations.at(0);
+  above_pick_end.orientation = pick_orientation;
 
   std::vector<geometry_msgs::msg::Pose> waypoints;
   waypoints.push_back(centre_rotated_pose);
@@ -514,45 +499,48 @@ void moveit_trajectory::pick_slice() {
   if (!serve_pick_points.empty()) {
     serve_pick_points.erase(serve_pick_points.begin());
   }
-  if (!serve_pick_orientations.empty()) {
-    serve_pick_orientations.erase(serve_pick_orientations.begin());
-  }
-  if (!serve_invert_flags.empty()) {
-    serve_invert_flags.erase(serve_invert_flags.begin());
-  }
 
   return;
 }
 
 void moveit_trajectory::place_slice() {
+  // Determine orientation to serve slice
+  bool in_half_near_base = (cos(serve_slice_angles.at(0)-atan2(pizza_pose.position.y,pizza_pose.position.x)) > 0);
+  geometry_msgs::msg::Quaternion flat_orientation;
+  geometry_msgs::msg::Quaternion incline_orientation;
+  if (in_half_near_base) {
+    flat_orientation = get_serve_quaternion(flat_spatula_angle, 0);
+    incline_orientation = get_serve_quaternion(flat_spatula_angle+serve_incline, 0);
+
+  } else {
+    flat_orientation = get_serve_quaternion(flat_spatula_angle, M_PI);
+    incline_orientation = get_serve_quaternion(flat_spatula_angle+serve_incline, M_PI);
+  }
+
   // Create waypoints
   // Centre pose, with orientation for spatula
   geometry_msgs::msg::Pose centre_rotated_pose = centre_pose;
-  centre_rotated_pose.orientation = serve_place_orientations.at(0);
+  centre_rotated_pose.orientation = flat_orientation;
 
   geometry_msgs::msg::Pose above_plate;
   above_plate.position = plate_pose.position;
   above_plate.position.z += serve_height;
-  above_plate.orientation = serve_place_orientations.at(0);
+  above_plate.orientation = flat_orientation;
 
   geometry_msgs::msg::Pose incline;
   incline.position = above_plate.position;
-  if (!should_invert_place_direction.at(0)) {
-    incline.orientation = get_serve_quaternion(flat_spatula_angle+serve_incline,0);
-  } else {
-    incline.orientation = get_serve_quaternion(flat_spatula_angle+serve_incline,M_PI);
-  }
+  incline.orientation = incline_orientation;
   
 
   geometry_msgs::msg::Pose slide_out;
-  if (!should_invert_place_direction.at(0)) {
+  if (in_half_near_base) {
     slide_out.position.x = above_plate.position.x - (serve_retreat*sin(serve_incline));
   } else {
     slide_out.position.x = above_plate.position.x + (serve_retreat*sin(serve_incline));
   }
   slide_out.position.y = above_plate.position.y;
   slide_out.position.z = above_plate.position.z + (serve_retreat*cos(serve_incline));
-  slide_out.orientation = incline.orientation;
+  slide_out.orientation = incline_orientation;
 
   std::vector<geometry_msgs::msg::Pose> waypoints;
   waypoints.push_back(centre_rotated_pose);
@@ -568,13 +556,9 @@ void moveit_trajectory::place_slice() {
   wait(0.5);
 
   // Remove placed slice from stored trajectories
-  if (!serve_place_orientations.empty()) {
-    serve_place_orientations.erase(serve_place_orientations.begin());
+  if (!serve_slice_angles.empty()) {
+    serve_slice_angles.erase(serve_slice_angles.begin());
   }
-  if (!should_invert_place_direction.empty()) {
-    should_invert_place_direction.erase(should_invert_place_direction.begin());
-  }
-  
 
   return;
 }
