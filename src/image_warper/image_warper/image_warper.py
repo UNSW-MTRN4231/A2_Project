@@ -44,7 +44,7 @@ class ImageWarper(Node):
                        [int(self.tag2Pose.position.x),int(self.tag2Pose.position.y)],
                        [int(self.tag3Pose.position.x),int(self.tag3Pose.position.y)]] 
 
-        self.get_logger().info("Pruple dots: " + str(len(purple_dots)))
+        # self.get_logger().info("Pruple dots: " + str(len(purple_dots)))
 
 
 
