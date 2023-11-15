@@ -35,6 +35,7 @@ public:
         radius_publisher_ = this->create_publisher<std_msgs::msg::Float64>("pizza_radius", 10);
         plate_centroid_publisher_ = this->create_publisher<geometry_msgs::msg::Point>("plate_centroid", 10);
         pizza_angle_publisher_ = this->create_publisher<std_msgs::msg::Float64>("pizza_angle", 10);
+        operation_status_publisher_ = this->create_publisher<std_msgs::msg::String>("operation_status", 10);
 
 
         last_centroid_point_ = cv::Point(-1, -1);
@@ -45,7 +46,7 @@ private:
     cv::Mat current_image_;
     cv::Point robot_arm_position_;
     cv::Point centroid_point, radius_end, last_centroid_point_;
-    geometry_msgs::msg::Point centroid_msg;
+    geometry_msgs::msg::Point centroid_msg, centroid_p_msg;
     std_msgs::msg::Float64 radius_msg;
     double avg_radius;
 
@@ -54,6 +55,7 @@ private:
 
     geometry_msgs::msg::Pose pizza_pose_;
     double last_pizza_angle_;
+    std_msgs::msg::Float64 angle_msg;
     const double angle_change_threshold_ = 5.0 * (M_PI / 180.0); 
 
     void image_callback(const sensor_msgs::msg::Image::SharedPtr msg)
@@ -72,6 +74,12 @@ private:
             return;
         }
         publish_poses_and_radii();
+        
+        // Publish to operation_status
+        std_msgs::msg::String status_msg;
+        status_msg.data = "Detect Complete";
+        operation_status_publisher_->publish(status_msg);
+
     }
     
     void callback(const yolov8_msgs::msg::DetectionArray::SharedPtr msg)
@@ -89,9 +97,16 @@ private:
                 }
             }
         }
-        centroid_msg.x = last_centroid_point_.y;
-        centroid_msg.y = last_centroid_point_.x;
-        radius_msg.data = avg_radius;
+        centroid_msg.x = last_centroid_point_.y/1000;
+        centroid_msg.y = last_centroid_point_.x/1000;
+        centroid_msg.z = 0.05;
+        radius_msg.data = avg_radius/1000;
+        cv::Mat image_with_circle = current_image_.clone();
+        cv::circle(image_with_circle, last_centroid_point_ + robot_arm_position_, 5, cv::Scalar(0, 0, 255), -1); // centroid
+        cv::line(image_with_circle, last_centroid_point_ + robot_arm_position_, radius_end + robot_arm_position_, cv::Scalar(255, 0, 0), 2); // radius line
+
+        auto image_msg = cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", image_with_circle).toImageMsg();
+        image_publisher_->publish(*image_msg);
     }
     
     std::pair<float, float> computeCentroid(const yolov8_msgs::msg::Mask& mask) const
@@ -125,19 +140,15 @@ private:
     {
         if (last.x == -1 && last.y == -1) return true;
         double distance = cv::norm(current - last);
-        return distance > 20.0; // Check if the movement is more than 20mm
+        return distance > 10.0; // Check if the movement is more than 20mm
     }
 
     void publish_poses_and_radii()
     {
-        cv::Mat image_with_circle = current_image_.clone();
-        cv::circle(image_with_circle, last_centroid_point_ + robot_arm_position_, 5, cv::Scalar(0, 0, 255), -1); // centroid
-        cv::line(image_with_circle, last_centroid_point_ + robot_arm_position_, radius_end + robot_arm_position_, cv::Scalar(255, 0, 0), 2); // radius line
-
-        auto image_msg = cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", image_with_circle).toImageMsg();
-        image_publisher_->publish(*image_msg);
         centroid_publisher_->publish(centroid_msg);
         radius_publisher_->publish(radius_msg);
+        plate_centroid_publisher_->publish(centroid_p_msg);
+        pizza_angle_publisher_->publish(angle_msg);
     }
 
         void warp_pov_tf_callback(const std_msgs::msg::Float64MultiArray::SharedPtr msg)
@@ -184,10 +195,11 @@ private:
         cv::Point2f transformed_point = transform_plate_pose(plate_pose);
         transformed_point.x -= robot_arm_position_.x;
         transformed_point.y -= robot_arm_position_.y;
-        geometry_msgs::msg::Point centroid_msg;
-        centroid_msg.x = transformed_point.x;
-        centroid_msg.y = transformed_point.y;
-        plate_centroid_publisher_->publish(centroid_msg);
+        centroid_p_msg.x = transformed_point.x/1000;
+        centroid_p_msg.y = transformed_point.y/1000;
+
+        // Publish to back to highlevel // create all the subscripions and publishers
+        
     }
 
     void pizza_aruco_marker_callback(const geometry_msgs::msg::Pose::SharedPtr msg)
@@ -196,11 +208,10 @@ private:
         double angle_change = std::abs(current_angle - last_pizza_angle_);
 
         if (angle_change > angle_change_threshold_) {
-            std_msgs::msg::Float64 angle_msg;
+
             angle_msg.data = current_angle;
             last_pizza_angle_ = current_angle;
         }
-        pizza_angle_publisher_->publish(angle_msg);
     }
     rclcpp::Subscription<yolov8_msgs::msg::DetectionArray>::SharedPtr subscription_;
     rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_subscription_;
@@ -214,6 +225,7 @@ private:
     rclcpp::Publisher<geometry_msgs::msg::Point>::SharedPtr plate_centroid_publisher_;
     rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr radius_publisher_;
     rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr pizza_angle_publisher_;
+    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr operation_status_publisher_;
 };
 
 int main(int argc, char * argv[])
