@@ -15,6 +15,7 @@
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit_visual_tools/moveit_visual_tools.h>
 #include <sensor_msgs/msg/joint_state.hpp>
+#include <tf2/LinearMath/Transform.h>
 
 #include "tf2/exceptions.h"
 #include "tf2_ros/transform_listener.h"
@@ -30,6 +31,10 @@ class moveit_trajectory : public rclcpp::Node
     /////////////////////////////////////////////////////////////////////
     //                             METHODS                             //
     /////////////////////////////////////////////////////////////////////
+
+    // Transformations
+    geometry_msgs::msg::Transform create_cutter_to_link_tf();
+    geometry_msgs::msg::Transform create_server_to_link_tf();
 
     // Basic movement
     void follow_path_cartesian(std::vector<geometry_msgs::msg::Pose> waypoints, std::string ns);
@@ -80,6 +85,11 @@ class moveit_trajectory : public rclcpp::Node
     // Modifiable Trajectory Parameters (WIP - TODO collect all parameters here for easy modification)
     // General
     float flat_spatula_angle = (2.0/3.0) * M_PI; // Pitch (CCW from vertical) of the end effector for the spatula to be flat
+
+    // End effector transforms
+    geometry_msgs::msg::Transform pizza_cutter_to_link;
+    geometry_msgs::msg::Transform pizza_server_to_link;
+
 
     // Serving slice on plate
     float serve_height = 0.03;  // Height of spatula tip above the plate

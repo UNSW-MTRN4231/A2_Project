@@ -5,11 +5,13 @@
 
 #include "moveit_trajectory.hpp"
 #include "geometry_msgs/msg/transform_stamped.hpp"
+#include "geometry_msgs/msg/transform.hpp"
 
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
 
 #include <geometry_msgs/msg/vector3.hpp>
 #include <tf2/LinearMath/Quaternion.h>
+#include <tf2/LinearMath/Transform.h>
 #include <moveit_msgs/msg/display_robot_state.hpp>
 
 using rclcpp::executors::MultiThreadedExecutor;
@@ -88,6 +90,39 @@ void convertTF2ToGeometryMsgs(const tf2::Quaternion& tf_quat, geometry_msgs::msg
     geometry_quat.w = tf_quat.w();
 }
 
+geometry_msgs::msg::Transform convertTftoMsg(tf2::Transform tf_transform) {
+    geometry_msgs::msg::Transform transform_msg;
+
+    transform_msg.translation.x = tf_transform.getOrigin().getX();
+    transform_msg.translation.y = tf_transform.getOrigin().getY();
+    transform_msg.translation.z = tf_transform.getOrigin().getZ();
+
+    tf2::Quaternion tf_quaternion = tf_transform.getRotation();
+    transform_msg.rotation.x = tf_quaternion.x();
+    transform_msg.rotation.y = tf_quaternion.y();
+    transform_msg.rotation.z = tf_quaternion.z();
+    transform_msg.rotation.w = tf_quaternion.w();
+
+    return transform_msg;
+}
+
+tf2::Transform convertTfFromMsg(geometry_msgs::msg::Transform transform_msg) {
+    tf2::Transform tf_transform;
+
+    tf_transform.setOrigin(tf2::Vector3(
+        transform_msg.translation.x,
+        transform_msg.translation.y,
+        transform_msg.translation.z));
+
+    tf_transform.setRotation(tf2::Quaternion(
+        transform_msg.rotation.x,
+        transform_msg.rotation.y,
+        transform_msg.rotation.z,
+        transform_msg.rotation.w));
+
+    return tf_transform;
+}
+
 // Combines 2 quaternions into a single quaternion
 geometry_msgs::msg::Quaternion combineQuaternions(const geometry_msgs::msg::Quaternion& quaternion1, const geometry_msgs::msg::Quaternion& quaternion2) {
     tf2::Quaternion tf_quat1, tf_quat2;
@@ -120,6 +155,27 @@ geometry_msgs::msg::Pose add_translation_offset(geometry_msgs::msg::Pose pose, f
 
   return pose;
 }
+
+// Converts pose of end effector to pose of robot link, given tranformation between them
+geometry_msgs::msg::Pose computeDesiredLinkPose(geometry_msgs::msg::Pose desired_end_effector_pose, geometry_msgs::msg::Transform ee_to_link_transform) {
+    // Convert the end effector pose to a transform
+    tf2::Transform tf_desired_end_effector_pose;
+    convertTfFromMsg(desired_end_effector_pose, tf_desired_end_effector_pose);
+
+    // Convert the transform from end effector to link to tf2::Transform
+    tf2::Transform tf_ee_to_link_transform;
+    convertTfFromMsg(ee_to_link_transform, tf_ee_to_link_transform);
+
+    // Apply the transform to get the desired link pose in the end effector frame
+    tf2::Transform tf_desired_link_pose = tf_desired_end_effector_pose * tf_ee_to_link_transform;
+
+    // Convert the result back to geometry_msgs::msg::Pose
+    geometry_msgs::msg::Pose desired_link_pose;
+    convertTftoMsg(tf_desired_link_pose, desired_link_pose);
+
+    return desired_link_pose;
+}
+
 
 /////////////////////////////////////////////////////////////////////
 //                  MOVEIT_TRAJECTORY CLASS MEMBERS                //
@@ -184,6 +240,50 @@ moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
     move_group_interface->getRobotModel());
   visual_tools_->deleteAllMarkers();
   visual_tools_->loadRemoteControl();
+}
+
+/////////////////////////////////////////////////////////////////////
+//                           TRANSFORMATIONS                       //
+/////////////////////////////////////////////////////////////////////
+
+geometry_msgs::msg::Transform moveit_trajectory::create_cutter_to_link_tf() {
+    geometry_msgs::msg::Transform pizza_cutter_to_link;
+
+    // Set the translation in the end effector local frame
+    pizza_cutter_to_link.translation.x = -0.1;  // -0.1 in the X direction
+
+    // Set the orientation (assuming it's the same as the end effector orientation)
+    // Replace the values below with your actual orientation
+    tf2::Quaternion orientation;
+    orientation.setRPY(0.0, 0.0, 0.0);  // Assuming no rotation
+    pizza_cutter_to_link.rotation.x = orientation.x();
+    pizza_cutter_to_link.rotation.y = orientation.y();
+    pizza_cutter_to_link.rotation.z = orientation.z();
+    pizza_cutter_to_link.rotation.w = orientation.w();
+
+    // Set the frame IDs
+    pizza_cutter_to_link.header.frame_id = "cutting_tool_frame";
+    pizza_cutter_to_link.child_frame_id = "link_frame";
+}
+
+geometry_msgs::msg::Transform moveit_trajectory::create_server_to_link_tf() {
+    geometry_msgs::msg::Transform pizza_server_to_link;
+
+    // Set the translation in the end effector local frame
+    pizza_server_to_link.translation.x = -0.1;  // -0.1 in the X direction
+
+    // Set the orientation (assuming it's the same as the end effector orientation)
+    // Replace the values below with your actual orientation
+    tf2::Quaternion orientation;
+    orientation.setRPY(0.0, 0.0, 0.0);  // Assuming no rotation
+    pizza_server_to_link.rotation.x = orientation.x();
+    pizza_server_to_link.rotation.y = orientation.y();
+    pizza_server_to_link.rotation.z = orientation.z();
+    pizza_server_to_link.rotation.w = orientation.w();
+
+    // Set the frame IDs
+    pizza_server_to_link.header.frame_id = "serving_tool_frame";
+    pizza_server_to_link.child_frame_id = "link_frame";
 }
 
 /////////////////////////////////////////////////////////////////////
