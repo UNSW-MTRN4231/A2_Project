@@ -42,6 +42,18 @@ private:
     void image_callback(const sensor_msgs::msg::Image::SharedPtr msg)
     {
         current_image_ = cv_bridge::toCvCopy(msg, "bgr8")->image;
+
+        if (current_image_.empty()) {
+            RCLCPP_WARN(this->get_logger(), "No image data yet.");
+            return;
+        }
+        cv::Mat image_with_circle = current_image_.clone();
+        cv::circle(image_with_circle, last_centroid_point_+robot_arm_position_, 5, cv::Scalar(0, 0, 255), -1); // centroid
+        cv::line(image_with_circle, last_centroid_point_+robot_arm_position_, radius_end, cv::Scalar(255, 0, 0), 2); // radius line
+        auto image_msg = cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", image_with_circle).toImageMsg();
+        image_publisher_->publish(*image_msg);
+        centroid_publisher_->publish(centroid_msg);
+        radius_publisher_->publish(radius_msg);
     }
 
     void operation_command_callback(const std_msgs::msg::String::SharedPtr msg)
