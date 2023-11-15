@@ -97,10 +97,10 @@ private:
                 }
             }
         }
-        centroid_msg.x = last_centroid_point_.y/1000;
-        centroid_msg.y = last_centroid_point_.x/1000;
+        centroid_msg.x = last_centroid_point_.y/1000.0;
+        centroid_msg.y = last_centroid_point_.x/1000.0;
         centroid_msg.z = 0.05;
-        radius_msg.data = avg_radius/1000;
+        radius_msg.data = avg_radius/1000.0;
         cv::Mat image_with_circle = current_image_.clone();
         cv::circle(image_with_circle, last_centroid_point_ + robot_arm_position_, 5, cv::Scalar(0, 0, 255), -1); // centroid
         cv::line(image_with_circle, last_centroid_point_ + robot_arm_position_, radius_end + robot_arm_position_, cv::Scalar(255, 0, 0), 2); // radius line

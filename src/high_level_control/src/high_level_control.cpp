@@ -4,6 +4,12 @@
 //                              HELPERS                            //
 /////////////////////////////////////////////////////////////////////
 
+// Sleeps thread for a given number of seconds
+void wait(int t) {
+  std::chrono::seconds duration(t);
+  std::this_thread::sleep_for(duration);
+  return;
+}
 
 /////////////////////////////////////////////////////////////////////
 //                 HIGH_LEVEL_CONTROL CLASS MEMBERS                //
@@ -58,6 +64,8 @@ void high_level_control::execute_next_operation() {
   std_msgs::msg::String msg;
   msg.data = "Current operation: " + operation_sequence.at(0);
   gui_text_publisher_->publish(msg);
+
+  wait(2);
 
   // Publish operation command
   msg.data = operation_sequence.at(0);

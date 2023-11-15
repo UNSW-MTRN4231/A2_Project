@@ -1,23 +1,22 @@
 <launch>
 <!-- IMAGE WARPER NODES  -->
-  <node pkg="image_warper" exec="aruco_detector" name="aruco_dectector_node" namespace="A2"/>
-  <node pkg="image_warper" exec="image_warper" name="image_warper_node" namespace="A2"/>
-  <node pkg="pizza_estimation" exec="pizza_estimation" name="pizza_estimation_node" namespace="A2"/>
+  <node pkg="image_warper" exec="aruco_detector" name="aruco_dectector_node"/>
+  <node pkg="image_warper" exec="image_warper" name="image_warper_node"/>
+  <node pkg="pizza_estimation" exec="pizza_estimation" name="pizza_estimation_node"/>
   <!-- <node pkg="yolov8_bringup" exec="yolov8.launch.py" name="yolo_node" namespace="A2"/> -->
 
   <!-- --> 
-  <node pkg="util_arduino_serial" exec="util_arduino_serial" name="util_arduino_serial_node" namespace="A2"/>
+  <node pkg="util_arduino_serial" exec="util_arduino_serial" name="util_arduino_serial_node"/>
   <!-- <node pkg="moveit_ur" exec="moveit_trajectory" name="moveit_ur_node" namespace="A2"/> -->
-  <node pkg="high_level_control" exec="high_level_control" name="high_level_node" namespace="A2"/>
-  <node pkg="util_keyboard" exec="util_keyboard" name="util_keyboard_node" namespace="A2"/>
+  <node pkg="high_level_control" exec="high_level_control" name="high_level_node"/>
+  <node pkg="util_keyboard" exec="util_keyboard" name="util_keyboard_node"/>
 
   <!-- Include the moveit_ur launch file -->
     <include file="../src/moveit_ur/launch/moveit_trajectory_launch.py">
-        <arg name="namespace" value="A2"/>
     </include>
  
   
-  <node pkg="v4l2_camera" exec="v4l2_camera_node" name="camera_node" namespace="A2">
+  <node pkg="v4l2_camera" exec="v4l2_camera_node" name="camera_node">
     <param name="video_device" value="/dev/video0"/>
   </node>
 
