@@ -22,14 +22,6 @@ high_level_control::high_level_control() : Node("high_level_control") {
   sub_options_status.callback_group = status_cb_group;
 
   // Subscriptions
-  pizza_radius_subscription_ = this->create_subscription<std_msgs::msg::Float32>(
-    "pizza_radius", 10, std::bind(&high_level_control::pizza_radius_callback, this, std::placeholders::_1),sub_options_status);
-  pizza_pose_subscription_ = this->create_subscription<geometry_msgs::msg::Pose>(
-    "pizza_pose", 10, std::bind(&high_level_control::pizza_pose_callback, this, std::placeholders::_1),sub_options_status);
-  plate_pose_subscription_ = this->create_subscription<geometry_msgs::msg::Pose>(
-    "plate_pose", 10, std::bind(&high_level_control::plate_pose_callback, this, std::placeholders::_1),sub_options_status);
-  tool_jig_pose_subscription_ = this->create_subscription<geometry_msgs::msg::Pose>(
-    "tool_jig_pose", 10, std::bind(&high_level_control::tool_jig_pose_callback, this, std::placeholders::_1),sub_options_status);
   operation_status_subscription_ = this->create_subscription<std_msgs::msg::String>(
     "operation_status", 10, std::bind(&high_level_control::operation_status_callback, this, std::placeholders::_1),sub_options_status);
   keyboard_input_subscription_ = this->create_subscription<std_msgs::msg::String>(
@@ -74,45 +66,9 @@ void high_level_control::execute_next_operation() {
   operation_sequence_mutex.unlock();
 }
 
-// Checks if pizza radius and pose are set, and publishes a message to /operation_status
-void high_level_control::update_detection_status() {
-  if (pizza_radius_is_set && pizza_pose_is_set && plate_pose_is_set && tool_jig_pose_is_set && !detection_is_complete) {
-    detection_is_complete = true;
-
-    // Publish message // TODO get computer vision to do this
-    std_msgs::msg::String msg;
-    msg.data = "Detect Complete";
-    operation_status_publisher_->publish(msg);
-  }
-}
-
 /////////////////////////////////////////////////////////////////////
 //                      SUBSCRIPTION CALLBACKS                     //
 /////////////////////////////////////////////////////////////////////
-
-void high_level_control::pizza_radius_callback(std_msgs::msg::Float32 radius) {
-  pizza_radius_is_set = true;
-  update_detection_status();
-  return;
-}
-
-void high_level_control::pizza_pose_callback(geometry_msgs::msg::Pose pose) {
-  pizza_pose_is_set = true;
-  update_detection_status();
-  return;
-}
-
-void high_level_control::plate_pose_callback(geometry_msgs::msg::Pose pose) {
-  plate_pose_is_set = true;
-  update_detection_status();
-  return;
-}
-
-void high_level_control::tool_jig_pose_callback(geometry_msgs::msg::Pose pose) {
-  tool_jig_pose_is_set = true;
-  update_detection_status();
-  return;
-}
 
 void high_level_control::operation_status_callback(std_msgs::msg::String status) {
 

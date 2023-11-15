@@ -8,7 +8,7 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/string.hpp>
-#include <std_msgs/msg/float32.hpp>
+#include <std_msgs/msg/float64.hpp>
 #include <geometry_msgs/msg/pose.hpp>
 #include <geometry_msgs/msg/point.hpp>
 #include <geometry_msgs/msg/quaternion.hpp>
@@ -66,10 +66,10 @@ class moveit_trajectory : public rclcpp::Node
     void joint_states_callback(sensor_msgs::msg::JointState joint_state_msg);
     void operation_command_callback(std_msgs::msg::String operation_command);
     void operation_status_callback(std_msgs::msg::String operation_status);
-    void pizza_radius_callback(std_msgs::msg::Float32 pizza_radius);
-    void pizza_pose_callback(geometry_msgs::msg::Pose pizza_pose);
+    void pizza_radius_callback(std_msgs::msg::Float64 pizza_radius);
+    void pizza_centroid_callback(geometry_msgs::msg::Point pizza_centroid);
     void tool_jig_pose_callback(geometry_msgs::msg::Pose tool_jig_pose);
-    void plate_pose_callback(geometry_msgs::msg::Pose plate_pose);
+    void plate_centroid_callback(geometry_msgs::msg::Point plate_centroid);
 
     /////////////////////////////////////////////////////////////////////
     //                            VARIABLES                            //
@@ -106,14 +106,14 @@ class moveit_trajectory : public rclcpp::Node
 
     // Subscriptions
     rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr joint_states_subscription_;
-    rclcpp::Subscription<std_msgs::msg::Float32>::SharedPtr pizza_radius_subscription_;
-    rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr pizza_pose_subscription_;
-    rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr plate_pose_subscription_;
+    rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr pizza_radius_subscription_;
+    rclcpp::Subscription<geometry_msgs::msg::Point>::SharedPtr pizza_centroid_subscription_;
+    rclcpp::Subscription<geometry_msgs::msg::Point>::SharedPtr plate_centroid_subscription_;
     rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr tool_jig_pose_subscription_;
     rclcpp::Subscription<std_msgs::msg::String>::SharedPtr operation_command_subscription_;
 
     // Stored variables from messages
-    std_msgs::msg::Float32 pizza_radius;
+    std_msgs::msg::Float64 pizza_radius;
     geometry_msgs::msg::Pose pizza_pose;
     geometry_msgs::msg::Pose plate_pose;
     geometry_msgs::msg::Pose tool_jig_pose;

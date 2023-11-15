@@ -147,12 +147,12 @@ moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
     "joint_states", 10, std::bind(&moveit_trajectory::joint_states_callback, this, std::placeholders::_1), sub_options_state);
   operation_command_subscription_ = this->create_subscription<std_msgs::msg::String>(
     "operation_command", 10, std::bind(&moveit_trajectory::operation_command_callback, this, std::placeholders::_1),sub_options_operation);
-  pizza_radius_subscription_ = this->create_subscription<std_msgs::msg::Float32>(
+  pizza_radius_subscription_ = this->create_subscription<std_msgs::msg::Float64>(
     "pizza_radius", 10, std::bind(&moveit_trajectory::pizza_radius_callback, this, std::placeholders::_1),sub_options_detection);
-  pizza_pose_subscription_ = this->create_subscription<geometry_msgs::msg::Pose>(
-    "pizza_pose", 10, std::bind(&moveit_trajectory::pizza_pose_callback, this, std::placeholders::_1),sub_options_detection);
-  plate_pose_subscription_ = this->create_subscription<geometry_msgs::msg::Pose>(
-    "plate_pose", 10, std::bind(&moveit_trajectory::plate_pose_callback, this, std::placeholders::_1),sub_options_detection);
+  pizza_centroid_subscription_ = this->create_subscription<geometry_msgs::msg::Point>(
+    "pizza_centroid", 10, std::bind(&moveit_trajectory::pizza_centroid_callback, this, std::placeholders::_1),sub_options_detection);
+  plate_centroid_subscription_ = this->create_subscription<geometry_msgs::msg::Point>(
+    "plate_centroid", 10, std::bind(&moveit_trajectory::plate_centroid_callback, this, std::placeholders::_1),sub_options_detection);
   tool_jig_pose_subscription_ = this->create_subscription<geometry_msgs::msg::Pose>(
     "tool_jig_pose", 10, std::bind(&moveit_trajectory::tool_jig_pose_callback, this, std::placeholders::_1),sub_options_detection);
 
@@ -792,16 +792,17 @@ void moveit_trajectory::joint_states_callback(sensor_msgs::msg::JointState joint
 }
 
 // Callback for /pizza_radius
-void moveit_trajectory::pizza_radius_callback(std_msgs::msg::Float32 pizza_radius) {
+void moveit_trajectory::pizza_radius_callback(std_msgs::msg::Float64 pizza_radius) {
   RCLCPP_INFO(this->get_logger(), "Pizza radius set");
   this->pizza_radius = pizza_radius;
 }
 
-// Callback for /pizza_pose
-void moveit_trajectory::pizza_pose_callback(geometry_msgs::msg::Pose pizza_pose) {
+// Callback for /pizza_centroid
+void moveit_trajectory::pizza_centroid_callback(geometry_msgs::msg::Point pizza_centroid) {
   // Set pizza pose
   RCLCPP_INFO(this->get_logger(), "Pizza pose set");
-  this->pizza_pose = pizza_pose;
+  this->pizza_pose.position = pizza_centroid;
+  this->pizza_pose.orientation = RPYToQuaternion(0,M_PI,0);
 
   // Update centre pose (above pizza)
   centre_pose = pizza_pose;
@@ -812,9 +813,10 @@ void moveit_trajectory::pizza_pose_callback(geometry_msgs::msg::Pose pizza_pose)
 }
 
 // Callback for /plate_pose
-void moveit_trajectory::plate_pose_callback(geometry_msgs::msg::Pose plate_pose) {
+void moveit_trajectory::plate_centroid_callback(geometry_msgs::msg::Point plate_centroid) {
   RCLCPP_INFO(this->get_logger(), "Plate pose set");
-  this->plate_pose = plate_pose;
+  this->plate_pose.position = plate_centroid;
+  this->plate_pose.orientation = RPYToQuaternion(0,M_PI,0);
 }
 
 // Callback for /tool_jig_pose
