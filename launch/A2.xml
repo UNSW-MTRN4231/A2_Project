@@ -8,10 +8,15 @@
   <!-- --> 
   <node pkg="util_arduino_serial" exec="util_arduino_serial" name="util_arduino_serial_node" namespace="A2"/>
   <node pkg="moveit_ur" exec="moveit_trajectory" name="moveit_ur_node" namespace="A2"/>
+  <node pkg="high_level_control" exec="high_level_control" name="high_level_node" namespace="A2"/>
+  <node pkg="util_keyboard" exec="util_keyboard" name="util_keyboard_node" namespace="A2"/>
  
+  
   <node pkg="v4l2_camera" exec="v4l2_camera_node" name="camera_node" namespace="A2">
     <param name="video_device" value="/dev/video0"/>
   </node>
+
+    <!-- ros2 launch ur_moveit_config ur_moveit.launch.py robot_ip:=192.168.0.100 ur_type:=ur5e launch_rviz:=true -->
 
 
   <!-- <node pkg="image_warper" exec="ImagePublisher" name="image_publisher_node" namespace="A2"/>
