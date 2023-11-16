@@ -14,6 +14,7 @@ find_package(control_msgs REQUIRED)
 find_package(controller_manager_msgs REQUIRED)
 find_package(std_srvs)
 find_package(std_msgs REQUIRED)
+find_package(shape_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
@@ -27,6 +28,7 @@ ament_target_dependencies(
   moveit_trajectory
   "moveit_ros_planning_interface"
   "std_msgs"
+  "shape_msgs"
   "moveit_visual_tools"
   "rclcpp"
   "tf2"
@@ -40,7 +42,7 @@ DESTINATION lib/${PROJECT_NAME})
 
 # Install launch files.
 install(DIRECTORY
-  launch
+  launch meshes
   DESTINATION share/${PROJECT_NAME}/
 )
 

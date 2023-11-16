@@ -12,6 +12,8 @@
 #include <geometry_msgs/msg/vector3.hpp>
 #include <tf2/LinearMath/Quaternion.h>
 #include <moveit_msgs/msg/display_robot_state.hpp>
+#include <geometric_shapes/shape_operations.h>
+#include <shape_msgs/msg/mesh.hpp>
 
 using rclcpp::executors::MultiThreadedExecutor;
 
@@ -44,6 +46,103 @@ auto generateCollisionObject(float sx,float sy, float sz, float x, float y, floa
 
   return collision_object;
 }
+
+auto generateMeshGripperObject(std::string frame_id,std::string id) {
+  moveit_msgs::msg::CollisionObject collision_object;
+  collision_object.header.frame_id = frame_id;
+  collision_object.id = id;
+  shapes::Mesh* m = shapes::createMeshFromResource("file:///home/mtrn/4231/projec/src/moveit_ur/meshes/MTRN4231Base.STL");
+  
+  //RCLCPP_INFO(this->get_logger(),"Pizza Cutter loaded");
+
+  shape_msgs::msg::Mesh mesh;
+  shapes::ShapeMsg mesh_msg;  
+  shapes::constructMsgFromShape(m, mesh_msg);
+  mesh = boost::get<shape_msgs::msg::Mesh>(mesh_msg);
+
+  collision_object.meshes.resize(1);
+  collision_object.mesh_poses.resize(1);
+  collision_object.meshes[0] = mesh;
+  collision_object.header.frame_id = "gripper";   
+  collision_object.mesh_poses[0].position.x = 0.6;
+  collision_object.mesh_poses[0].position.y = 0.6;
+  collision_object.mesh_poses[0].position.z = 0.5;
+  collision_object.mesh_poses[0].orientation.w= 0.0; 
+  collision_object.mesh_poses[0].orientation.x= 0.0; 
+  collision_object.mesh_poses[0].orientation.y= 0.0;
+  collision_object.mesh_poses[0].orientation.z= 0.0;
+
+  collision_object.meshes.push_back(mesh);
+  collision_object.mesh_poses.push_back(collision_object.mesh_poses[0]);
+  collision_object.operation = collision_object.ADD;
+
+  return collision_object;
+}
+
+uto generateMeshCutterObject(std::string frame_id,std::string id) {
+  moveit_msgs::msg::CollisionObject collision_object;
+  collision_object.header.frame_id = frame_id;
+  collision_object.id = id;
+  shapes::Mesh* m = shapes::createMeshFromResource("file:///home/mtrn/4231/projec/src/moveit_ur/meshes/MTRN4231Base.STL");
+  
+  //RCLCPP_INFO(this->get_logger(),"Pizza Cutter loaded");
+
+  shape_msgs::msg::Mesh mesh;
+  shapes::ShapeMsg mesh_msg;  
+  shapes::constructMsgFromShape(m, mesh_msg);
+  mesh = boost::get<shape_msgs::msg::Mesh>(mesh_msg);
+
+  collision_object.meshes.resize(1);
+  collision_object.mesh_poses.resize(1);
+  collision_object.meshes[0] = mesh;
+  collision_object.header.frame_id = "cutter";   
+  collision_object.mesh_poses[0].position.x = 1;
+  collision_object.mesh_poses[0].position.y = 1;
+  collision_object.mesh_poses[0].position.z = 0.5;
+  collision_object.mesh_poses[0].orientation.w= 0.0; 
+  collision_object.mesh_poses[0].orientation.x= 0.0; 
+  collision_object.mesh_poses[0].orientation.y= 0.0;
+  collision_object.mesh_poses[0].orientation.z= 0.0;
+
+  collision_object.meshes.push_back(mesh);
+  collision_object.mesh_poses.push_back(collision_object.mesh_poses[0]);
+  collision_object.operation = collision_object.ADD;
+
+  return collision_object;
+}
+
+uto generateMeshSpatulaObject(std::string frame_id,std::string id) {
+  moveit_msgs::msg::CollisionObject collision_object;
+  collision_object.header.frame_id = frame_id;
+  collision_object.id = id;
+  shapes::Mesh* m = shapes::createMeshFromResource("file:///home/mtrn/4231/projec/src/moveit_ur/meshes/MTRN4231Base.STL");
+  
+  //RCLCPP_INFO(this->get_logger(),"Pizza Cutter loaded");
+
+  shape_msgs::msg::Mesh mesh;
+  shapes::ShapeMsg mesh_msg;  
+  shapes::constructMsgFromShape(m, mesh_msg);
+  mesh = boost::get<shape_msgs::msg::Mesh>(mesh_msg);
+
+  collision_object.meshes.resize(1);
+  collision_object.mesh_poses.resize(1);
+  collision_object.meshes[0] = mesh;
+  collision_object.header.frame_id = "spatula";   
+  collision_object.mesh_poses[0].position.x = 1.3;
+  collision_object.mesh_poses[0].position.y = 1.3;
+  collision_object.mesh_poses[0].position.z = 0.5;
+  collision_object.mesh_poses[0].orientation.w= 0.0; 
+  collision_object.mesh_poses[0].orientation.x= 0.0; 
+  collision_object.mesh_poses[0].orientation.y= 0.0;
+  collision_object.mesh_poses[0].orientation.z= 0.0;
+
+  collision_object.meshes.push_back(mesh);
+  collision_object.mesh_poses.push_back(collision_object.mesh_poses[0]);
+  collision_object.operation = collision_object.ADD;
+
+  return collision_object;
+}
+
 
 // Sleeps thread for a given number of seconds
 void wait(int t) {
@@ -135,19 +234,25 @@ moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
   move_group_interface->setPlannerId("RRTConnectkConfigDefault");
   move_group_interface->setPlanningTime(10.0);
   move_group_interface->setNumPlanningAttempts(10);
-  move_group_interface->setMaxVelocityScalingFactor(0.1);
+  move_group_interface->setMaxVelocityScalingFactor(0.05);
   std::string frame_id = move_group_interface->getPlanningFrame();
 
   // Define collision objects (size, pos, frame, id)
   auto col_object_table = generateCollisionObject( 2.4, 1.2, 0.04, 0.85, 0.25, -0.03, frame_id, "table");
   auto col_object_backWall = generateCollisionObject( 2.4, 0.04, 1.0, 0.85, -0.45, 0.5, frame_id, "backWall");
   auto col_object_sideWall = generateCollisionObject( 0.04, 1.2, 1.0, -0.45, 0.25, 0.5, frame_id, "sideWall");
+  auto col_object_gripper = generateMeshGripperObject(frame_id,"gripper");
+  auto col_object_cutter = generateMeshCutterObject(frame_id,"cutter");
+  auto col_object_spatula = generateMeshSpatulaObject(frame_id,"spatula");
 
   // Add collision objects to planning scene
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
   planning_scene_interface.applyCollisionObject(col_object_table);
   planning_scene_interface.applyCollisionObject(col_object_backWall);
   planning_scene_interface.applyCollisionObject(col_object_sideWall);
+  planning_scene_interface.applyCollisionObject(col_object_gripper);
+  planning_scene_interface.applyCollisionObject(col_object_cutter);
+  planning_scene_interface.applyCollisionObject(col_object_spatula);
 
   // Instantiate visualization tool
   visual_tools_ = std::make_unique<moveit_visual_tools::MoveItVisualTools>(
@@ -334,7 +439,8 @@ void moveit_trajectory::cut_pizza() {
     RCLCPP_INFO(this->get_logger(), "Executing cut");
     follow_path_cartesian(waypoints, "Cutting Path");
 
-    wait(5);
+    std::cout<<"execute() returned"<<std::endl;
+    wait(3);
   }
 
   return;
