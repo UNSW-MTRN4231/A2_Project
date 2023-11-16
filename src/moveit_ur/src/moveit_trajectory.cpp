@@ -90,7 +90,40 @@ void convertTF2ToGeometryMsgs(const tf2::Quaternion& tf_quat, geometry_msgs::msg
     geometry_quat.w = tf_quat.w();
 }
 
-geometry_msgs::msg::Transform convertTftoMsg(tf2::Transform tf_transform) {
+geometry_msgs::msg::Pose convertTfToPose(tf2::Transform tf_transform)
+{
+    geometry_msgs::msg::Pose pose_msg;
+
+    // Translation
+    pose_msg.position.x = tf_transform.getOrigin().getX();
+    pose_msg.position.y = tf_transform.getOrigin().getY();
+    pose_msg.position.z = tf_transform.getOrigin().getZ();
+
+    // Rotation
+    tf2::Quaternion tf_quaternion = tf_transform.getRotation();
+    pose_msg.orientation.x = tf_quaternion.getX();
+    pose_msg.orientation.y = tf_quaternion.getY();
+    pose_msg.orientation.z = tf_quaternion.getZ();
+    pose_msg.orientation.w = tf_quaternion.getW();
+
+    return pose_msg;
+}
+
+tf2::Transform convertTfFromPose(geometry_msgs::msg::Pose pose_msg)
+{
+    tf2::Transform tf_transform;
+
+    // Translation
+    tf_transform.setOrigin(tf2::Vector3(pose_msg.position.x, pose_msg.position.y, pose_msg.position.z));
+
+    // Rotation
+    tf2::Quaternion tf_quaternion(pose_msg.orientation.x, pose_msg.orientation.y, pose_msg.orientation.z, pose_msg.orientation.w);
+    tf_transform.setRotation(tf_quaternion);
+
+    return tf_transform;
+}
+
+geometry_msgs::msg::Transform convertTfToMsg(tf2::Transform tf_transform) {
     geometry_msgs::msg::Transform transform_msg;
 
     transform_msg.translation.x = tf_transform.getOrigin().getX();
@@ -160,18 +193,18 @@ geometry_msgs::msg::Pose add_translation_offset(geometry_msgs::msg::Pose pose, f
 geometry_msgs::msg::Pose computeDesiredLinkPose(geometry_msgs::msg::Pose desired_end_effector_pose, geometry_msgs::msg::Transform ee_to_link_transform) {
     // Convert the end effector pose to a transform
     tf2::Transform tf_desired_end_effector_pose;
-    convertTfFromMsg(desired_end_effector_pose, tf_desired_end_effector_pose);
+    tf_desired_end_effector_pose = convertTfFromPose(desired_end_effector_pose);
 
     // Convert the transform from end effector to link to tf2::Transform
     tf2::Transform tf_ee_to_link_transform;
-    convertTfFromMsg(ee_to_link_transform, tf_ee_to_link_transform);
+    tf_ee_to_link_transform = convertTfFromMsg(ee_to_link_transform);
 
     // Apply the transform to get the desired link pose in the end effector frame
     tf2::Transform tf_desired_link_pose = tf_desired_end_effector_pose * tf_ee_to_link_transform;
 
     // Convert the result back to geometry_msgs::msg::Pose
     geometry_msgs::msg::Pose desired_link_pose;
-    convertTftoMsg(tf_desired_link_pose, desired_link_pose);
+    desired_link_pose = convertTfToPose(tf_desired_link_pose);
 
     return desired_link_pose;
 }
@@ -240,6 +273,10 @@ moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
     move_group_interface->getRobotModel());
   visual_tools_->deleteAllMarkers();
   visual_tools_->loadRemoteControl();
+
+  // Generate transforms
+  create_cutter_to_link_tf();
+  create_server_to_link_tf();
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -247,43 +284,51 @@ moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
 /////////////////////////////////////////////////////////////////////
 
 geometry_msgs::msg::Transform moveit_trajectory::create_cutter_to_link_tf() {
-    geometry_msgs::msg::Transform pizza_cutter_to_link;
 
     // Set the translation in the end effector local frame
-    pizza_cutter_to_link.translation.x = -0.1;  // -0.1 in the X direction
+    cutter_to_link_tf.translation.z = -0.1;
 
-    // Set the orientation (assuming it's the same as the end effector orientation)
-    // Replace the values below with your actual orientation
+    // Set the orientation
     tf2::Quaternion orientation;
     orientation.setRPY(0.0, 0.0, 0.0);  // Assuming no rotation
-    pizza_cutter_to_link.rotation.x = orientation.x();
-    pizza_cutter_to_link.rotation.y = orientation.y();
-    pizza_cutter_to_link.rotation.z = orientation.z();
-    pizza_cutter_to_link.rotation.w = orientation.w();
-
-    // Set the frame IDs
-    pizza_cutter_to_link.header.frame_id = "cutting_tool_frame";
-    pizza_cutter_to_link.child_frame_id = "link_frame";
+    cutter_to_link_tf.rotation.x = orientation.x();
+    cutter_to_link_tf.rotation.y = orientation.y();
+    cutter_to_link_tf.rotation.z = orientation.z();
+    cutter_to_link_tf.rotation.w = orientation.w();
 }
 
 geometry_msgs::msg::Transform moveit_trajectory::create_server_to_link_tf() {
-    geometry_msgs::msg::Transform pizza_server_to_link;
 
     // Set the translation in the end effector local frame
-    pizza_server_to_link.translation.x = -0.1;  // -0.1 in the X direction
+    server_to_link_tf.translation.x = -0.25;
+    server_to_link_tf.translation.z = 0.075;
 
-    // Set the orientation (assuming it's the same as the end effector orientation)
-    // Replace the values below with your actual orientation
+    // Set the orientation
     tf2::Quaternion orientation;
-    orientation.setRPY(0.0, 0.0, 0.0);  // Assuming no rotation
-    pizza_server_to_link.rotation.x = orientation.x();
-    pizza_server_to_link.rotation.y = orientation.y();
-    pizza_server_to_link.rotation.z = orientation.z();
-    pizza_server_to_link.rotation.w = orientation.w();
+    orientation.setRPY(0.0, 0.349066+M_PI/2, 0.0); // ~20 deg pitch
+    server_to_link_tf.rotation.x = orientation.x();
+    server_to_link_tf.rotation.y = orientation.y();
+    server_to_link_tf.rotation.z = orientation.z();
+    server_to_link_tf.rotation.w = orientation.w();
+}
 
-    // Set the frame IDs
-    pizza_server_to_link.header.frame_id = "serving_tool_frame";
-    pizza_server_to_link.child_frame_id = "link_frame";
+std::vector<geometry_msgs::msg::Pose> moveit_trajectory::convert_waypoints(std::vector<geometry_msgs::msg::Pose> waypoints, std::string frame) {
+  // Set frame transform
+  geometry_msgs::msg::Transform  frame_tf;
+  if (frame == "cutter") {
+    frame_tf = cutter_to_link_tf;
+  } else if (frame == "server") {
+    frame_tf = server_to_link_tf;
+  }
+
+  std::vector<geometry_msgs::msg::Pose> converted_waypoints;
+
+  // Convert waypoints
+  for (size_t i=0; i<waypoints.size(); i++) {
+    converted_waypoints.push_back(computeDesiredLinkPose(waypoints.at(i), frame_tf));
+  }
+
+  return converted_waypoints;
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -524,6 +569,9 @@ void moveit_trajectory::cut_pizza() {
     waypoints.push_back(above_cut_end);
     waypoints.push_back(centre_pose);
 
+    // Convert waypoints from cutter to robot link frame
+    waypoints = convert_waypoints(waypoints, "cutter");
+
     // Execute path
     RCLCPP_INFO(this->get_logger(), "Executing cut");
     follow_path_cartesian(waypoints, "Cutting Path");
@@ -591,6 +639,9 @@ void moveit_trajectory::pick_slice() {
   waypoints.push_back(above_pick_end);
   waypoints.push_back(centre_rotated_pose);
 
+  // Convert waypoints from server to robot link frame
+  waypoints = convert_waypoints(waypoints, "server");
+
   // Execute path
   RCLCPP_INFO(this->get_logger(), "Executing pick");
   follow_path_cartesian(waypoints, "Pick path");
@@ -650,6 +701,9 @@ void moveit_trajectory::place_slice() {
   waypoints.push_back(incline);
   waypoints.push_back(slide_out);
   waypoints.push_back(centre_rotated_pose);
+
+  // Convert waypoints from server to robot link frame
+  waypoints = convert_waypoints(waypoints, "server");
 
   // Execute path
   RCLCPP_INFO(this->get_logger(), "Placing slice");
@@ -933,7 +987,6 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
 {
   // Planning
   if (operation_command.data == "Plan Trajectories") {
-    draw_title("Planning_Trajectories");
     RCLCPP_INFO(this->get_logger(), "Planning Trajectories");
 
     // Visualize detections
@@ -962,7 +1015,6 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
   // Pick cutting tool
   if (operation_command.data == "Pick Cutting Tool") {
     RCLCPP_INFO(this->get_logger(), "Picking Cutting Tool");
-    draw_title("Pick_Cutting_Tool");
     pick_cutting_tool();
 
     // Publish to /operation_status
@@ -974,7 +1026,6 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
   // Cutting
   if (operation_command.data == "Cut") {
     RCLCPP_INFO(this->get_logger(), "Cutting");
-    draw_title("Cutting");
     cut_pizza();
 
     // Publish to /operation_status
@@ -986,7 +1037,6 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
   // Pick cutting tool
   if (operation_command.data == "Place Cutting Tool") {
     RCLCPP_INFO(this->get_logger(), "Placing Cutting Tool");
-    draw_title("Place_Cutting_Tool");
     place_cutting_tool();
 
     // Publish to /operation_status
@@ -998,7 +1048,6 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
   // Pick serving tool
   if (operation_command.data == "Pick Serving Tool") {
     RCLCPP_INFO(this->get_logger(), "Picking Serving Tool");
-    draw_title("Pick_Serving_Tool");
     pick_serving_tool();
 
     // Publish to /operation_status
@@ -1010,7 +1059,6 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
   // Picking slice
   if (operation_command.data == "Pick Slice") {
     RCLCPP_INFO(this->get_logger(), "Picking Slice");
-    draw_title("Picking_Slice");
     pick_slice();
 
     // Publish to /operation_status
@@ -1022,7 +1070,6 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
   // Placing Slice
   if (operation_command.data == "Place Slice") {
     RCLCPP_INFO(this->get_logger(), "Placing Slice");
-    draw_title("Placing_Slice");
     place_slice();
 
     // Publish to /operation_status
@@ -1034,7 +1081,6 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
   // Place serving tool
   if (operation_command.data == "Place Serving Tool") {
     RCLCPP_INFO(this->get_logger(), "Placinging Serving Tool");
-    draw_title("Place_Serving_Tool");
     place_serving_tool();
 
     // Publish to /operation_status

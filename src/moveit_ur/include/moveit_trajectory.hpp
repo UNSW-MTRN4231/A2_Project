@@ -35,6 +35,7 @@ class moveit_trajectory : public rclcpp::Node
     // Transformations
     geometry_msgs::msg::Transform create_cutter_to_link_tf();
     geometry_msgs::msg::Transform create_server_to_link_tf();
+    std::vector<geometry_msgs::msg::Pose> convert_waypoints(std::vector<geometry_msgs::msg::Pose> waypoints, std::string frame);
 
     // Basic movement
     void follow_path_cartesian(std::vector<geometry_msgs::msg::Pose> waypoints, std::string ns);
@@ -84,11 +85,12 @@ class moveit_trajectory : public rclcpp::Node
 
     // Modifiable Trajectory Parameters (WIP - TODO collect all parameters here for easy modification)
     // General
-    float flat_spatula_angle = (2.0/3.0) * M_PI; // Pitch (CCW from vertical) of the end effector for the spatula to be flat
+    // float flat_spatula_angle = (2.0/3.0) * M_PI; // Pitch (CCW from vertical) of the end effector for the spatula to be flat
+    float flat_spatula_angle = 0; // TESTING ONLY
 
     // End effector transforms
-    geometry_msgs::msg::Transform pizza_cutter_to_link;
-    geometry_msgs::msg::Transform pizza_server_to_link;
+    geometry_msgs::msg::Transform cutter_to_link_tf;
+    geometry_msgs::msg::Transform server_to_link_tf;
 
 
     // Serving slice on plate
