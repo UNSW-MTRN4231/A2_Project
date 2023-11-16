@@ -43,13 +43,19 @@ void high_level_control::generate_operation_sequence() {
   operation_sequence.push_back("Detect");
   operation_sequence.push_back("Plan Trajectories");
   operation_sequence.push_back("Pick Cutting Tool");
+  operation_sequence.push_back("Detect");
   operation_sequence.push_back("Cut");
+  operation_sequence.push_back("Detect");
   operation_sequence.push_back("Place Cutting Tool");
+  operation_sequence.push_back("Detect");
   operation_sequence.push_back("Pick Serving Tool");
+  operation_sequence.push_back("Detect");
 
   for (int i=0; i<num_slices; i++){
     operation_sequence.push_back("Pick Slice");
+    operation_sequence.push_back("Detect");
     operation_sequence.push_back("Place Slice");
+    operation_sequence.push_back("Detect");
   }
 
   operation_sequence.push_back("Place Serving Tool");
@@ -82,13 +88,25 @@ void high_level_control::operation_status_callback(std_msgs::msg::String status)
 
   std::lock_guard<std::mutex> lock(operation_sequence_mutex);
 
-  // Publish gui text
+  // Check if status ends with "Fail"
+  bool complete = true;
+  if (status.data.length() >= 4 && status.data.substr(status.data.length() - 4) == "Fail") {
+    complete = false;
+  }
+
+  // Take action depending on complete/fail
   std_msgs::msg::String msg;
-  msg.data = operation_sequence.at(0) + " Complete. Press [space] to continue";
+  if (complete) {
+    msg.data = operation_sequence.at(0) + " Complete. Press [space] to continue";
+    // Remove completed operation from sequence
+    operation_sequence.erase(operation_sequence.begin());
+  } else {
+    msg.data = operation_sequence.at(0) + " Fail. Move objects and press [space] to continue";
+    // Insert detection to allow operator to move objects
+    operation_sequence.insert(operation_sequence.begin(), "Detect");
+  }
   gui_text_publisher_->publish(msg);
 
-  // Remove completed operation from sequence
-  operation_sequence.erase(operation_sequence.begin());
 
   if (operation_sequence.empty()) {
     // Shutdown if sequence is complete
@@ -98,11 +116,8 @@ void high_level_control::operation_status_callback(std_msgs::msg::String status)
     msg.data = "Operation sequence complete, it's time to eat :)";
     gui_text_publisher_->publish(msg);
     rclcpp::shutdown();
-  } else {
-    // Prompt for next operation if sequence is not complete
-    std::string prompt_str = status.data + ". Press space to continue.";
-    RCLCPP_INFO(this->get_logger(), "%s", prompt_str.c_str());
   }
+
   operation_sequence_mutex.unlock();
 
   previous_operation_complete = true;
