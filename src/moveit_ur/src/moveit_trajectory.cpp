@@ -5,11 +5,13 @@
 
 #include "moveit_trajectory.hpp"
 #include "geometry_msgs/msg/transform_stamped.hpp"
+#include "geometry_msgs/msg/transform.hpp"
 
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
 
 #include <geometry_msgs/msg/vector3.hpp>
 #include <tf2/LinearMath/Quaternion.h>
+#include <tf2/LinearMath/Transform.h>
 #include <moveit_msgs/msg/display_robot_state.hpp>
 
 using rclcpp::executors::MultiThreadedExecutor;
@@ -88,6 +90,72 @@ void convertTF2ToGeometryMsgs(const tf2::Quaternion& tf_quat, geometry_msgs::msg
     geometry_quat.w = tf_quat.w();
 }
 
+geometry_msgs::msg::Pose convertTfToPose(tf2::Transform tf_transform)
+{
+    geometry_msgs::msg::Pose pose_msg;
+
+    // Translation
+    pose_msg.position.x = tf_transform.getOrigin().getX();
+    pose_msg.position.y = tf_transform.getOrigin().getY();
+    pose_msg.position.z = tf_transform.getOrigin().getZ();
+
+    // Rotation
+    tf2::Quaternion tf_quaternion = tf_transform.getRotation();
+    pose_msg.orientation.x = tf_quaternion.getX();
+    pose_msg.orientation.y = tf_quaternion.getY();
+    pose_msg.orientation.z = tf_quaternion.getZ();
+    pose_msg.orientation.w = tf_quaternion.getW();
+
+    return pose_msg;
+}
+
+tf2::Transform convertTfFromPose(geometry_msgs::msg::Pose pose_msg)
+{
+    tf2::Transform tf_transform;
+
+    // Translation
+    tf_transform.setOrigin(tf2::Vector3(pose_msg.position.x, pose_msg.position.y, pose_msg.position.z));
+
+    // Rotation
+    tf2::Quaternion tf_quaternion(pose_msg.orientation.x, pose_msg.orientation.y, pose_msg.orientation.z, pose_msg.orientation.w);
+    tf_transform.setRotation(tf_quaternion);
+
+    return tf_transform;
+}
+
+geometry_msgs::msg::Transform convertTfToMsg(tf2::Transform tf_transform) {
+    geometry_msgs::msg::Transform transform_msg;
+
+    transform_msg.translation.x = tf_transform.getOrigin().getX();
+    transform_msg.translation.y = tf_transform.getOrigin().getY();
+    transform_msg.translation.z = tf_transform.getOrigin().getZ();
+
+    tf2::Quaternion tf_quaternion = tf_transform.getRotation();
+    transform_msg.rotation.x = tf_quaternion.x();
+    transform_msg.rotation.y = tf_quaternion.y();
+    transform_msg.rotation.z = tf_quaternion.z();
+    transform_msg.rotation.w = tf_quaternion.w();
+
+    return transform_msg;
+}
+
+tf2::Transform convertTfFromMsg(geometry_msgs::msg::Transform transform_msg) {
+    tf2::Transform tf_transform;
+
+    tf_transform.setOrigin(tf2::Vector3(
+        transform_msg.translation.x,
+        transform_msg.translation.y,
+        transform_msg.translation.z));
+
+    tf_transform.setRotation(tf2::Quaternion(
+        transform_msg.rotation.x,
+        transform_msg.rotation.y,
+        transform_msg.rotation.z,
+        transform_msg.rotation.w));
+
+    return tf_transform;
+}
+
 // Combines 2 quaternions into a single quaternion
 geometry_msgs::msg::Quaternion combineQuaternions(const geometry_msgs::msg::Quaternion& quaternion1, const geometry_msgs::msg::Quaternion& quaternion2) {
     tf2::Quaternion tf_quat1, tf_quat2;
@@ -121,6 +189,27 @@ geometry_msgs::msg::Pose add_translation_offset(geometry_msgs::msg::Pose pose, f
   return pose;
 }
 
+// Converts pose of end effector to pose of robot link, given tranformation between them
+geometry_msgs::msg::Pose computeDesiredLinkPose(geometry_msgs::msg::Pose desired_end_effector_pose, geometry_msgs::msg::Transform ee_to_link_transform) {
+    // Convert the end effector pose to a transform
+    tf2::Transform tf_desired_end_effector_pose;
+    tf_desired_end_effector_pose = convertTfFromPose(desired_end_effector_pose);
+
+    // Convert the transform from end effector to link to tf2::Transform
+    tf2::Transform tf_ee_to_link_transform;
+    tf_ee_to_link_transform = convertTfFromMsg(ee_to_link_transform);
+
+    // Apply the transform to get the desired link pose in the end effector frame
+    tf2::Transform tf_desired_link_pose = tf_desired_end_effector_pose * tf_ee_to_link_transform;
+
+    // Convert the result back to geometry_msgs::msg::Pose
+    geometry_msgs::msg::Pose desired_link_pose;
+    desired_link_pose = convertTfToPose(tf_desired_link_pose);
+
+    return desired_link_pose;
+}
+
+
 /////////////////////////////////////////////////////////////////////
 //                  MOVEIT_TRAJECTORY CLASS MEMBERS                //
 /////////////////////////////////////////////////////////////////////
@@ -149,6 +238,8 @@ moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
     "operation_command", 10, std::bind(&moveit_trajectory::operation_command_callback, this, std::placeholders::_1),sub_options_operation);
   pizza_radius_subscription_ = this->create_subscription<std_msgs::msg::Float64>(
     "pizza_radius", 10, std::bind(&moveit_trajectory::pizza_radius_callback, this, std::placeholders::_1),sub_options_detection);
+  pizza_angle_subscription_ = this->create_subscription<std_msgs::msg::Float64>(
+    "pizza_angle", 10, std::bind(&moveit_trajectory::pizza_angle_callback, this, std::placeholders::_1),sub_options_detection);
   pizza_centroid_subscription_ = this->create_subscription<geometry_msgs::msg::Point>(
     "pizza_centroid", 10, std::bind(&moveit_trajectory::pizza_centroid_callback, this, std::placeholders::_1),sub_options_detection);
   plate_centroid_subscription_ = this->create_subscription<geometry_msgs::msg::Point>(
@@ -184,25 +275,96 @@ moveit_trajectory::moveit_trajectory() : Node("moveit_trajectory") {
     move_group_interface->getRobotModel());
   visual_tools_->deleteAllMarkers();
   visual_tools_->loadRemoteControl();
+
+  // Generate transforms
+  create_cutter_to_link_tf();
+  create_server_to_link_tf();
+
+  // Manually set tool jig pose
+  tool_jig_pose.position.x = 0.2;
+  tool_jig_pose.position.y = 0.5;
+  tool_jig_pose.position.z = 0.25;
+  tool_jig_pose.orientation = RPYToQuaternion(0,M_PI,0);
+  cutting_tool_pose = tool_jig_pose;
+  serving_tool_pose = tool_jig_pose;
+}
+
+/////////////////////////////////////////////////////////////////////
+//                           TRANSFORMATIONS                       //
+/////////////////////////////////////////////////////////////////////
+
+void moveit_trajectory::create_cutter_to_link_tf() {
+
+    // Set the translation in the end effector local frame
+    cutter_to_link_tf.translation.z = -0.1;
+
+    // Set the orientation
+    tf2::Quaternion orientation;
+    orientation.setRPY(0.0, 0.0, 0.0);  // Assuming no rotation
+    cutter_to_link_tf.rotation.x = orientation.x();
+    cutter_to_link_tf.rotation.y = orientation.y();
+    cutter_to_link_tf.rotation.z = orientation.z();
+    cutter_to_link_tf.rotation.w = orientation.w();
+}
+
+void moveit_trajectory::create_server_to_link_tf() {
+
+    // Set the translation in the end effector local frame
+    server_to_link_tf.translation.x = -0.25;
+    server_to_link_tf.translation.z = 0.075;
+
+    // Set the orientation
+    tf2::Quaternion orientation;
+    orientation.setRPY(0.0, 0.349066+M_PI/2, 0.0); // ~20 deg pitch
+    server_to_link_tf.rotation.x = orientation.x();
+    server_to_link_tf.rotation.y = orientation.y();
+    server_to_link_tf.rotation.z = orientation.z();
+    server_to_link_tf.rotation.w = orientation.w();
+}
+
+std::vector<geometry_msgs::msg::Pose> moveit_trajectory::convert_waypoints(std::vector<geometry_msgs::msg::Pose> waypoints, std::string frame) {
+  // Set frame transform
+  geometry_msgs::msg::Transform  frame_tf;
+  if (frame == "cutter") {
+    frame_tf = cutter_to_link_tf;
+  } else if (frame == "server") {
+    frame_tf = server_to_link_tf;
+  }
+
+  std::vector<geometry_msgs::msg::Pose> converted_waypoints;
+
+  // Convert waypoints
+  for (size_t i=0; i<waypoints.size(); i++) {
+    converted_waypoints.push_back(computeDesiredLinkPose(waypoints.at(i), frame_tf));
+  }
+
+  return converted_waypoints;
 }
 
 /////////////////////////////////////////////////////////////////////
 //                           BASIC MOVEMENT                        //
 /////////////////////////////////////////////////////////////////////
 
-void moveit_trajectory::follow_path_cartesian(std::vector<geometry_msgs::msg::Pose> waypoints, std::string ns) {
+bool moveit_trajectory::follow_path_cartesian(std::vector<geometry_msgs::msg::Pose> waypoints, std::string ns) {
 
   // Plan the trajectory
   moveit_msgs::msg::RobotTrajectory trajectory;
   const double jump_threshold = 0.0; // Disabled jump threshold
   const double eef_step = 0.01; // Resolution the path will be interpolated at
-  move_group_interface->computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory);
+  double completion = move_group_interface->computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory);
+
+  // Check if path was computed completely
+  if (completion < 0.99) {
+    return false;
+  }
 
   // Visualize the plan in RViz
   visualize_cartesian_path(waypoints,ns);
 
   // Execute the trajectory
   move_group_interface->execute(trajectory);
+
+  return true;
 }
 
 void moveit_trajectory::rotate_joint(std::string joint, float theta) {
@@ -296,21 +458,19 @@ geometry_msgs::msg::Quaternion moveit_trajectory::get_serve_quaternion(float inc
 void moveit_trajectory::plan_cuts() {
 
   int num_cuts = num_slices/2;
-  float TCP_height = 0.12;
 
   // Define an initial, horizontal cut
   geometry_msgs::msg::Point start;
   start.x = pizza_pose.position.x - pizza_radius.data;
   start.y = pizza_pose.position.y;
-  start.z = TCP_height;
+  start.z = pizza_pose.position.z;
 
   geometry_msgs::msg::Point cut_centre = pizza_pose.position;
-  cut_centre.z = TCP_height;
 
   geometry_msgs::msg::Point end;
   end.x = pizza_pose.position.x + pizza_radius.data;
   end.y = pizza_pose.position.y;
-  end.z = TCP_height;
+  end.z = pizza_pose.position.z;
 
   // Rotate the cut to find all cuts
   for (int i = 0; i<(num_cuts); i++){
@@ -337,8 +497,7 @@ void moveit_trajectory::plan_cuts() {
 
 void moveit_trajectory::plan_serve() {
 
-  float TCP_height = 0.15; // Height of spatula tip
-  float lead_in_length = 0.05; // Starting distance from spatula tip from pizza perimeter
+  float lead_in_length = 0.01; // Starting distance from spatula tip from pizza perimeter
   float spatula_length = 0.1; // Length of flat section of spatula, from the tip to the bend
   float slide_length = spatula_length + lead_in_length; // Total length of the sliding motion
   
@@ -346,12 +505,12 @@ void moveit_trajectory::plan_serve() {
   geometry_msgs::msg::Point start;
   start.x = pizza_pose.position.x - pizza_radius.data - lead_in_length;
   start.y = pizza_pose.position.y;
-  start.z = TCP_height;
+  start.z = pizza_pose.position.z;
 
   geometry_msgs::msg::Point end;
   end.x = start.x + slide_length;
   end.y = pizza_pose.position.y;
-  end.z = TCP_height;
+  end.z = pizza_pose.position.z;
 
   // Rotate the cut to find all cuts
   for (int i = 0; i<(num_slices); i++){
@@ -375,6 +534,32 @@ void moveit_trajectory::plan_serve() {
 }
 
 /////////////////////////////////////////////////////////////////////
+//                           INTERFERENCE                          //
+/////////////////////////////////////////////////////////////////////
+
+// Translates each point in a 2D vector
+void moveit_trajectory::translate_point_vector(
+  std::vector<std::vector<geometry_msgs::msg::Point>>& points, float dx, float dy, float dz) {
+    for (auto& row : points) {
+      for (auto& point : row) {
+          point.x += dx;
+          point.y += dy;
+          point.z += dz;
+      }
+    }
+}
+
+// Rotates each point in a 2D vector about a given center
+void moveit_trajectory::rotate_point_vector(
+  std::vector<std::vector<geometry_msgs::msg::Point>>& points, geometry_msgs::msg::Point center, float angle) {
+    for (auto& row : points) {
+      for (auto& point : row) {
+        point = rotate_point(point, center, angle);
+      }
+    }
+}
+
+/////////////////////////////////////////////////////////////////////
 //                       TRAJECTORY EXECUTION                      //
 /////////////////////////////////////////////////////////////////////
 
@@ -386,7 +571,7 @@ void moveit_trajectory::send_gripper_command(std::string command) {
 }
 
 // Completes all planned cuts of the pizza
-void moveit_trajectory::cut_pizza() {
+bool moveit_trajectory::cut_pizza() {
   float lift_height  = 0.04; // Height of vertical lead in and lead out
 
   // Loop through cut points and execute
@@ -424,26 +609,32 @@ void moveit_trajectory::cut_pizza() {
     waypoints.push_back(above_cut_end);
     waypoints.push_back(centre_pose);
 
+    // Convert waypoints from cutter to robot link frame
+    waypoints = convert_waypoints(waypoints, "cutter");
+
     // Execute path
     RCLCPP_INFO(this->get_logger(), "Executing cut");
-    follow_path_cartesian(waypoints, "Cutting Path");
+    bool complete = follow_path_cartesian(waypoints, "Cutting Path");
 
-    std::cout<<"execute() returned"<<std::endl;
     wait(0.5);
+
+    if (!complete) {
+      return false;
+    }
   }
 
-  return;
+  return true;
 }
 
 // Picks a single slice and removes it from the planned trajectories
-void moveit_trajectory::pick_slice() {
+bool moveit_trajectory::pick_slice() {
 
   float lift_height  = 0.08; // Height of vertical lead in and lead out
 
   // Return if all slices picked up
   if (serve_pick_points.empty()) {
     RCLCPP_WARN(this->get_logger(), "No slice picking trajectories planned.");
-    return;
+    return false;
   }
 
   bool in_half_near_base = (cos(serve_slice_angles.at(0)-atan2(pizza_pose.position.y,pizza_pose.position.x)) > 0);
@@ -491,21 +682,28 @@ void moveit_trajectory::pick_slice() {
   waypoints.push_back(above_pick_end);
   waypoints.push_back(centre_rotated_pose);
 
+  // Convert waypoints from server to robot link frame
+  waypoints = convert_waypoints(waypoints, "server");
+
   // Execute path
   RCLCPP_INFO(this->get_logger(), "Executing pick");
-  follow_path_cartesian(waypoints, "Pick path");
+  bool complete = follow_path_cartesian(waypoints, "Pick path");
 
   wait(0.5);
+
+  if (!complete) {
+    return false;
+  }
 
   // Remove picked slice from stored trajectories
   if (!serve_pick_points.empty()) {
     serve_pick_points.erase(serve_pick_points.begin());
   }
 
-  return;
+  return true;
 }
 
-void moveit_trajectory::place_slice() {
+bool moveit_trajectory::place_slice() {
   // Determine orientation to serve slice
   bool in_half_near_base = (cos(serve_slice_angles.at(0)-atan2(pizza_pose.position.y,pizza_pose.position.x)) > 0);
   geometry_msgs::msg::Quaternion flat_orientation;
@@ -551,18 +749,25 @@ void moveit_trajectory::place_slice() {
   waypoints.push_back(slide_out);
   waypoints.push_back(centre_rotated_pose);
 
+  // Convert waypoints from server to robot link frame
+  waypoints = convert_waypoints(waypoints, "server");
+
   // Execute path
   RCLCPP_INFO(this->get_logger(), "Placing slice");
-  follow_path_cartesian(waypoints, "Place path");
-
+  bool complete = follow_path_cartesian(waypoints, "Place path");
+  
   wait(0.5);
+
+  if (!complete) {
+    return false;
+  }
 
   // Remove placed slice from stored trajectories
   if (!serve_slice_angles.empty()) {
     serve_slice_angles.erase(serve_slice_angles.begin());
   }
 
-  return;
+  return true;
 }
 
 void moveit_trajectory::pick_cutting_tool() {
@@ -687,6 +892,32 @@ void moveit_trajectory::place_serving_tool() {
 //                          VISUALIZATION                          //
 /////////////////////////////////////////////////////////////////////
 
+// Displays all markers for which data is available, (pizza,plate and trajectories)
+void moveit_trajectory::display_visualization_markers() {
+
+  visual_tools_->deleteAllMarkers();
+
+  // Pizza
+  if (pizza_radius_is_set && pizza_pose_is_set) {
+    visualize_pizza();
+  }
+
+  // Plate
+  if (plate_pose_is_set) {
+    visualize_plate();
+  }
+
+  // Cutting plan
+  if (cutting_is_planned) {
+    visualize_cut_points();
+  }
+
+  // Serving plan
+  if (serve_is_planned) {
+    visualize_serve_pick_points();
+  }
+}
+
 // Creates large text in RVIZ above the robot
 void moveit_trajectory::draw_title(std::string text) {
   auto const text_pose = [] {
@@ -747,7 +978,7 @@ void moveit_trajectory::visualize_cut_points() {
 
     // Get start/end points
     geometry_msgs::msg::Point cut_start = cut_points.at(i).at(0);
-    geometry_msgs::msg::Point cut_end = cut_points.at(i).at(1);
+    geometry_msgs::msg::Point cut_end = cut_points.at(i).at(2);
 
     // Change z coordinate, so that the cut lines appear on top of the pizza cylinder
     cut_start.z += 0.012;
@@ -795,10 +1026,49 @@ void moveit_trajectory::joint_states_callback(sensor_msgs::msg::JointState joint
 void moveit_trajectory::pizza_radius_callback(std_msgs::msg::Float64 pizza_radius) {
   RCLCPP_INFO(this->get_logger(), "Pizza radius set");
   this->pizza_radius = pizza_radius;
+
+  // State checking
+  pizza_radius_is_set = true;
+
+  display_visualization_markers();
+}
+
+// Callback for /pizza_angle
+void moveit_trajectory::pizza_angle_callback(std_msgs::msg::Float64 pizza_angle) {
+  // Rotate paths
+  float delta_angle = pizza_angle.data - this->pizza_angle.data;
+
+  if (cutting_is_planned) {
+    rotate_point_vector(cut_points,pizza_pose.position,delta_angle);
+  }
+
+  if (serve_is_planned) {
+    rotate_point_vector(serve_pick_points,pizza_pose.position,delta_angle);
+  }
+
+  RCLCPP_INFO(this->get_logger(), "Pizza angle set");
+  this->pizza_angle = pizza_angle;
+
+  display_visualization_markers();
 }
 
 // Callback for /pizza_centroid
 void moveit_trajectory::pizza_centroid_callback(geometry_msgs::msg::Point pizza_centroid) {
+  // Translate paths
+  if (pizza_pose_is_set) {
+    float dx = pizza_centroid.x - pizza_pose.position.x;
+    float dy = pizza_centroid.y - pizza_pose.position.y;
+    float dz = pizza_centroid.z - pizza_pose.position.z;
+
+    if (cutting_is_planned) {
+      translate_point_vector(cut_points,dx,dy,dz);
+    }
+
+    if (serve_is_planned) {
+      translate_point_vector(serve_pick_points,dx,dy,dz);
+    }
+  }
+
   // Set pizza pose
   RCLCPP_INFO(this->get_logger(), "Pizza pose set");
   this->pizza_pose.position = pizza_centroid;
@@ -810,6 +1080,11 @@ void moveit_trajectory::pizza_centroid_callback(geometry_msgs::msg::Point pizza_
   // Rotation
   geometry_msgs::msg::Quaternion down_orientation = RPYToQuaternion(0,M_PI,0);
   centre_pose.orientation = down_orientation;
+
+  // State checking
+  pizza_pose_is_set = true;
+
+  display_visualization_markers();
 }
 
 // Callback for /plate_pose
@@ -817,6 +1092,11 @@ void moveit_trajectory::plate_centroid_callback(geometry_msgs::msg::Point plate_
   RCLCPP_INFO(this->get_logger(), "Plate pose set");
   this->plate_pose.position = plate_centroid;
   this->plate_pose.orientation = RPYToQuaternion(0,M_PI,0);
+
+  // State checking
+  plate_pose_is_set = true;
+
+  display_visualization_markers();
 }
 
 // Callback for /tool_jig_pose
@@ -833,25 +1113,20 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
 {
   // Planning
   if (operation_command.data == "Plan Trajectories") {
-    draw_title("Planning_Trajectories");
     RCLCPP_INFO(this->get_logger(), "Planning Trajectories");
-
-    // Visualize detections
-    visualize_pizza();
-    visualize_plate();
-    // TODO visualize tool jig
 
     // Cut planning
     if (!cutting_is_planned){
       plan_cuts();
-      visualize_cut_points();
     }
 
     // Serve picking planning
     if (!serve_is_planned){
       plan_serve();
-      visualize_serve_pick_points();
     }
+
+    // Display visualization
+    display_visualization_markers();
 
     // Publish to /operation_status
     std_msgs::msg::String msg;
@@ -862,7 +1137,6 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
   // Pick cutting tool
   if (operation_command.data == "Pick Cutting Tool") {
     RCLCPP_INFO(this->get_logger(), "Picking Cutting Tool");
-    draw_title("Pick_Cutting_Tool");
     pick_cutting_tool();
 
     // Publish to /operation_status
@@ -874,19 +1148,21 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
   // Cutting
   if (operation_command.data == "Cut") {
     RCLCPP_INFO(this->get_logger(), "Cutting");
-    draw_title("Cutting");
-    cut_pizza();
+    bool complete = cut_pizza();
 
     // Publish to /operation_status
     std_msgs::msg::String msg;
-    msg.data = "Cut Complete";
+    if (complete) {
+      msg.data = "Cut Complete";
+    } else {
+      msg.data = "Cut Fail";
+    }
     operation_status_publisher_->publish(msg);
   }
 
   // Pick cutting tool
   if (operation_command.data == "Place Cutting Tool") {
     RCLCPP_INFO(this->get_logger(), "Placing Cutting Tool");
-    draw_title("Place_Cutting_Tool");
     place_cutting_tool();
 
     // Publish to /operation_status
@@ -898,7 +1174,6 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
   // Pick serving tool
   if (operation_command.data == "Pick Serving Tool") {
     RCLCPP_INFO(this->get_logger(), "Picking Serving Tool");
-    draw_title("Pick_Serving_Tool");
     pick_serving_tool();
 
     // Publish to /operation_status
@@ -910,31 +1185,36 @@ void moveit_trajectory::operation_command_callback(std_msgs::msg::String operati
   // Picking slice
   if (operation_command.data == "Pick Slice") {
     RCLCPP_INFO(this->get_logger(), "Picking Slice");
-    draw_title("Picking_Slice");
-    pick_slice();
+    bool complete = pick_slice();
 
     // Publish to /operation_status
     std_msgs::msg::String msg;
-    msg.data = "Pick Slice Complete";
+    if (complete) {
+      msg.data = "Pick Slice Complete";
+    } else {
+      msg.data = "Pick Slice Fail";
+    }
     operation_status_publisher_->publish(msg);
   }
 
   // Placing Slice
   if (operation_command.data == "Place Slice") {
     RCLCPP_INFO(this->get_logger(), "Placing Slice");
-    draw_title("Placing_Slice");
-    place_slice();
+    bool complete = place_slice();
 
     // Publish to /operation_status
     std_msgs::msg::String msg;
-    msg.data = "Place Slice Complete";
+    if (complete) {
+      msg.data = "Place Slice Complete";
+    } else {
+      msg.data = "Place Slice Fail";
+    }
     operation_status_publisher_->publish(msg);
   }
 
   // Place serving tool
   if (operation_command.data == "Place Serving Tool") {
     RCLCPP_INFO(this->get_logger(), "Placinging Serving Tool");
-    draw_title("Place_Serving_Tool");
     place_serving_tool();
 
     // Publish to /operation_status

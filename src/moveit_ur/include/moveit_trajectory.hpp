@@ -15,6 +15,7 @@
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit_visual_tools/moveit_visual_tools.h>
 #include <sensor_msgs/msg/joint_state.hpp>
+#include <tf2/LinearMath/Transform.h>
 
 #include "tf2/exceptions.h"
 #include "tf2_ros/transform_listener.h"
@@ -31,8 +32,13 @@ class moveit_trajectory : public rclcpp::Node
     //                             METHODS                             //
     /////////////////////////////////////////////////////////////////////
 
+    // Transformations
+    void create_cutter_to_link_tf();
+    void create_server_to_link_tf();
+    std::vector<geometry_msgs::msg::Pose> convert_waypoints(std::vector<geometry_msgs::msg::Pose> waypoints, std::string frame);
+
     // Basic movement
-    void follow_path_cartesian(std::vector<geometry_msgs::msg::Pose> waypoints, std::string ns);
+    bool follow_path_cartesian(std::vector<geometry_msgs::msg::Pose> waypoints, std::string ns);
     void rotate_joint(std::string joint, float theta);
     void invert_wrist();
     void uninvert_wrist();
@@ -43,17 +49,24 @@ class moveit_trajectory : public rclcpp::Node
     void plan_cuts();
     void plan_serve();
 
+    // Interference
+    void translate_point_vector(std::vector<std::vector<geometry_msgs::msg::Point>>& points, float dx, float dy, float dz);
+    void rotate_point_vector(
+      std::vector<std::vector<geometry_msgs::msg::Point>>& points, geometry_msgs::msg::Point center, float angle);
+    
     // Trajectory execution
     void send_gripper_command(std::string command);
-    void cut_pizza();
-    void pick_slice();
-    void place_slice();
+    bool cut_pizza();
+    bool pick_slice();
+    bool place_slice();
     void pick_cutting_tool();
     void place_cutting_tool();
     void pick_serving_tool();
     void place_serving_tool();
 
     // Visualization
+    void display_visualization_markers();
+
     void draw_title(std::string text);
     void visualize_cartesian_path(std::vector<geometry_msgs::msg::Pose> waypoints, std::string ns);
 
@@ -67,6 +80,7 @@ class moveit_trajectory : public rclcpp::Node
     void operation_command_callback(std_msgs::msg::String operation_command);
     void operation_status_callback(std_msgs::msg::String operation_status);
     void pizza_radius_callback(std_msgs::msg::Float64 pizza_radius);
+    void pizza_angle_callback(std_msgs::msg::Float64 pizza_angle);
     void pizza_centroid_callback(geometry_msgs::msg::Point pizza_centroid);
     void tool_jig_pose_callback(geometry_msgs::msg::Pose tool_jig_pose);
     void plate_centroid_callback(geometry_msgs::msg::Point plate_centroid);
@@ -79,7 +93,13 @@ class moveit_trajectory : public rclcpp::Node
 
     // Modifiable Trajectory Parameters (WIP - TODO collect all parameters here for easy modification)
     // General
-    float flat_spatula_angle = (2.0/3.0) * M_PI; // Pitch (CCW from vertical) of the end effector for the spatula to be flat
+    // float flat_spatula_angle = (2.0/3.0) * M_PI; // Pitch (CCW from vertical) of the end effector for the spatula to be flat
+    float flat_spatula_angle = 0; // TESTING ONLY
+
+    // End effector transforms
+    geometry_msgs::msg::Transform cutter_to_link_tf;
+    geometry_msgs::msg::Transform server_to_link_tf;
+
 
     // Serving slice on plate
     float serve_height = 0.03;  // Height of spatula tip above the plate
@@ -107,6 +127,7 @@ class moveit_trajectory : public rclcpp::Node
     // Subscriptions
     rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr joint_states_subscription_;
     rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr pizza_radius_subscription_;
+    rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr pizza_angle_subscription_;
     rclcpp::Subscription<geometry_msgs::msg::Point>::SharedPtr pizza_centroid_subscription_;
     rclcpp::Subscription<geometry_msgs::msg::Point>::SharedPtr plate_centroid_subscription_;
     rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr tool_jig_pose_subscription_;
@@ -114,12 +135,15 @@ class moveit_trajectory : public rclcpp::Node
 
     // Stored variables from messages
     std_msgs::msg::Float64 pizza_radius;
+    std_msgs::msg::Float64 pizza_angle;
     geometry_msgs::msg::Pose pizza_pose;
     geometry_msgs::msg::Pose plate_pose;
-    geometry_msgs::msg::Pose tool_jig_pose;
     std::vector<double> joint_positions; // Order - shoulder lift, elbow, wrist 1, wrist 2, wrist 3, shoulder pan
 
     // Completion checking
+    bool pizza_pose_is_set = false;
+    bool pizza_radius_is_set = false;
+    bool plate_pose_is_set = false;
     bool cutting_is_planned = false;
     bool serve_is_planned = false;
 
@@ -133,6 +157,7 @@ class moveit_trajectory : public rclcpp::Node
     // Tool change
     geometry_msgs::msg::Pose cutting_tool_pose;
     geometry_msgs::msg::Pose serving_tool_pose;
+    geometry_msgs::msg::Pose tool_jig_pose;
     // Cutting
     // 2D vector of points, representing the start and end of each cut
     std::vector<std::vector<geometry_msgs::msg::Point>> cut_points;
